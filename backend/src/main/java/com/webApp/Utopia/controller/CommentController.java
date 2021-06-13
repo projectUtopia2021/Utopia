@@ -28,7 +28,7 @@ public class CommentController {
     @RequestMapping(method=RequestMethod.GET,value="/")
     public ResponseEntity checkHealth()
     {
-        return new ResponseEntity("Congratulations!! Spring Boot Application is up and running..",HttpStatus.OK);
+        return new ResponseEntity("Hello!! Spring Boot Application is up and running..",HttpStatus.OK);
     }
 
     // GET Comments
