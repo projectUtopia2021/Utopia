@@ -4,9 +4,20 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Community from './components/Community';
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+
+    <Router>
+      <Switch>
+        <Route exact path="/" component={App} />
+        <Route path="/community" component={Community} />
+      </Switch>
+    </Router>
+
+
   </React.StrictMode>,
   document.getElementById('root')
 );
