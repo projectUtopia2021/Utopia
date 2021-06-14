@@ -56,4 +56,16 @@ public class UserService {
             userRepo.deleteByName(name);
         }
     }
+
+    public void updateUserPassword(String emailAddress, String password){
+        Optional<User> userOptional = userRepo.findByEmailAddress(emailAddress);
+        if(!userOptional.isPresent()) {
+            throw new IllegalArgumentException("User " + emailAddress + "Not Found");
+        } else {
+            User targetUser = userOptional.get();
+            targetUser.setPassword(password);
+            userRepo.save(targetUser);
+        }
+    }
+    
 }

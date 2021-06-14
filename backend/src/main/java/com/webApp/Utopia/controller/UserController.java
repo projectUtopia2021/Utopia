@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -53,4 +54,15 @@ public class UserController {
             return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(method=RequestMethod.PUT, value="/updatePassword")
+    public ResponseEntity updatePassword(@RequestBody Map<String, Object> inputData) {
+        try{
+            userService.updateUserPassword(inputData.get("emailAddress").toString(), inputData.get("password").toString());
+            return new ResponseEntity("Successfully updated password", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
