@@ -1,23 +1,26 @@
 package com.webApp.Utopia.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.webApp.Utopia.utils.UserRole;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotNull;
-
+import java.util.Collection;
+import java.util.Collections;
 
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection="user")
-public class User {
+public class User implements UserDetails {
 
     @Id
     private String id;
@@ -26,10 +29,18 @@ public class User {
     private String name;
 
     @NotNull(message = "emailAddress cannot be empty")
-    private String emailAddress;
-
+    private String email;
     @NotNull(message = "password cannot be empty")
     private String password;
+    private UserRole userRole;
+    private Boolean locked = false;
+    private Boolean enabled =true;
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 
     public String getId() {
         return id;
@@ -37,27 +48,47 @@ public class User {
     public void setId(String id) {
         this.id = id;
     }
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getEmail() {
+        return email;
     }
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    public String getName() {
-        return name;
+    public void setEmail(String emailAddress) {
+        this.email = emailAddress;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("USER");
+        return Collections.singletonList(authority);
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 }
 
