@@ -1,23 +1,26 @@
 package com.webApp.Utopia.service;
 
-import com.webApp.Utopia.exception.CommentCollectionException;
-import com.webApp.Utopia.model.Comment;
 import com.webApp.Utopia.model.User;
 import com.webApp.Utopia.repository.UserRepository;
-import org.springframework.beans.BeanUtils;
+import com.webApp.Utopia.utils.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private JWTUtility jwtUtility;
 
     public List<User> getAllUsers() {
         List<User> users = userRepo.findAll();
@@ -28,7 +31,7 @@ public class UserService {
         }
     }
 
-    public void createUser(User user)
+    public String createUser(User user)
             throws Exception {
 
         // If the comment is valid as per not null constraint we have to next
@@ -38,9 +41,16 @@ public class UserService {
         if (userNameOptional.isPresent()) {
             System.out.println(userNameOptional.get());
             throw new IllegalArgumentException("User Name exists");
-        } else {
-            userRepo.save(user);
         }
+        //String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(user.getPassword());
+        try {
+            userRepo.save(user);
+        }catch(Exception e){
+            throw new IllegalStateException("User creation failed");
+        }
+
+        return user.getName();
 
     }
 
@@ -58,7 +68,7 @@ public class UserService {
     }
 
     public void updateUserPassword(String emailAddress, String password){
-        Optional<User> userOptional = userRepo.findByEmailAddress(emailAddress);
+        Optional<User> userOptional = userRepo.findByEmail(emailAddress);
         if(!userOptional.isPresent()) {
             throw new IllegalArgumentException("User " + emailAddress + "Not Found");
         } else {
@@ -67,5 +77,10 @@ public class UserService {
             userRepo.save(targetUser);
         }
     }
-    
+
+    @Override
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        //return new User("admin","passwor", new ArrayList<>());
+        return userRepo.findByName(name).orElseThrow(() -> new UsernameNotFoundException("User " + name + " Not Found"));
+    }
 }
