@@ -1,11 +1,11 @@
-import Community from './components/Homepage/Community';
+import HomePage from './components/HomePage/HomePage.js';
 
 function App() {
   return (
     <div className="App">
-        <Community>
+        <HomePage>
 
-        </Community>
+        </HomePage>
     </div>
   );
 }
