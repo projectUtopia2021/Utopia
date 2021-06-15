@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // GET Comments
+    // GET Users
     @RequestMapping(method=RequestMethod.GET,value="/getUsers")
     public ResponseEntity getAllUsers()
     {
@@ -29,7 +29,7 @@ public class UserController {
         );
     }
 
-    // SAVE Comment
+    // SAVE User
     @RequestMapping(method= RequestMethod.POST,value="/addUser")
     public ResponseEntity<String> createComment(@RequestBody User user)
     {
@@ -41,7 +41,7 @@ public class UserController {
         }
     }
 
-    // DELETE Comment
+    // DELETE User
     @RequestMapping(method=RequestMethod.DELETE,value="/deleteUser/{name}")
     public ResponseEntity deleteCommentById(@PathVariable("name") String name)
     {

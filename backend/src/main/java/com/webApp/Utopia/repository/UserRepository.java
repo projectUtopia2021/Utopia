@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface UserRepository extends MongoRepository<User, String> {
     @Query("{'name':?0}")
     Optional<User> findByName(String name);
-    Optional<User> findByEmailAddress(String emailAddress);
+    Optional<User> findByEmail(String emailAddress);
     Long deleteByName(String Name);
 }
