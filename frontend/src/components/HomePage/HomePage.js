@@ -48,10 +48,22 @@ function HomePage() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+          
           <ButtonBox>
             <ButtonGroup variant="contained" aria-label="outlined primary button group">
-              <Button style={{textTransform: 'none'}} onClick = {() => {alert("log in")}}>Log In</Button>
-              <Button style={{textTransform: 'none'}} onClick = {() => {alert("sign up")}}>Sign Up</Button>
+              <Button style={{textTransform: 'none'}} 
+                      onClick = {() => {
+                          alert("Login")
+                      }}
+                      >
+                Log In
+              </Button>
+
+              <Button style={{textTransform: 'none'}} 
+                      onClick = {() => alert("hi")
+                    }>
+                        Sign Up
+              </Button>
              </ButtonGroup>
          </ButtonBox>
         </Toolbar>
