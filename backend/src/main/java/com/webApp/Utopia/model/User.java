@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 
 @Getter
@@ -35,11 +36,18 @@ public class User implements UserDetails {
     private UserRole userRole;
     private Boolean locked = false;
     private Boolean enabled =true;
+    private List<String> friends;
 
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public User(@NotNull(message = "Username cannot be empty") String name, @NotNull(message = "emailAddress cannot be empty") String email, List<String> friends) {
+        this.name = name;
+        this.email = email;
+        this.friends = friends;
     }
 
     public String getId() {
