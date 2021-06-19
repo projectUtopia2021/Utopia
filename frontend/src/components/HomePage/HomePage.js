@@ -15,7 +15,9 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import SearchIcon from '@material-ui/icons/Search';
 import {Search, SearchIconWrapper, StyledInputBase, ButtonBox} from './HomePageStyles';
+import { useHistory } from "react-router";
 
+const fixed_API = "http://localhost:8080/getUsers"
 function HomeIcon(props) {
   return (
     <SvgIcon {...props}>
@@ -29,6 +31,7 @@ const cards = [1, 2, 3, 4];
 
 
 function HomePage() {
+  const history = useHistory()
 
   return (
     <React.Fragment>
@@ -53,15 +56,16 @@ function HomePage() {
             <ButtonGroup variant="contained" aria-label="outlined primary button group">
               <Button style={{textTransform: 'none'}} 
                       onClick = {() => {
-                          alert("Login")
+                          history.push("/login")
                       }}
                       >
                 Log In
               </Button>
 
               <Button style={{textTransform: 'none'}} 
-                      onClick = {() => alert("hi")
-                    }>
+                      onClick = {() => history.push("/register")
+                    }
+                    >
                         Sign Up
               </Button>
              </ButtonGroup>

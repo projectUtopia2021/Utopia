@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @AllArgsConstructor
@@ -26,6 +27,7 @@ public class RegistrationController {
     @Autowired
     private RegistrationService registrationService;
 
+    @CrossOrigin
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegistrationRequest request){
         try{

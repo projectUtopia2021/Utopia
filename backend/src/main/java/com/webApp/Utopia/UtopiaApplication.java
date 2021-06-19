@@ -6,8 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+//@ComponentScan({"com.webApp.Utopia.controller"})
 public class UtopiaApplication {
 
 	public static void main(String[] args) {
