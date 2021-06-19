@@ -4,11 +4,18 @@ services:
     build: ./backend/
     restart: always
     ports:
-      - 8080:8080
+      - 8081:8080
     environment:
       - MONGO_URL=mongodb://db:27017/app_development
     depends_on:
       - db
+  client:
+    build: ./frontend/
+    restart: always
+    ports: 
+      - 80:80
+    depends_on:
+      - api_service
   db:
     image: "mongo:4.4.3"
     restart: always
