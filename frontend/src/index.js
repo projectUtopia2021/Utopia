@@ -1,11 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import HomePage from './components/HomePage/HomePage.js';
+import NaviBar from './components/NaviBar/NaviBar.js';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
 ReactDOM.render(
-  <App />
-  ,
+  <React.StrictMode>
+    <Router>
+      <NaviBar/>
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+      </Switch>
+    </Router>
+
+
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

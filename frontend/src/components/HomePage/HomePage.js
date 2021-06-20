@@ -1,61 +1,21 @@
 import * as React from 'react';
-import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import SvgIcon from "@material-ui/core/SvgIcon";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import SearchIcon from '@material-ui/icons/Search';
-import {Search, SearchIconWrapper, StyledInputBase, ButtonBox} from './HomePageStyles';
-
-function HomeIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-    </SvgIcon>
-  );
-};
-
 
 const cards = [1, 2, 3, 4];
-
 
 function HomePage() {
 
   return (
     <React.Fragment>
-      <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <HomeIcon sx={{ mr: 2 }} />
-          <Typography variant="h6" color="inherit" noWrap>
-            Utopia
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <ButtonBox>
-            <ButtonGroup variant="contained" aria-label="outlined primary button group">
-              <Button style={{textTransform: 'none'}} onClick = {() => {alert("log in")}}>Log In</Button>
-              <Button style={{textTransform: 'none'}} onClick = {() => {alert("sign up")}}>Sign Up</Button>
-             </ButtonGroup>
-         </ButtonBox>
-        </Toolbar>
-      </AppBar>
+      
       <main>
         {/* Hero unit */}
         <Box
