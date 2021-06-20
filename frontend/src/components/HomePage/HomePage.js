@@ -17,7 +17,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import {Search, SearchIconWrapper, StyledInputBase, ButtonBox} from './HomePageStyles';
 import { useHistory } from "react-router";
 
-const fixed_API = "http://localhost:8080/getUsers"
 function HomeIcon(props) {
   return (
     <SvgIcon {...props}>

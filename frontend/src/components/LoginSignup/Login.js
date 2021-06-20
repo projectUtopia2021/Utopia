@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import './LoginSignup.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { loginService } from './AuthService.js';
 import axios from "axios";
 import { useHistory } from "react-router";
 
@@ -21,7 +20,6 @@ export default function Login(props) {
                 response => {
                     localStorage.setItem('token', response.data)
                     history.push("/")
-                    //window.location.reload()
                 }
             ).catch(error => {
                 alert("Account doesn't exist")

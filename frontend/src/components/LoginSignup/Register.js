@@ -79,10 +79,7 @@ export default function Register(props) {
                     Sign Up
                     </button>
                 <p className="forgot-password text-right">
-                    Already registered <a 
-                    onClick={()=> {
-                        props.history.push("/login")
-                        }}>Sign in</a>?
+                    Already registered <a href="/login">Sign in</a>?
                 </p>
                 </div>
                 </form>
