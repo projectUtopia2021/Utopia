@@ -1,18 +1,31 @@
-import React, {
-  MouseEvent,
-  ReactElement,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { EditorState,convertToRaw} from 'draft-js';
-import Editor from '@draft-js-plugins/editor';
 
-import createMentionPlugin from '@draft-js-plugins/mention';
-import editorStyles from './RemoteMentionEditor.css';
-//import draftToHtml from 'draftjs-to-html';
-//import htmlToDraft from 'html-to-draftjs';
+
+
+
+import React from "react";
+import { EditorState, convertToRaw } from "draft-js";
+import Editor from "draft-js-plugins-editor";
+import createMentionPlugin, {
+  defaultSuggestionsFilter
+} from "draft-js-mention-plugin";
+import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
+import {
+  ItalicButton,
+  BoldButton,
+  UnderlineButton,
+  CodeButton,
+  HeadlineOneButton,
+  HeadlineTwoButton,
+  HeadlineThreeButton,
+  UnorderedListButton,
+  OrderedListButton,
+  BlockquoteButton,
+  CodeBlockButton,
+} from '@draft-js-plugins/buttons';
+import editorStyles from "./RemoteMentionEditor.css";
+import "draft-js-mention-plugin/lib/plugin.css";
+import '@draft-js-plugins/static-toolbar/lib/plugin.css';
+import draftToHtml from 'draftjs-to-html';
 
 const mentions: MentionData[] = [
   {
@@ -55,56 +68,147 @@ const mentions: MentionData[] = [
   },
 ];
 
-function MyEditor(): ReactElement {
-  const ref = useRef<Editor>(null);
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
-  const [open, setOpen] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
+class HeadlinesPicker extends React.Component {
+  componentDidMount() {
+    setTimeout(() => {
+      window.addEventListener('click', this.onWindowClick);
+    });
+  }
 
-  const { MentionSuggestions, plugins } = useMemo(() => {
-    const mentionPlugin = createMentionPlugin();
-    // eslint-disable-next-line no-shadow
-    const { MentionSuggestions } = mentionPlugin;
-    // eslint-disable-next-line no-shadow
-    const plugins = [mentionPlugin];
-    return { plugins, MentionSuggestions };
-  }, []);
+  componentWillUnmount() {
+    window.removeEventListener('click', this.onWindowClick);
+  }
 
-  const onOpenChange = useCallback((_open: boolean) => {
-    setOpen(_open);
-  }, []);
-  const onSearchChange = useCallback(({ value }: { value: string }) => {
+  onWindowClick = () =>
+    // Call `onOverrideContent` again with `undefined`
+    // so the toolbar can show its regular content again.
+    this.props.onOverrideContent(undefined);
 
-        setSuggestions(mentions);
-
-  }, []);
-
-  return (
-    <div
-      className={editorStyles.editor}
-      onClick={() => {
-      }}
-    >
-      <Editor
-        editorKey={'editor'}
-        editorState={editorState}
-        onChange={setEditorState}
-        plugins={plugins}
-        //ref={ref}
-      />
-      <MentionSuggestions
-        open={open}
-        onOpenChange={onOpenChange}
-        suggestions={suggestions}
-        onSearchChange={onSearchChange}
-        onAddMention={() => {
-          // get the mention object selected
-        }}
-      />
-    </div>
-  );
+  render() {
+    const buttons = [HeadlineOneButton, HeadlineTwoButton, HeadlineThreeButton];
+    return (
+      <div>
+        {buttons.map((Button, i) => (
+          // eslint-disable-next-line
+          <Button key={i} {...this.props} />
+        ))}
+      </div>
+    );
+  }
 }
 
-export{MyEditor}
+class HeadlinesButton extends React.Component {
+  onClick = () =>
+    // A button can call `onOverrideContent` to replace the content
+    // of the toolbar. This can be useful for displaying sub
+    // menus or requesting additional information from the user.
+    this.props.onOverrideContent(HeadlinesPicker);
+
+  render() {
+    return (
+      <div className={editorStyles.headlineButtonWrapper}>
+        <button onClick={this.onClick} className={editorStyles.headlineButton}>
+          H
+        </button>
+      </div>
+    );
+  }
+}
+
+const toolbarPlugin = createToolbarPlugin();
+const { Toolbar } = toolbarPlugin;
+const plugins = [toolbarPlugin];
+const text =
+  'In this editor a toolbar shows up once you select part of the text …';
+
+class MyEditor extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.mentionPlugin = createMentionPlugin();
+    this.toolbarPlugin = createToolbarPlugin();
+  }
+
+  state = {
+    editorState: EditorState.createEmpty(),
+    suggestions: mentions
+  };
+
+  onChange = editorState => {
+    this.setState({ editorState });
+  };
+
+  onSearchChange = ({ value }) => {
+    this.setState({
+      suggestions: defaultSuggestionsFilter(value, mentions)
+    });
+  };
+
+  onExtractData = () => {
+    const contentState = this.state.editorState.getCurrentContent();
+    const raw = draftToHtml(convertToRaw(contentState));
+    console.log(raw);
+  };
+
+  onExtractMentions = () => {
+    const contentState = this.state.editorState.getCurrentContent();
+    const raw = convertToRaw(contentState);
+    let mentionedUsers = [];
+    for (let key in raw.entityMap) {
+      const ent = raw.entityMap[key];
+      if (ent.type === "mention") {
+        mentionedUsers.push(ent.data.mention);
+      }
+    }
+    console.log(mentionedUsers);
+  };
+
+  makePosts = () => {
+     this.onExtractData();
+     this.onExtractMentions();
+     console.log("make Posts");
+  }
+
+  render() {
+    const { MentionSuggestions } = this.mentionPlugin;
+    const { Toolbar } = this.toolbarPlugin;
+    const plugins = [this.mentionPlugin, this.toolbarPlugin];
+
+    return (
+      <div>
+        <div className={editorStyles.editor}>
+          <Editor
+            editorState={this.state.editorState}
+            onChange={this.onChange}
+            plugins={plugins}
+          />
+                    <Toolbar>
+                      {
+                        // may be use React.Fragment instead of div to improve perfomance after React 16
+                        (externalProps) => (
+                          <div>
+                            <BoldButton {...externalProps} />
+                            <ItalicButton {...externalProps} />
+                            <UnderlineButton {...externalProps} />
+                            <CodeButton {...externalProps} />
+                            <UnorderedListButton {...externalProps} />
+                            <OrderedListButton {...externalProps} />
+                          </div>
+                        )
+                      }
+                    </Toolbar>
+          <MentionSuggestions
+            onSearchChange={this.onSearchChange}
+            suggestions={this.state.suggestions}
+          />
+
+        </div>
+        <div>
+          <button onClick={() => this.makePosts()}>Submit</button>
+        </div>
+      </div>
+    );
+  }
+}
+
+export {MyEditor};
