@@ -1,4 +1,4 @@
-import { styled, alpha } from '@material-ui/core/styles';
+import { alpha, styled } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import Box from '@material-ui/core/Box';
 const Search = styled('div')(({ theme }) => ({
