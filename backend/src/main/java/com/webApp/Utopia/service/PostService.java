@@ -36,7 +36,7 @@ public class PostService {
         // If the post is valid as per not null constraint we have to next
         // check if the post with the same name/id already exists
         Optional<Post> postTitleOptional = postRepo
-                .findByTitle(post.getId());
+                .findByTitle(post.getTitle());
         if (postTitleOptional.isPresent()) {
             System.out.println(postTitleOptional.get());
             throw new PostCollectionException(
