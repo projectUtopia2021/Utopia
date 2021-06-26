@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -78,10 +79,35 @@ class CommentServiceTest {
     }
 
     @Test
-    void updateComment() {
+    void updateCommentDoesNotExist() throws ConstraintViolationException, CommentCollectionException{
+        Mockito.when(commentRepository.findById(Mockito.any())).thenReturn(Optional.empty());
+        Mockito.when(commentRepository.findByTitle(Mockito.any())).thenReturn(Optional.empty());
+        assertThrows(CommentCollectionException.class, () -> commentService.updateComment("1", new Comment()));
     }
 
     @Test
-    void deleteCommentById() {
+    void updateCommentSuccess() throws ConstraintViolationException, CommentCollectionException {
+        Comment existingComment = new Comment("1", "Bucks win the title", "Giannis won the FMVP and Suns lost");
+        Comment modifiedComment = new Comment("1", "Bucks win the title", "Holiday won the FMVP title");
+
+        Mockito.when(commentRepository.findById("1")).thenReturn(Optional.of(existingComment));
+        Mockito.when(commentRepository.findByTitle("Bucks win the title")).thenReturn(Optional.of(existingComment));
+
+        commentService.updateComment("1", modifiedComment);
+        Mockito.verify(commentRepository, Mockito.times(1)).save(existingComment);
+
+    }
+
+    @Test
+    void deleteCommentByIdDoesNotExist() throws CommentCollectionException{
+        Mockito.when(commentRepository.findById("1")).thenReturn(Optional.empty());
+        assertThrows(CommentCollectionException.class, ()->commentService.deleteCommentById("1"));
+    }
+    
+    @Test
+    void deleteCommentByIdExists() throws CommentCollectionException {
+        Mockito.when(commentRepository.findById("1")).thenReturn(Optional.of(new Comment("1", "Bucks", "won the title")));
+        commentService.deleteCommentById("1");
+        Mockito.verify(commentRepository, Mockito.times(1)).deleteById(Mockito.any());
     }
 }
