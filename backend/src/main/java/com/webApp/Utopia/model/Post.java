@@ -27,7 +27,7 @@ public class Post {
 
     @NotNull(message = "Post description cannot be empty")
     private String desc;
-    //外键
+
     private User user;
     private List<Comment> comments = new ArrayList<>();
 

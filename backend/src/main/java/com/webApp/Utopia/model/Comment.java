@@ -24,7 +24,7 @@ public class Comment {
     @NotNull(message = "Comment title cannot be empty")
     private String title;
 
-    @NotNull(message = "Comment descripton cannot be emptyssssss")
+    @NotNull(message = "Comment description cannot be empty")
     private String desc;
 
     public String getId() {
