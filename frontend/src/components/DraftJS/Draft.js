@@ -28,6 +28,36 @@ class Draft extends Component {
     });
   }
 
+  handleClick = (editorState) => {
+    const contentState = editorState.getCurrentContent();
+    console.log('this is:'+contentState.getPlainText());
+    const axios = require('axios')
+
+    var postData = {
+      title: 'testJW',
+      desc: contentState.getPlainText(),
+      user: null,
+      comment: []
+    };
+    
+    let axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS', 
+        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0emVuZyIsImV4cCI6MTYyNDczMzYxMCwiaWF0IjoxNjI0NzE1NjEwfQ.rKWJM2w_rpEaHanw3GT-R5rD86GJejb9Jpo_4v1vihn0ENG4TMZvbLfILWNhNd-WZ7lZgKM5wxu9ZDzELeV5UQ'
+      }
+    };
+    
+    axios.post('localhost:8081/savePosts', postData, axiosConfig)
+    .then((res) => {
+      console.log("RESPONSE RECEIVED: ", res);
+    })
+    .catch((err) => {
+      console.log("AXIOS ERROR: ", err);
+    })
+  }
+
   render() {
     const classes = this.props.classes;
     return (
@@ -42,7 +72,7 @@ class Draft extends Component {
         <EmojiSuggestions />
         <EmojiSelect />
         <input
-          onClick={this.logState}
+          onClick={this.handleClick(this.state.editorState)}
           type="button"
           value="Log State"
         />
