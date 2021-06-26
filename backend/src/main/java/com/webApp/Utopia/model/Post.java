@@ -25,7 +25,7 @@ public class Post {
     @NotNull(message = "Post title cannot be empty")
     private String title;
 
-    @NotNull(message = "Post description cannot be empty")git
+    @NotNull(message = "Post description cannot be empty")
     private String desc;
     //外键
     private User user;
