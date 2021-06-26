@@ -46,11 +46,11 @@ public class CommentService {
 
     }
 
-    public void updateComment(String id, Comment newCommet)
+    public void updateComment(String id, Comment newComment)
             throws ConstraintViolationException, CommentCollectionException {
         Optional<Comment> commentWithId = commentRepo.findById(id);
         Optional<Comment> movieWithSameTitle = commentRepo
-                .findByTitle(newCommet.getTitle());
+                .findByTitle(newComment.getTitle());
         if (commentWithId.isPresent()) {
             if (movieWithSameTitle.isPresent()
                     && !movieWithSameTitle.get().getId().equals(id)) {
@@ -59,7 +59,7 @@ public class CommentService {
                         CommentCollectionException.TitleAlreadyExists());
             }
             Comment commentToUpdate = commentWithId.get();
-            BeanUtils.copyProperties(newCommet, commentToUpdate);
+            BeanUtils.copyProperties(newComment, commentToUpdate);
 
             // To make sure that newComment doesn't get added as a new document
             commentToUpdate.setId(id);
