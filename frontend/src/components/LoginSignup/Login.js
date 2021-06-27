@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import './LoginSignup.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
-import { useHistory } from "react-router";
 
 const pre_fixed_API = "/api/authenticate"
 
 export default function Login(props) {
-    const history = useHistory();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -18,11 +16,12 @@ export default function Login(props) {
             'password': password})
             .then(
                 response => {
-                    localStorage.setItem('token', response.data)
-                    history.push("/")
+                    localStorage.setItem('token', JSON.stringify(response.data))
+                    props.history.push('/')
+                    window.location.reload()
                 }
             ).catch(error => {
-                alert("Account doesn't exist")
+                alert(error)
             })
     }
     return (
@@ -53,23 +52,6 @@ export default function Login(props) {
                     />
                 </div>
                 </div>
-                
-                {/* <div className="form-padding">
-                <div className="form-group">
-                    <div className="custom-control custom-checkbox">
-                        <input type="checkbox" 
-                        className="custom-control-input" 
-                        id="customCheck1" 
-                        style={{paddingRight:250}}
-                        onChange={this.handleRememberStatus}
-                        checked={this.state.remembered}/>
-                        <label className="custom-control-label" 
-                        htmlFor="customCheck1">
-                            Remember me
-                            </label>
-                    </div>
-                </div>
-                </div> */}
                 
                 <div className="form-padding" style={{paddingTop:'5px'}}>
                 <button type="submit" className="btn btn-primary btn-block"

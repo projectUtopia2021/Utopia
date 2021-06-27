@@ -1,5 +1,4 @@
 package com.webApp.Utopia.controller;
-
 import com.webApp.Utopia.model.JwtRequest;
 import com.webApp.Utopia.model.JwtResponse;
 import com.webApp.Utopia.service.RegistrationService;

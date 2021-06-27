@@ -20,7 +20,16 @@ export default function Register(props) {
             password
         }).then(
             response => {
-                history.push("/login")
+                axios.post("/api/authenticate", {
+                    'username': name, 
+                    'password': password})
+                    .then(
+                        res => {
+                            localStorage.setItem('token', JSON.stringify(res.data))
+                            props.history.push('/')
+                            window.location.reload()
+                        }
+                    )
             }).catch(error => {
                 const errorMessage = (
                     error.response &&
@@ -28,8 +37,7 @@ export default function Register(props) {
                     error.response.data.message) ||
                     error.message ||
                     error.toString()
-                console.log(errorMessage)
-                alert("Account Exist")
+                alert(errorMessage)
             })
     }
 
