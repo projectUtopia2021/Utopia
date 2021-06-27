@@ -18,7 +18,7 @@ public class PostController {
     private PostService postService;
 
     // GET Posts
-    @RequestMapping(method=RequestMethod.GET,value="/getPosts")
+    @RequestMapping(method=RequestMethod.GET,value="/api/getPosts")
     public ResponseEntity getAllPosts()
     {
         List<Post> posts = postService.getAllPosts();
@@ -29,24 +29,20 @@ public class PostController {
     }
 
     // SAVE Post
-    @RequestMapping(method= RequestMethod.POST,value="/savePosts")
+    @RequestMapping(method= RequestMethod.POST,value="/api/savePosts")
     public ResponseEntity<String> createPost(@RequestBody Post post)
     {
         try{
             postService.createPost(post);
             return new ResponseEntity("Successfully added post " +post.getTitle(), HttpStatus.OK);
         }
-        catch(ConstraintViolationException  e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-        catch(PostCollectionException e)
-        {
-            return new ResponseEntity(e.getMessage(),HttpStatus.CONFLICT);
+        catch(Exception  e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     // EDIT Post
-    @RequestMapping(method=RequestMethod.PUT,value="/updatePost/{id}")
+    @RequestMapping(method=RequestMethod.PUT,value="/api/updatePost/{id}")
     public ResponseEntity updatePostById(@PathVariable("id") String id,@RequestBody Post editedPost)
     {
         try {
@@ -64,7 +60,7 @@ public class PostController {
 
 
     // DELETE Post
-    @RequestMapping(method=RequestMethod.DELETE,value="/deletePost/{id}")
+    @RequestMapping(method=RequestMethod.DELETE,value="/api/deletePost/{id}")
     public ResponseEntity deletePostById(@PathVariable("id") String id)
     {
         try{

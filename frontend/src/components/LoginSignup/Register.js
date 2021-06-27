@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import { useHistory } from "react-router";
 
-const register_API = "http://localhost:8080/register"
+const register_API = "/api/register"
 
 export default function Register(props) {
     const history = useHistory();
@@ -20,7 +20,7 @@ export default function Register(props) {
             password
         }).then(
             response => {
-                history.push("/homepage")
+                history.push("/login")
             }).catch(error => {
                 const errorMessage = (
                     error.response &&

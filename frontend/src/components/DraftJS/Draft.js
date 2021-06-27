@@ -45,11 +45,11 @@ class Draft extends Component {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin' : '*',
         'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS', 
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0emVuZyIsImV4cCI6MTYyNDczMzYxMCwiaWF0IjoxNjI0NzE1NjEwfQ.rKWJM2w_rpEaHanw3GT-R5rD86GJejb9Jpo_4v1vihn0ENG4TMZvbLfILWNhNd-WZ7lZgKM5wxu9ZDzELeV5UQ'
+        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0emVuZyIsImV4cCI6MTYyNDc4MjY5MSwiaWF0IjoxNjI0NzY0NjkxfQ.oCK_AcABqOtNqHt9KgI0H9oLpHTVa5wbXsG3QR7gQD1WAqslZjjvHWFVhpeNoPfdDY11RKOVr46rxgeZS51pZQ'
       }
     };
     
-    axios.post('localhost:8081/savePosts', postData, axiosConfig)
+    axios.post('/api/savePosts', postData, axiosConfig)
     .then((res) => {
       console.log("RESPONSE RECEIVED: ", res);
     })

@@ -19,7 +19,7 @@ public class UserController {
     private UserService userService;
 
     // GET Users
-    @RequestMapping(method=RequestMethod.GET,value="/getUsers")
+    @RequestMapping(method=RequestMethod.GET,value="/api/getUsers")
     public ResponseEntity getAllUsers()
     {
         List<User> comments = userService.getAllUsers();
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     // SAVE User
-    @RequestMapping(method= RequestMethod.POST,value="/addUser")
+    @RequestMapping(method= RequestMethod.POST,value="/api/addUser")
     public ResponseEntity<String> createComment(@RequestBody User user)
     {
         try{
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     // DELETE User
-    @RequestMapping(method=RequestMethod.DELETE,value="/deleteUser/{name}")
+    @RequestMapping(method=RequestMethod.DELETE,value="/api/deleteUser/{name}")
     public ResponseEntity deleteCommentById(@PathVariable("name") String name)
     {
         try{
@@ -55,7 +55,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/updatePassword")
+    @RequestMapping(method=RequestMethod.PUT, value="/api/updatePassword")
     public ResponseEntity updatePassword(@RequestBody Map<String, Object> inputData) {
         try{
             userService.updateUserPassword(inputData.get("emailAddress").toString(), inputData.get("password").toString());
