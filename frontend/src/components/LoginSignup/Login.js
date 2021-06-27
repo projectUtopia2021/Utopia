@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import { useHistory } from "react-router";
 
-const pre_fixed_API = "http://localhost:8081/authenticate"
+const pre_fixed_API = "/api/authenticate"
 
 export default function Login(props) {
     const history = useHistory();

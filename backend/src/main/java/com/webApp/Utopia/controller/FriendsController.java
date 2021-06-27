@@ -19,7 +19,7 @@ public class FriendsController {
     @Autowired
     FriendsService friendsService;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/addFriend")
+    @RequestMapping(method = RequestMethod.POST, value = "/api/addFriend")
     public ResponseEntity<String> addFriend(@RequestBody Map<String, Object> emailMap) {
         try {
             if (friendsService.addFriend(emailMap.get("emailOne").toString(), emailMap.get("emailTwo").toString())) {
@@ -32,7 +32,7 @@ public class FriendsController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteFriend")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/api/deleteFriend")
     public ResponseEntity<String> deleteFriend(@RequestBody Map<String, Object> emailMap) {
         try {
             if (friendsService.deleteFriend(emailMap.get("emailOne").toString(), emailMap.get("emailTwo").toString())) {

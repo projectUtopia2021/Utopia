@@ -31,19 +31,11 @@ public class PostService {
     }
 
     public void createPost(Post post)
-            throws ConstraintViolationException, PostCollectionException {
+            throws Exception{
 
         // If the post is valid as per not null constraint we have to next
         // check if the post with the same name/id already exists
-        Optional<Post> postTitleOptional = postRepo
-                .findByTitle(post.getTitle());
-        if (postTitleOptional.isPresent()) {
-            System.out.println(postTitleOptional.get());
-            throw new PostCollectionException(
-                    PostCollectionException.TitleAlreadyExists());
-        } else {
             postRepo.save(post);
-        }
 
     }
 
