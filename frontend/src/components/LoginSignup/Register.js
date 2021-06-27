@@ -3,8 +3,9 @@ import './LoginSignup.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import { useHistory } from "react-router";
+import API_PREFIX from '../../API_PREFIX';
 
-const register_API = "http://localhost:8080/register"
+const registerAPI = API_PREFIX + "/register";
 
 export default function Register(props) {
     const history = useHistory();
@@ -14,7 +15,7 @@ export default function Register(props) {
 
     const handleRgister = (event) => {
         event.preventDefault();
-        axios.post(register_API, {
+        axios.post(registerAPI, {
             name, 
             email, 
             password

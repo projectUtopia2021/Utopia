@@ -3,8 +3,9 @@ import './LoginSignup.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import { useHistory } from "react-router";
+import API_PREFIX from '../../API_PREFIX'
 
-const pre_fixed_API = "http://localhost:8081/authenticate"
+const authenticateAPI = API_PREFIX + "/authenticate";
 
 export default function Login(props) {
     const history = useHistory();
@@ -13,16 +14,17 @@ export default function Login(props) {
 
     const handleLogin = (event) => {
         event.preventDefault()
-        axios.post(pre_fixed_API, {
+        axios.post(authenticateAPI, {
             'username': username, 
             'password': password})
             .then(
-                response => {
-                    localStorage.setItem('token', response.data)
+                response =>{
+                    console.log(response)
+                    //localStorage.setItem('token', response.data)
                     history.push("/")
                 }
             ).catch(error => {
-                alert("Account doesn't exist")
+                alert(error)
             })
     }
     return (
