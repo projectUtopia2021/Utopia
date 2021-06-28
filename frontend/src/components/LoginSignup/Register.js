@@ -5,7 +5,7 @@ import axios from "axios";
 import { useHistory } from "react-router";
 import API_PREFIX from '../../API_PREFIX';
 
-const registerAPI = API_PREFIX + "/register";
+const register_API = "/api/register"
 
 export default function Register(props) {
     const history = useHistory();
@@ -15,13 +15,22 @@ export default function Register(props) {
 
     const handleRgister = (event) => {
         event.preventDefault();
-        axios.post(registerAPI, {
+        axios.post(register_API, {
             name, 
             email, 
             password
         }).then(
             response => {
-                history.push("/homepage")
+                axios.post("/api/authenticate", {
+                    'username': name, 
+                    'password': password})
+                    .then(
+                        res => {
+                            localStorage.setItem('token', JSON.stringify(res.data))
+                            props.history.push('/')
+                            window.location.reload()
+                        }
+                    )
             }).catch(error => {
                 const errorMessage = (
                     error.response &&
@@ -29,8 +38,7 @@ export default function Register(props) {
                     error.response.data.message) ||
                     error.message ||
                     error.toString()
-                console.log(errorMessage)
-                alert("Account Exist")
+                alert(errorMessage)
             })
     }
 

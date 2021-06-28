@@ -26,14 +26,14 @@ public class CommentController {
     private CommentService commentService;
 
     //Health Check
-    @RequestMapping(method=RequestMethod.GET,value="/")
+    @RequestMapping(method=RequestMethod.GET,value="/api/")
     public ResponseEntity checkHealth()
     {
         return new ResponseEntity("Hello!! Spring Boot Application is up and running..",HttpStatus.OK);
     }
 
     // GET Comments
-    @RequestMapping(method=RequestMethod.GET,value="/getComments")
+    @RequestMapping(method=RequestMethod.GET,value="/api/getComments")
     public ResponseEntity getAllComments()
     {
         List<Comment> comments = commentService.getAllComments();
@@ -44,7 +44,7 @@ public class CommentController {
     }
 
     // SAVE Comment
-    @RequestMapping(method= RequestMethod.POST,value="/saveComments")
+    @RequestMapping(method= RequestMethod.POST,value="/api/saveComments")
     public ResponseEntity<String> createComment(@RequestBody Comment comment)
     {
         try{
@@ -61,7 +61,7 @@ public class CommentController {
     }
 
     // EDIT Comment
-    @RequestMapping(method=RequestMethod.PUT,value="/updateComment/{id}")
+    @RequestMapping(method=RequestMethod.PUT,value="/api/updateComment/{id}")
     public ResponseEntity updateCommentById(@PathVariable("id") String id,@RequestBody Comment editedComment)
     {
         try {
@@ -79,7 +79,7 @@ public class CommentController {
 
 
     // DELETE Comment
-    @RequestMapping(method=RequestMethod.DELETE,value="/deleteComment/{id}")
+    @RequestMapping(method=RequestMethod.DELETE,value="/api/deleteComment/{id}")
     public ResponseEntity deleteCommentById(@PathVariable("id") String id)
     {
         try{

@@ -2,26 +2,23 @@ import React, { useState } from "react";
 import './LoginSignup.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
-import { useHistory } from "react-router";
-import API_PREFIX from '../../API_PREFIX'
 
-const authenticateAPI = API_PREFIX + "/authenticate";
+const pre_fixed_API = "/api/authenticate"
 
 export default function Login(props) {
-    const history = useHistory();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = (event) => {
         event.preventDefault()
-        axios.post(authenticateAPI, {
+        axios.post(pre_fixed_API, {
             'username': username, 
             'password': password})
             .then(
-                response =>{
-                    console.log(response)
-                    //localStorage.setItem('token', response.data)
-                    history.push("/")
+                response => {
+                    localStorage.setItem('token', JSON.stringify(response.data))
+                    props.history.push('/')
+                    window.location.reload()
                 }
             ).catch(error => {
                 alert(error)
@@ -55,23 +52,6 @@ export default function Login(props) {
                     />
                 </div>
                 </div>
-                
-                {/* <div className="form-padding">
-                <div className="form-group">
-                    <div className="custom-control custom-checkbox">
-                        <input type="checkbox" 
-                        className="custom-control-input" 
-                        id="customCheck1" 
-                        style={{paddingRight:250}}
-                        onChange={this.handleRememberStatus}
-                        checked={this.state.remembered}/>
-                        <label className="custom-control-label" 
-                        htmlFor="customCheck1">
-                            Remember me
-                            </label>
-                    </div>
-                </div>
-                </div> */}
                 
                 <div className="form-padding" style={{paddingTop:'5px'}}>
                 <button type="submit" className="btn btn-primary btn-block"

@@ -20,6 +20,21 @@ function HomeIcon(props) {
 
 function NaviBar() {
     const history = useHistory()
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+    const handleLogOut = (event) => {
+        event.preventDefault()
+        localStorage.removeItem('token')
+        setIsLoggedIn(false)
+    }
+
+    React.useEffect(() => {
+        if(localStorage.getItem('token')){
+            setIsLoggedIn(true)
+        }
+    }, [])
+    
+    
     return (
         <div>
             <CssBaseline />
@@ -39,18 +54,30 @@ function NaviBar() {
                     />
                 </Search>
                 <ButtonBox>
+                {isLoggedIn? (
                     <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                    <Button style={{textTransform: 'none'}} 
-                    onClick = {() => {
-                        history.push("/login")
-                        }}>Log In
+                    <Button style={{textTransform: 'none'}}
+                        onClick={handleLogOut}>
+                    Log Out
+                    </Button>
+                </ButtonGroup>
+                ): (
+                    <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                    <Button style={{textTransform: 'none'}}  
+                                onClick = {() => {
+                                    history.push("/login")
+                            }}>
+                                Log In
                         </Button>
-                    <Button style={{textTransform: 'none'}} 
-                    onClick = {() => {
-                        history.push("/register")
-                        }}>Sign Up
-                        </Button>
+                         <Button style={{textTransform: 'none'}} 
+                                onClick = {() => {
+                                history.push("/register")
+                            }}>
+                                    Sign Up
+                    </Button>
                     </ButtonGroup>
+                    
+                )}
                 </ButtonBox>
                 </Toolbar>
             </AppBar>

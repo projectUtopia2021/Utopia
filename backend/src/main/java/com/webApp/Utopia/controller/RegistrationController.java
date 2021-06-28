@@ -1,5 +1,4 @@
 package com.webApp.Utopia.controller;
-
 import com.webApp.Utopia.model.JwtRequest;
 import com.webApp.Utopia.model.JwtResponse;
 import com.webApp.Utopia.service.RegistrationService;
@@ -26,7 +25,7 @@ public class RegistrationController {
     @Autowired
     private RegistrationService registrationService;
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public ResponseEntity register(@RequestBody RegistrationRequest request){
         try{
             String name = registrationService.register(request);

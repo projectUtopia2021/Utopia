@@ -30,7 +30,6 @@ class CommentServiceTest {
         //insert a comment that does not exist
         Comment newComment = new Comment("comment1", "jinritoutiao", "Bucks beat Hawks");
         commentService.createComment(newComment);
-        Optional<Comment> commentById =
 
     }
 
