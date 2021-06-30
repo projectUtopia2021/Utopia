@@ -19,6 +19,7 @@ import com.webApp.Utopia.repository.CommentRepository;
 import com.webApp.Utopia.service.CommentService;
 
 @RestController
+@RequestMapping(value = "/comment")
 public class CommentController {
 
     @Autowired

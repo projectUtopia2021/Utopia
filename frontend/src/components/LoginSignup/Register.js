@@ -3,6 +3,7 @@ import './LoginSignup.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import { useHistory } from "react-router";
+import API_PREFIX from '../../API_PREFIX';
 
 const register_API = "/api/register"
 
