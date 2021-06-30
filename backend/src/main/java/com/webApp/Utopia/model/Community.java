@@ -14,20 +14,20 @@ import java.util.UUID;
  * @author Jeff
  * @date 6/26/21 9:22 PM
  */
-@Document(collection = "community_detail")
+@Document(collection = "community")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CommunityDetail {
+public class Community {
     @Id
-    private UUID id;
-    @NotNull(message = "community title cannot be empty")
-    private String title;
+    private String id;
+    @NotNull(message = "community name cannot be empty")
+    private String name;
     @NotNull(message = "description cannot be empty")
     private String description;
     @NotNull(message = "creator username cannot be empty")
     private String creatorUsername;
     private List<String> members;
-    private List<Channel> channels;
+    private List<String> posts;
 
 }
