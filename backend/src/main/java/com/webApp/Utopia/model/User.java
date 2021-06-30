@@ -37,17 +37,20 @@ public class User implements UserDetails {
     private Boolean locked = false;
     private Boolean enabled =true;
     private List<String> friends;
+    private List<Post> posts;
 
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+
     }
 
-    public User(@NotNull(message = "Username cannot be empty") String name, @NotNull(message = "emailAddress cannot be empty") String email, List<String> friends) {
+    public User(@NotNull(message = "Username cannot be empty") String name, @NotNull(message = "emailAddress cannot be empty") String email, List<String> friends,List<Post> posts) {
         this.name = name;
         this.email = email;
         this.friends = friends;
+        this.posts = posts;
     }
 
     public String getId() {

@@ -26,6 +26,9 @@ public class Comment {
 
     @NotNull(message = "Comment description cannot be empty")
     private String desc;
+    private User user;
+    private Post post;
+
 
     public String getId() {
         return id;
@@ -45,6 +48,11 @@ public class Comment {
     public void setDesc(String desc) {
         this.desc = desc;
     }
-
+    public User getUser() { return user; }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public Post getPost(){ return post; }
+    public void setPost(Post post){ this.post = post; }
 }
 
