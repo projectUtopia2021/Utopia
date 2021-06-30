@@ -25,21 +25,21 @@ class CommentServiceTest {
     }
 
     @Test
-    @Transactional
+    //@Transactional
     void createComment() throws CommentCollectionException {
         //insert a comment that does not exist
-        Comment newComment = new Comment("comment1", "jinritoutiao", "Bucks beat Hawks");
-        commentService.createComment(newComment);
+        //Comment newComment = new Comment("comment1", "jinritoutiao", "Bucks beat Hawks");
+        //commentService.createComment(newComment);
 
     }
 
     @Test
-    @Transactional
+    //@Transactional
     void updateComment() {
     }
 
     @Test
-    @Transactional
+    //@Transactional
     void deleteCommentById() {
     }
 }

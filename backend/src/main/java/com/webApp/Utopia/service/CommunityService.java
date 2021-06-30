@@ -46,7 +46,7 @@ public class CommunityService {
     public boolean updateCommunity(Community updatedCommunity) {
         Optional<Community> communityByName = communityRepo.findByName(updatedCommunity.getName());
         // need to create an Exception class to handle the exiting error
-        if (communityByName.isPresent()) {
+        if (!communityByName.isPresent()) {
             return false;
         } else {
             communityRepo.save(updatedCommunity);

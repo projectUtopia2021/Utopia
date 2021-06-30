@@ -4,6 +4,8 @@ import com.webApp.Utopia.model.JwtResponse;
 import com.webApp.Utopia.service.RegistrationService;
 import com.webApp.Utopia.service.UserService;
 import com.webApp.Utopia.utils.JWTUtility;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @CrossOrigin
+@Api(value = "Authentication Controller")
+@ApiOperation(value = "APIs for Authentication Controller")
 public class AuthenticationController {
     private RegistrationService registrationService;
 

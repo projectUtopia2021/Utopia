@@ -5,6 +5,8 @@ import com.webApp.Utopia.service.RegistrationService;
 import com.webApp.Utopia.service.UserService;
 import com.webApp.Utopia.utils.JWTUtility;
 import com.webApp.Utopia.utils.RegistrationRequest;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
+@Api(value = "Registration Controller")
+@ApiOperation(value = "APIs for Registration Controller")
 public class RegistrationController {
 
     @Autowired

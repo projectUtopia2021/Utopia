@@ -2,6 +2,8 @@ package com.webApp.Utopia.controller;
 
 import com.webApp.Utopia.model.Community;
 import com.webApp.Utopia.service.CommunityService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +17,12 @@ import java.util.ArrayList;
  */
 @RequestMapping("/api/community")
 @RestController
+@Api(value = "Community Controller")
+@ApiOperation(value = "APIs for community")
 public class CommunityController {
 
     @Autowired
     CommunityService communityService;
-
-    @PostMapping(value = "/")
-    public ResponseEntity test(@RequestHeader(value = "Authorization") String authorization) {
-        System.out.println(authorization);
-        return ResponseEntity.ok("this is community");
-    }
-
 
     @GetMapping(value = "/getAllCommunities")
     public ResponseEntity getAllCommunities() {
@@ -45,8 +42,8 @@ public class CommunityController {
 
     @PostMapping(value = "createCommunity")
     public ResponseEntity createCommunity(@RequestBody Community community) {
-        boolean found = communityService.createCommunity(community);
-        if (!found) {
+        boolean created = communityService.createCommunity(community);
+        if (created) {
             return new ResponseEntity("created successfully", HttpStatus.OK);
         }
 
@@ -56,8 +53,8 @@ public class CommunityController {
 
     @PostMapping(value = "updateCommuity")
     public ResponseEntity updateCommunity(@RequestBody Community community) {
-        boolean found = communityService.createCommunity(community);
-        if (found) {
+        boolean updated = communityService.updateCommunity(community);
+        if (updated) {
             return new ResponseEntity("updated successfully", HttpStatus.OK);
         }
 
