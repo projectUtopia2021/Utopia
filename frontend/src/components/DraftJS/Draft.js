@@ -166,6 +166,41 @@ class Draft extends React.Component {
      this.onExtractData();
      this.onExtractMentions();
      console.log("make Posts");
+
+    //  localStorage.getItem('token', JSON.stringify(res.data))
+    console.log(localStorage.getItem('token'))
+
+
+    const contentState = this.state.editorState.getCurrentContent();
+
+    const axios = require('axios')
+
+    var postData = {
+      title: 'testJW',
+      desc: draftToHtml(convertToRaw(contentState)),
+      user: null,
+      comment: []
+    };
+    
+    let axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS', 
+        'Authorization': localStorage.getItem('token'),
+      }
+    };
+    
+    axios.post('/api/savePosts', postData, axiosConfig)
+    .then((res) => {
+      console.log("RESPONSE RECEIVED: ", res);
+    })
+    .catch((err) => {
+      console.log("AXIOS ERROR: ", err);
+    })
+
+
+
   }
 
   render() {
