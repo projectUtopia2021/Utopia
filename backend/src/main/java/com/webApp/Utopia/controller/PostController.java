@@ -3,6 +3,8 @@ package com.webApp.Utopia.controller;
 import com.webApp.Utopia.exception.PostCollectionException;
 import com.webApp.Utopia.model.Post;
 import com.webApp.Utopia.service.PostService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,8 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
+@Api(value = "Post Controller")
+@ApiOperation(value = "APIs for Post Controller")
 public class PostController {
 
     @Autowired
