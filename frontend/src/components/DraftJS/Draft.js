@@ -1,90 +1,216 @@
-import React, { Component } from 'react';
-import { EditorState } from 'draft-js';
-import Editor from '@draft-js-plugins/editor';
-import {useStyles} from './DraftStyles';
-import Container from '@material-ui/core/Container';
-import createEmojiPlugin from '@draft-js-plugins/emoji';
+import React from "react";
+import { EditorState, convertToRaw } from "draft-js";
+import Editor from "draft-js-plugins-editor";
+import createMentionPlugin, {
+  defaultSuggestionsFilter
+} from "draft-js-mention-plugin";
+import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
+import {
+  ItalicButton,
+  BoldButton,
+  UnderlineButton,
+  CodeButton,
+  HeadlineOneButton,
+  HeadlineTwoButton,
+  HeadlineThreeButton,
+  UnorderedListButton,
+  OrderedListButton,
+  BlockquoteButton,
+  CodeBlockButton,
+} from '@draft-js-plugins/buttons';
+import {editorStyles} from "./RemoteMentionEditor";
+import "draft-js-mention-plugin/lib/plugin.css";
+import '@draft-js-plugins/static-toolbar/lib/plugin.css';
+import draftToHtml from 'draftjs-to-html';
+import { Container } from "@material-ui/core";
 
-import "./styles.css";
+
+import createEmojiPlugin from '@draft-js-plugins/emoji';
 import "../../../node_modules/@draft-js-plugins/emoji/lib/plugin.css"
 
-const emojiPlugin = createEmojiPlugin();
 
-const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
 
-class Draft extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editorState: EditorState.createEmpty(),
-    }
-    this.setDomEditorRef = ref => this.domEditor = ref;
-    this.focus = () => this.domEditor.focus();
-  }
+const mentions: MentionData[] = [
+  {
+    name: 'Matthew Russell',
+    title: 'Senior Software Engineer',
+    avatar:
+      'https://pbs.twimg.com/profile_images/517863945/mattsailing_400x400.jpg',
+  },
+  {
+    name: 'Julian Krispel-Samsel',
+    title: 'United Kingdom',
+    avatar: 'https://avatars2.githubusercontent.com/u/1188186?v=3&s=400',
+  },
+  {
+    name: 'Jyoti Puri',
+    title: 'New Delhi, India',
+    avatar: 'https://avatars0.githubusercontent.com/u/2182307?v=3&s=400',
+  },
+  {
+    name: 'Max Stoiber',
+    title:
+      'Travels around the world, brews coffee, skis mountains and makes stuff on the web.',
+    avatar: 'https://avatars0.githubusercontent.com/u/7525670?s=200&v=4',
+  },
+  {
+    name: 'Nik Graf',
+    title: 'Passionate about Software Architecture, UX, Skiing & Triathlons',
+    avatar: 'https://avatars0.githubusercontent.com/u/223045?v=3&s=400',
+  },
+  {
+    name: 'Pascal Brandt',
+    title: 'HeathIT hacker and researcher',
+    avatar:
+      'https://pbs.twimg.com/profile_images/688487813025640448/E6O6I011_400x400.png',
+  },
+  {
+    name: 'Łukasz Bąk',
+    title: 'Randomly Generated User',
+    avatar: 'https://randomuser.me/api/portraits/men/36.jpg',
+  },
+];
 
-  onChange = (editorState) => {
-    this.setState({
-      editorState,
+class HeadlinesPicker extends React.Component {
+  componentDidMount() {
+    setTimeout(() => {
+      window.addEventListener('click', this.onWindowClick);
     });
   }
 
-  handleClick = (editorState) => {
-    const contentState = editorState.getCurrentContent();
-    console.log('this is:'+contentState.getPlainText());
-    const axios = require('axios')
-
-    var postData = {
-      title: 'testJW',
-      desc: contentState.getPlainText(),
-      user: null,
-      comment: []
-    };
-    
-    let axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin' : '*',
-        'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS', 
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0emVuZyIsImV4cCI6MTYyNDc4MjY5MSwiaWF0IjoxNjI0NzY0NjkxfQ.oCK_AcABqOtNqHt9KgI0H9oLpHTVa5wbXsG3QR7gQD1WAqslZjjvHWFVhpeNoPfdDY11RKOVr46rxgeZS51pZQ'
-      }
-    };
-    
-    axios.post('/api/savePosts', postData, axiosConfig)
-    .then((res) => {
-      console.log("RESPONSE RECEIVED: ", res);
-    })
-    .catch((err) => {
-      console.log("AXIOS ERROR: ", err);
-    })
+  componentWillUnmount() {
+    window.removeEventListener('click', this.onWindowClick);
   }
 
+  onWindowClick = () =>
+    // Call `onOverrideContent` again with `undefined`
+    // so the toolbar can show its regular content again.
+    this.props.onOverrideContent(undefined);
+
   render() {
-    const classes = this.props.classes;
+    const buttons = [HeadlineOneButton, HeadlineTwoButton, HeadlineThreeButton];
     return (
-      <Container maxWidth="sm" className={classes.textbox} onClick={this.focus}>
-        <Editor
-          placeholder="Enter some text..."
-          editorState={this.state.editorState}
-          onChange={this.onChange}
-          ref={this.setDomEditorRef}
-          plugins={[emojiPlugin]}
-        />
-        <EmojiSuggestions />
-        <EmojiSelect />
-        <input
-          onClick={this.handleClick(this.state.editorState)}
-          type="button"
-          value="Log State"
-        />
-      </Container>
-      
+      <div>
+        {buttons.map((Button, i) => (
+          // eslint-disable-next-line
+          <Button key={i} {...this.props} />
+        ))}
+      </div>
     );
   }
 }
 
-export default () => {
-  const classes = useStyles();
-  return (
-      <Draft classes={classes} />
-  )
+class HeadlinesButton extends React.Component {
+  onClick = () =>
+    // A button can call `onOverrideContent` to replace the content
+    // of the toolbar. This can be useful for displaying sub
+    // menus or requesting additional information from the user.
+    this.props.onOverrideContent(HeadlinesPicker);
+
+  render() {
+    return (
+      <div className={editorStyles.headlineButtonWrapper}>
+        <button onClick={this.onClick} className={editorStyles.headlineButton}>
+          H
+        </button>
+      </div>
+    );
+  }
 }
+
+
+class Draft extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.mentionPlugin = createMentionPlugin();
+    this.toolbarPlugin = createToolbarPlugin();
+    this.emojiPlugin   = createEmojiPlugin();
+  }
+
+  state = {
+    editorState: EditorState.createEmpty(),
+    suggestions: mentions
+  };
+
+  onChange = editorState => {
+    this.setState({ editorState });
+  };
+
+  onSearchChange = ({ value }) => {
+    this.setState({
+      suggestions: defaultSuggestionsFilter(value, mentions)
+    });
+  };
+
+  onExtractData = () => {
+    const contentState = this.state.editorState.getCurrentContent();
+    const raw = draftToHtml(convertToRaw(contentState));
+    console.log(raw);
+  };
+
+  onExtractMentions = () => {
+    const contentState = this.state.editorState.getCurrentContent();
+    const raw = convertToRaw(contentState);
+    let mentionedUsers = [];
+    for (let key in raw.entityMap) {
+      const ent = raw.entityMap[key];
+      if (ent.type === "mention") {
+        mentionedUsers.push(ent.data.mention);
+      }
+    }
+    console.log(mentionedUsers);
+  };
+
+  makePosts = () => {
+     this.onExtractData();
+     this.onExtractMentions();
+     console.log("make Posts");
+  }
+
+  render() {
+    const { MentionSuggestions } = this.mentionPlugin;
+    const { EmojiSuggestions, EmojiSelect } = this.emojiPlugin;
+    const { Toolbar } = this.toolbarPlugin;
+    const plugins = [this.mentionPlugin, this.toolbarPlugin, this.emojiPlugin];
+
+    return (
+      <Container maxWidth="sm" className={editorStyles.textbox} onClick={this.focus}>
+        <div className={editorStyles.editor, editorStyles.textbox}>
+          <Editor
+            editorState={this.state.editorState}
+            onChange={this.onChange}
+            plugins={plugins}
+          />
+                    <Toolbar>
+                      {
+                        // may be use React.Fragment instead of div to improve perfomance after React 16
+                        (externalProps) => (
+                          <div>
+                            <BoldButton {...externalProps} />
+                            <ItalicButton {...externalProps} />
+                            <UnderlineButton {...externalProps} />
+                            <CodeButton {...externalProps} />
+                            <UnorderedListButton {...externalProps} />
+                            <OrderedListButton {...externalProps} />
+                          </div>
+                        )
+                      }
+                    </Toolbar>
+          <EmojiSuggestions />
+          <EmojiSelect />
+          <MentionSuggestions
+            onSearchChange={this.onSearchChange}
+            suggestions={this.state.suggestions}
+          />
+
+        </div>
+        <div>
+          <button onClick={() => this.makePosts()}>Submit</button>
+        </div>
+      </Container>
+    );
+  }
+}
+
+export default Draft;
