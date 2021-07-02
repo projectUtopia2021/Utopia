@@ -35,7 +35,8 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
-            "/swagger-ui/**"
+            "/swagger-ui/**",
+            "api/community/**"
     };
 
     @Override

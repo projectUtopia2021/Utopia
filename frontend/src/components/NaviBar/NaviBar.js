@@ -9,6 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import {Search, SearchIconWrapper, StyledInputBase, ButtonBox} from './NaviBarStyles';
 import { useHistory } from 'react-router-dom';
+import Discovery from '../Discovery/Discovery';
+import IconButton from '@material-ui/core/IconButton';
+import axios from 'axios';
+
+
+const GET_COMMUNITIES_API = "/api/community/getCommunityByName"
 
 function HomeIcon(props) {
     return (
@@ -21,11 +27,22 @@ function HomeIcon(props) {
 function NaviBar() {
     const history = useHistory()
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+    const [searchContent, setSearchContent] = React.useState('');
+    const [searchResult, setSearchResult] = React.useState('');
 
     const handleLogOut = (event) => {
         event.preventDefault()
         localStorage.removeItem('token')
         setIsLoggedIn(false)
+    }
+
+    const handleSearch = (event) => {
+        event.preventDefault()
+        if(window.localStorage.getItem('token')){
+            axios.defaults.headers.common['Authorization'] = `Bearer` + ' ' +JSON.parse(window.localStorage.getItem('token')).jwtToken
+        }
+        console.log(axios.defaults.headers.common['Authorization'])
+        history.push("/discovery")
     }
 
     React.useEffect(() => {
@@ -44,15 +61,28 @@ function NaviBar() {
                 <Typography variant="h6" color="inherit" noWrap>
                     Utopia
                 </Typography>
+                
                 <Search>
-                    <SearchIconWrapper>
+                    {/* <SearchIconWrapper>
                     <SearchIcon />
-                    </SearchIconWrapper>
+                    </SearchIconWrapper>  */}
+                    <form onSubmit={handleSearch}>
                     <StyledInputBase
                     placeholder="Search…"
                     inputProps={{ 'aria-label': 'search' }}
+                    onChange={(event) => {
+                        setSearchContent(event.target.value)
+                    }}
                     />
+                    <IconButton type="submit" aria-label="search"
+                         //onPointerEnter={handleSearch}
+                         //onClick={handleSearch}
+                         >
+                    <SearchIcon />
+                    </IconButton>
+                    </form>
                 </Search>
+                
                 <ButtonBox>
                 {isLoggedIn? (
                     <ButtonGroup variant="contained" aria-label="outlined primary button group">

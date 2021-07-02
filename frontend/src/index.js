@@ -6,6 +6,8 @@ import Login from './components/LoginSignup/Login';
 import Register from './components/LoginSignup/Register'
 import Profile from './components/Profile/Profile.js';
 import Draft from './components/DraftJS/Draft.js';
+import Discovery from './components/Discovery/Discovery.js';
+import Communities from './components/Communities/Communities.js';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
@@ -19,6 +21,8 @@ ReactDOM.render(
         <Route path="/register" component={Register} />
         <Route path="/profile" component={Profile} />
         <Route path="/draft" component={Draft} />
+        <Route path="/discovery" component={Discovery} />
+        <Route path="/communities" component={Communities} />
       </Switch>
     </Router>
 

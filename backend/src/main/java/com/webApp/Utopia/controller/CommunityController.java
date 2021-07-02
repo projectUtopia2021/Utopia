@@ -40,7 +40,7 @@ public class CommunityController {
         return new ResponseEntity(community, HttpStatus.OK);
     }
 
-    @PostMapping(value = "createCommunity")
+    @PostMapping(value = "/createCommunity")
     public ResponseEntity createCommunity(@RequestBody Community community) {
         boolean created = communityService.createCommunity(community);
         if (created) {
@@ -51,7 +51,7 @@ public class CommunityController {
     }
 
 
-    @PostMapping(value = "updateCommuity")
+    @PostMapping(value = "/updateCommuity")
     public ResponseEntity updateCommunity(@RequestBody Community community) {
         boolean updated = communityService.updateCommunity(community);
         if (updated) {

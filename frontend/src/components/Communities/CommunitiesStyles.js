@@ -1,6 +1,8 @@
 import Tabs from "@material-ui/core/Tabs";
 import { withStyles } from "@material-ui/styles";
 import Tab from "@material-ui/core/Tab";
+import { styled } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 
 const VerticalTabs = withStyles(theme => ({
   flexContainer: {
@@ -16,20 +18,34 @@ const VerticalTabs = withStyles(theme => ({
 
 const TheTab = withStyles(theme => ({
     root: {
-      //border: "2px solid lightgray",
       textAlign: "left"
     },
     selected: {
       color: "#AB83FF",
-      //border: "3px solid #FFFFFF",
+      fontWeight:'bold',
       backgroundColor: "#EBFC9F",
-      borderRadius:"12px",
+      borderRadius:'2px',
       alignItems:"left"
     },
     label: {
-      //fontSize: 20,
       textTransform: "lowercase"
     }
   }))(Tab);
 
-export {VerticalTabs, TheTab};
+ const MainContainer = withStyles(theme => ({
+      position: 'relative',
+      display: 'flex',
+      width: "80%"
+ }))(Container);
+
+ const CommunityBar = styled('div')(theme => ({
+   flex: 3,
+   height: 'calc(100vh - 50px)'
+ }));
+
+ const PostDisplay = styled('div')(theme => ({
+  flex: 10
+}));
+
+
+export {MainContainer, CommunityBar, PostDisplay, VerticalTabs, TheTab};
