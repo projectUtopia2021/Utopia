@@ -11,5 +11,6 @@ public interface CommunityRepository extends MongoRepository<Community, String> 
 
     @Query("{'name':?0}")
     Optional<Community> findByName(String name);
-
+    Optional<Community> findByNameLike(String name);
+    void deleteByName(String name);
 }
