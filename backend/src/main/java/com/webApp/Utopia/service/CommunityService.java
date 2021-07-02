@@ -1,7 +1,10 @@
 package com.webApp.Utopia.service;
 
+import com.webApp.Utopia.exception.CommentCollectionException;
+import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.model.Community;
 import com.webApp.Utopia.repository.CommunityRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,36 +24,55 @@ public class CommunityService {
         return communityRepo.findAll();
     }
 
-    public Community getCommunityByName(String name) {
+    public void createCommunity(Community newCommunity) throws CommunityCollectionException{
+        Optional<Community> communityByName = communityRepo.findByName(newCommunity.getName());
+        // need to create an Exception class to handle the exiting error
+        if (communityByName.isPresent()) {
+            throw new CommunityCollectionException(CommunityCollectionException.CommunityNameExists(newCommunity.getName()));
+        } else {
+            communityRepo.save(newCommunity);
+        }
+    }
+
+    public void updateCommunity(Community updatedCommunity) throws CommunityCollectionException{
+        Optional<Community> communityByName = communityRepo.findByName(updatedCommunity.getName());
+        if (!communityByName.isPresent()) {
+            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(updatedCommunity.getName()));
+        } else {
+            Community originalCommunity = communityByName.get();
+            String id = originalCommunity.getId();
+            BeanUtils.copyProperties(updatedCommunity, originalCommunity);
+            originalCommunity.setId(id);
+            communityRepo.save(originalCommunity);
+        }
+    }
+
+    public Community getCommunityByName(String name) throws CommunityCollectionException {
         Optional<Community> targetCommunity= communityRepo.findByName(name);
 
-        //need to create an Exception class to handle the not found error
         if (!targetCommunity.isPresent()) {
-            return null;
+            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(name));
         } else {
             return targetCommunity.get();
         }
     }
 
-    public boolean createCommunity(Community newCommunity) {
-        Optional<Community> communityByName = communityRepo.findByName(newCommunity.getName());
-        // need to create an Exception class to handle the exiting error
+
+    public Community findCommunityByNameApproximate(String name) {
+        Optional<Community> communityByName = communityRepo.findByNameLike(name);
         if (communityByName.isPresent()) {
-            return false;
+            return communityByName.get();
         } else {
-            communityRepo.save(newCommunity);
-            return true;
+            return null;
         }
     }
 
-    public boolean updateCommunity(Community updatedCommunity) {
-        Optional<Community> communityByName = communityRepo.findByName(updatedCommunity.getName());
-        // need to create an Exception class to handle the exiting error
-        if (!communityByName.isPresent()) {
-            return false;
+    public void deleteCommunity(String communityName) throws CommunityCollectionException {
+        Optional<Community> communityByName = communityRepo.findByName(communityName);
+        if(communityByName.isPresent()) {
+            communityRepo.deleteByName(communityName);
         } else {
-            communityRepo.save(updatedCommunity);
-            return true;
+            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(communityName));
         }
     }
 }

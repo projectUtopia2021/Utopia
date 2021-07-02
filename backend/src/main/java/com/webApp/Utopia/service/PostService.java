@@ -8,12 +8,13 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.webApp.Utopia.exception.PostCollectionException;  //Exception可以后面再写
 import com.webApp.Utopia.model.Post;
 import com.webApp.Utopia.repository.PostRepository;
-
 
 @Service
 public class PostService {

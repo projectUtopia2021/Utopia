@@ -1,5 +1,6 @@
 package com.webApp.Utopia.controller;
 
+import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.model.Community;
 import com.webApp.Utopia.service.CommunityService;
 import io.swagger.annotations.Api;
@@ -32,32 +33,42 @@ public class CommunityController {
     @GetMapping(value = "/getCommunityByName/{name}")
     public ResponseEntity getCommunityByName(@PathVariable("name") String name) {
         //change to "try" and "catch" once Exception is implemented
-        Community community = communityService.getCommunityByName(name);
-        if (community == null) {
-            return new ResponseEntity("not found", HttpStatus.NOT_FOUND);
+        try {
+            Community community = communityService.getCommunityByName(name);
+            return new ResponseEntity(community, HttpStatus.OK);
+        } catch (CommunityCollectionException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity(community, HttpStatus.OK);
     }
 
-    @PostMapping(value = "createCommunity")
+    @PostMapping(value = "/createCommunity")
     public ResponseEntity createCommunity(@RequestBody Community community) {
-        boolean created = communityService.createCommunity(community);
-        if (created) {
-            return new ResponseEntity("created successfully", HttpStatus.OK);
+        try {
+            communityService.createCommunity(community);
+            return new ResponseEntity(community.getName() + " has been successfully created", HttpStatus.OK);
+        } catch (CommunityCollectionException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.CONFLICT);
         }
-
-        return new ResponseEntity(community.getName() + " exists", HttpStatus.CONFLICT);
     }
 
 
-    @PostMapping(value = "updateCommuity")
+    @PostMapping(value = "/updateCommunity")
     public ResponseEntity updateCommunity(@RequestBody Community community) {
-        boolean updated = communityService.updateCommunity(community);
-        if (updated) {
-            return new ResponseEntity("updated successfully", HttpStatus.OK);
+        try {
+            communityService.updateCommunity(community);
+            return new ResponseEntity(community.getName() + " has been successfully updated", HttpStatus.OK);
+        } catch (CommunityCollectionException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
 
-        return new ResponseEntity(community.getName() + " not found", HttpStatus.NOT_FOUND);
+    @DeleteMapping(value = "/deleteCommunityByName/{communityName}")
+    public ResponseEntity deleteCommunity(@PathVariable String communityName) {
+        try {
+            communityService.deleteCommunity(communityName);
+            return new ResponseEntity(communityName + " is deleted", HttpStatus.OK);
+        } catch (CommunityCollectionException exception) {
+            return new ResponseEntity(communityName + " is not found", HttpStatus.NOT_FOUND);
+        }
     }
 }
