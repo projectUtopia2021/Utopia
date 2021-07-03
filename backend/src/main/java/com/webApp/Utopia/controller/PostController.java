@@ -3,6 +3,8 @@ package com.webApp.Utopia.controller;
 import com.webApp.Utopia.exception.PostCollectionException;
 import com.webApp.Utopia.model.Post;
 import com.webApp.Utopia.service.PostService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +14,15 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
+@Api(value = "Post Controller")
+@ApiOperation(value = "APIs for Post Controller")
 public class PostController {
 
     @Autowired
     private PostService postService;
 
     // GET Posts
-    @RequestMapping(method=RequestMethod.GET,value="/getPosts")
+    @RequestMapping(method=RequestMethod.GET,value="/api/getPosts")
     public ResponseEntity getAllPosts()
     {
         List<Post> posts = postService.getAllPosts();
@@ -29,24 +33,20 @@ public class PostController {
     }
 
     // SAVE Post
-    @RequestMapping(method= RequestMethod.POST,value="/savePosts")
+    @RequestMapping(method= RequestMethod.POST,value="/api/savePosts")
     public ResponseEntity<String> createPost(@RequestBody Post post)
     {
         try{
             postService.createPost(post);
             return new ResponseEntity("Successfully added post " +post.getTitle(), HttpStatus.OK);
         }
-        catch(ConstraintViolationException  e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-        catch(PostCollectionException e)
-        {
-            return new ResponseEntity(e.getMessage(),HttpStatus.CONFLICT);
+        catch(Exception  e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     // EDIT Post
-    @RequestMapping(method=RequestMethod.PUT,value="/updatePost/{id}")
+    @RequestMapping(method=RequestMethod.PUT,value="/api/updatePost/{id}")
     public ResponseEntity updatePostById(@PathVariable("id") String id,@RequestBody Post editedPost)
     {
         try {
@@ -64,7 +64,7 @@ public class PostController {
 
 
     // DELETE Post
-    @RequestMapping(method=RequestMethod.DELETE,value="/deletePost/{id}")
+    @RequestMapping(method=RequestMethod.DELETE,value="/api/deletePost/{id}")
     public ResponseEntity deletePostById(@PathVariable("id") String id)
     {
         try{

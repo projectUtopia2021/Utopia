@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import HomePage from './components/HomePage/HomePage.js';
 import NaviBar from './components/NaviBar/NaviBar.js';
+import Login from './components/LoginSignup/Login';
+import Register from './components/LoginSignup/Register'
+import Profile from './components/Profile/Profile.js';
+import Draft from './components/DraftJS/Draft.js';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
@@ -11,6 +15,10 @@ ReactDOM.render(
       <NaviBar/>
       <Switch>
         <Route exact path="/" component={HomePage} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/draft" component={Draft} />
       </Switch>
     </Router>
 

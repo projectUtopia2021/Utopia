@@ -8,6 +8,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import {Search, SearchIconWrapper, StyledInputBase, ButtonBox} from './NaviBarStyles';
+import { useHistory } from 'react-router-dom';
 
 function HomeIcon(props) {
     return (
@@ -18,6 +19,22 @@ function HomeIcon(props) {
 };
 
 function NaviBar() {
+    const history = useHistory()
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+    const handleLogOut = (event) => {
+        event.preventDefault()
+        localStorage.removeItem('token')
+        setIsLoggedIn(false)
+    }
+
+    React.useEffect(() => {
+        if(localStorage.getItem('token')){
+            setIsLoggedIn(true)
+        }
+    }, [])
+    
+    
     return (
         <div>
             <CssBaseline />
@@ -37,10 +54,30 @@ function NaviBar() {
                     />
                 </Search>
                 <ButtonBox>
+                {isLoggedIn? (
                     <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                    <Button style={{textTransform: 'none'}} onClick = {() => {alert("log in")}}>Log In</Button>
-                    <Button style={{textTransform: 'none'}} onClick = {() => {alert("sign up")}}>Sign Up</Button>
+                    <Button style={{textTransform: 'none'}}
+                        onClick={handleLogOut}>
+                    Log Out
+                    </Button>
+                </ButtonGroup>
+                ): (
+                    <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                    <Button style={{textTransform: 'none'}}  
+                                onClick = {() => {
+                                    history.push("/login")
+                            }}>
+                                Log In
+                        </Button>
+                         <Button style={{textTransform: 'none'}} 
+                                onClick = {() => {
+                                history.push("/register")
+                            }}>
+                                    Sign Up
+                    </Button>
                     </ButtonGroup>
+                    
+                )}
                 </ButtonBox>
                 </Toolbar>
             </AppBar>

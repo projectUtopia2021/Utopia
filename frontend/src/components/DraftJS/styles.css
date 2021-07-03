@@ -1,0 +1,18 @@
+div.DraftEditor-root {
+    border: 1px solid #000;
+    background-color: beige;
+  
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+}
+
+div.DraftEditor-editorContainer1,
+div.public-DraftEditor-content {
+    height: 100%;
+    font-family: "Comic sans ms";
+}
+
+div.public-DraftEditorPlaceholder-root {
+    position: absolute;
+}

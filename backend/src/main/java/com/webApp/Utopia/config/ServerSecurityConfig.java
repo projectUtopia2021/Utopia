@@ -24,6 +24,20 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
     @Autowired
     private JwtFilter jwtFilter;
+    private static final String[] AUTH_WHITELIST = {
+            // -- Swagger UI v2
+            "/api/register",
+            "/api/authenticate",
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/swagger-ui/**",
+            "/api/community/**"
+    };
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -42,7 +56,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/register", "/authenticate")
+                .antMatchers(AUTH_WHITELIST)
                 .permitAll()
                 .anyRequest()
                 .authenticated()

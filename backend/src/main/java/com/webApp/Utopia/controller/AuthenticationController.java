@@ -1,22 +1,27 @@
 package com.webApp.Utopia.controller;
-
 import com.webApp.Utopia.model.JwtRequest;
 import com.webApp.Utopia.model.JwtResponse;
 import com.webApp.Utopia.service.RegistrationService;
 import com.webApp.Utopia.service.UserService;
 import com.webApp.Utopia.utils.JWTUtility;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin
+@Api(value = "Authentication Controller")
+@ApiOperation(value = "APIs for Authentication Controller")
 public class AuthenticationController {
     private RegistrationService registrationService;
 
@@ -28,7 +33,7 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/authenticate")
+    @PostMapping("/api/authenticate")
     public JwtResponse authenticate(@RequestBody JwtRequest jwtRequest) throws Exception{
 
         try{
