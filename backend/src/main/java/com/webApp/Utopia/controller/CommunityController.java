@@ -3,6 +3,7 @@ package com.webApp.Utopia.controller;
 import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.model.Community;
 import com.webApp.Utopia.service.CommunityService;
+import com.webApp.Utopia.utils.JWTUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  * @author Jeff
@@ -24,6 +26,8 @@ public class CommunityController {
 
     @Autowired
     CommunityService communityService;
+    @Autowired
+    JWTUtility jwtUtility;
 
     @GetMapping(value = "/getAllCommunities")
     public ResponseEntity getAllCommunities() {
@@ -32,10 +36,9 @@ public class CommunityController {
 
     @GetMapping(value = "/getCommunityByName/{name}")
     public ResponseEntity getCommunityByName(@PathVariable("name") String name) {
-        //change to "try" and "catch" once Exception is implemented
         try {
-            Community community = communityService.getCommunityByName(name);
-            return new ResponseEntity(community, HttpStatus.OK);
+            List<Community> communityList = communityService.findCommunityByNameApproximate(name);
+            return new ResponseEntity(communityList, HttpStatus.OK);
         } catch (CommunityCollectionException exception) {
             return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -63,9 +66,11 @@ public class CommunityController {
     }
 
     @DeleteMapping(value = "/deleteCommunityByName/{communityName}")
-    public ResponseEntity deleteCommunity(@PathVariable String communityName) {
+    public ResponseEntity deleteCommunity(@PathVariable String communityName, @RequestHeader(value = "Authorization") String authorization) {
+        String token = authorization.substring(7);
+        String username = jwtUtility.getUsernameFromToken(token);
         try {
-            communityService.deleteCommunity(communityName);
+            communityService.deleteCommunity(communityName, username);
             return new ResponseEntity(communityName + " is deleted", HttpStatus.OK);
         } catch (CommunityCollectionException exception) {
             return new ResponseEntity(communityName + " is not found", HttpStatus.NOT_FOUND);

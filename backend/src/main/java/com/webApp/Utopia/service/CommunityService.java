@@ -1,6 +1,5 @@
 package com.webApp.Utopia.service;
 
-import com.webApp.Utopia.exception.CommentCollectionException;
 import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.model.Community;
 import com.webApp.Utopia.repository.CommunityRepository;
@@ -8,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +19,8 @@ import java.util.Optional;
 public class CommunityService {
     @Autowired
     CommunityRepository communityRepo;
+    @Autowired
+    UserService userService;
 
     public List<Community> getAllCommunities() {
         return communityRepo.findAll();
@@ -26,7 +28,7 @@ public class CommunityService {
 
     public void createCommunity(Community newCommunity) throws CommunityCollectionException{
         Optional<Community> communityByName = communityRepo.findByName(newCommunity.getName());
-        // need to create an Exception class to handle the exiting error
+
         if (communityByName.isPresent()) {
             throw new CommunityCollectionException(CommunityCollectionException.CommunityNameExists(newCommunity.getName()));
         } else {
@@ -47,30 +49,38 @@ public class CommunityService {
         }
     }
 
-    public Community getCommunityByName(String name) throws CommunityCollectionException {
+    public List<Community> getCommunityByName(String name) throws CommunityCollectionException {
         Optional<Community> targetCommunity= communityRepo.findByName(name);
 
         if (!targetCommunity.isPresent()) {
             throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(name));
         } else {
-            return targetCommunity.get();
+            List<Community> communityList = new ArrayList<Community>();
+            communityList.add(targetCommunity.get());
+            return communityList;
         }
+
     }
 
 
-    public Community findCommunityByNameApproximate(String name) {
-        Optional<Community> communityByName = communityRepo.findByNameLike(name);
-        if (communityByName.isPresent()) {
-            return communityByName.get();
+    public List<Community> findCommunityByNameApproximate(String name) throws CommunityCollectionException{
+        List<Community> communities = communityRepo.findByNameLike(name);
+        if (communities.size() > 0) {
+            return communities;
         } else {
-            return null;
+            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(name));
         }
     }
 
-    public void deleteCommunity(String communityName) throws CommunityCollectionException {
-        Optional<Community> communityByName = communityRepo.findByName(communityName);
-        if(communityByName.isPresent()) {
-            communityRepo.deleteByName(communityName);
+    public void deleteCommunity(String communityName, String username) throws CommunityCollectionException {
+        Optional<Community> targetCommunity = communityRepo.findByName(communityName);
+        if (targetCommunity.isPresent()) {
+            //check if the creator name is the same as username passed in
+            if( targetCommunity.get().getCreatorUsername().equals(username)) {
+                communityRepo.deleteByName(communityName);
+            } else {
+                throw new CommunityCollectionException(CommunityCollectionException.CommunityCreatorNameDoesNotMatch(username));
+            }
         } else {
             throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(communityName));
         }

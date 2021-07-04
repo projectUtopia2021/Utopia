@@ -4,6 +4,7 @@ import com.webApp.Utopia.model.User;
 import com.webApp.Utopia.repository.UserRepository;
 import com.webApp.Utopia.utils.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -80,7 +81,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        //return new User("admin","passwor", new ArrayList<>());
+        //return new User("admin","password", new ArrayList<>());
         return userRepo.findByName(name).orElseThrow(() -> new UsernameNotFoundException("User " + name + " Not Found"));
     }
 }
