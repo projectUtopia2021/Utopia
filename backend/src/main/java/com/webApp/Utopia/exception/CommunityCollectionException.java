@@ -16,4 +16,6 @@ public class CommunityCollectionException extends Exception{
     public static String CommunityNameExists(String name) {
         return name + " already exists";
     }
+
+    public static String CommunityCreatorNameDoesNotMatch(String name) {return name + " is not authorized"; }
 }

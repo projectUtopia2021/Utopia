@@ -16,13 +16,14 @@ import java.util.List;
 @RestController
 @Api(value = "Post Controller")
 @ApiOperation(value = "APIs for Post Controller")
+@RequestMapping("/api/community/post")
 public class PostController {
 
     @Autowired
     private PostService postService;
 
     // GET Posts
-    @RequestMapping(method=RequestMethod.GET,value="/api/getPosts")
+    @RequestMapping(method=RequestMethod.GET,value="/getPosts")
     public ResponseEntity getAllPosts()
     {
         List<Post> posts = postService.getAllPosts();
@@ -33,7 +34,7 @@ public class PostController {
     }
 
     // SAVE Post
-    @RequestMapping(method= RequestMethod.POST,value="/api/savePosts")
+    @RequestMapping(method= RequestMethod.POST,value="/savePosts")
     public ResponseEntity<String> createPost(@RequestBody Post post)
     {
         try{
@@ -46,7 +47,7 @@ public class PostController {
     }
 
     // EDIT Post
-    @RequestMapping(method=RequestMethod.PUT,value="/api/updatePost/{id}")
+    @RequestMapping(method=RequestMethod.PUT,value="/updatePost/{id}")
     public ResponseEntity updatePostById(@PathVariable("id") String id,@RequestBody Post editedPost)
     {
         try {
@@ -64,7 +65,7 @@ public class PostController {
 
 
     // DELETE Post
-    @RequestMapping(method=RequestMethod.DELETE,value="/api/deletePost/{id}")
+    @RequestMapping(method=RequestMethod.DELETE,value="/deletePost/{id}")
     public ResponseEntity deletePostById(@PathVariable("id") String id)
     {
         try{
