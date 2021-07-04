@@ -22,10 +22,13 @@ public class PostService {
     @Autowired
     private PostRepository postRepo;
 
-    public List<Post> getAllPosts() {
-        List<Post> posts = postRepo.findAll();
-        if (posts.size() > 0) {
-            return posts;
+    @Autowired
+    private UserService userService;
+
+    public List<Post> getAllPosts(String postId) {
+        Optional<List<Post>> posts = postRepo.getSubTree(postId);
+        if (posts.isPresent()) {
+            return posts.get();
         } else {
             return new ArrayList<Post>();
         }
@@ -37,6 +40,7 @@ public class PostService {
         // If the post is valid as per not null constraint we have to next
         // check if the post with the same name/id already exists
             postRepo.save(post);
+            userService.addToUserPostsHistory(post);
 
     }
 

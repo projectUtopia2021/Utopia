@@ -5,6 +5,7 @@ import com.webApp.Utopia.model.Post;
 import com.webApp.Utopia.service.PostService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import com.webApp.Utopia.utils.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +23,14 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private JWTUtility jwtUtility;
+
     // GET Posts
-    @RequestMapping(method=RequestMethod.GET,value="/getPosts")
-    public ResponseEntity getAllPosts()
+    @RequestMapping(method=RequestMethod.GET,value="/{id}")
+    public ResponseEntity getAllPosts(@PathVariable("id")  String postId)
     {
-        List<Post> posts = postService.getAllPosts();
+        List<Post> posts = postService.getAllPosts(postId);
         return new ResponseEntity(
                 posts,
                 posts.size()>0?HttpStatus.OK:HttpStatus.NOT_FOUND
@@ -34,10 +38,12 @@ public class PostController {
     }
 
     // SAVE Post
-    @RequestMapping(method= RequestMethod.POST,value="/savePosts")
-    public ResponseEntity<String> createPost(@RequestBody Post post)
+    @RequestMapping(method= RequestMethod.POST,value="/save")
+    public ResponseEntity<String> createPost(@RequestHeader("Authorization") String token, @RequestBody Post post)
     {
         try{
+            String username = jwtUtility.getUsernameFromToken(token.substring(7));
+            post.setUsername(username);
             postService.createPost(post);
             return new ResponseEntity("Successfully added post " +post.getTitle(), HttpStatus.OK);
         }
@@ -47,7 +53,7 @@ public class PostController {
     }
 
     // EDIT Post
-    @RequestMapping(method=RequestMethod.PUT,value="/updatePost/{id}")
+    @RequestMapping(method=RequestMethod.PUT,value="/{id}")
     public ResponseEntity updatePostById(@PathVariable("id") String id,@RequestBody Post editedPost)
     {
         try {
@@ -65,7 +71,7 @@ public class PostController {
 
 
     // DELETE Post
-    @RequestMapping(method=RequestMethod.DELETE,value="/deletePost/{id}")
+    @RequestMapping(method=RequestMethod.DELETE,value="/{id}")
     public ResponseEntity deletePostById(@PathVariable("id") String id)
     {
         try{
