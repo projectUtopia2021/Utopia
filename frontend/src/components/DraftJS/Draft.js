@@ -1,10 +1,12 @@
 import React from "react";
 import { EditorState, convertToRaw } from "draft-js";
-import Editor from "draft-js-plugins-editor";
+import Editor, { createEditorStateWithText } from "draft-js-plugins-editor";
 import createMentionPlugin, {
   defaultSuggestionsFilter
 } from "draft-js-mention-plugin";
-import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
+import createToolbarPlugin, {
+  Separator
+} from "@draft-js-plugins/static-toolbar";
 import {
   ItalicButton,
   BoldButton,
@@ -18,7 +20,7 @@ import {
   BlockquoteButton,
   CodeBlockButton,
 } from '@draft-js-plugins/buttons';
-import {editorStyles} from "./RemoteMentionEditor";
+import editorStyles from './DraftStyles.module.css';
 import "draft-js-mention-plugin/lib/plugin.css";
 import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import draftToHtml from 'draftjs-to-html';
@@ -118,6 +120,8 @@ class HeadlinesButton extends React.Component {
   }
 }
 
+const text =
+  "Placeholder sample text :)";
 
 class Draft extends React.Component {
   constructor(props) {
@@ -135,6 +139,18 @@ class Draft extends React.Component {
 
   onChange = editorState => {
     this.setState({ editorState });
+  };
+
+  componentDidMount() {
+    // fixing issue with SSR https://github.com/facebook/draft-js/issues/2332#issuecomment-761573306
+    // eslint-disable-next-line react/no-did-mount-set-state
+    this.setState({
+      editorState: createEditorStateWithText(text)
+    });
+  }
+
+  focus = () => {
+    this.editor.focus();
   };
 
   onSearchChange = ({ value }) => {
@@ -211,27 +227,34 @@ class Draft extends React.Component {
 
     return (
       <Container maxWidth="sm" className={editorStyles.textbox} onClick={this.focus}>
-        <div className={editorStyles.editor, editorStyles.textbox}>
+        <div className={editorStyles.editor}>
           <Editor
             editorState={this.state.editorState}
             onChange={this.onChange}
             plugins={plugins}
+            ref={(element) => {
+              this.editor = element;
+            }}
           />
-                    <Toolbar>
-                      {
-                        // may be use React.Fragment instead of div to improve perfomance after React 16
-                        (externalProps) => (
-                          <div>
-                            <BoldButton {...externalProps} />
-                            <ItalicButton {...externalProps} />
-                            <UnderlineButton {...externalProps} />
-                            <CodeButton {...externalProps} />
-                            <UnorderedListButton {...externalProps} />
-                            <OrderedListButton {...externalProps} />
-                          </div>
-                        )
-                      }
-                    </Toolbar>
+            <Toolbar>
+              {
+                // may be use React.Fragment instead of div to improve perfomance after React 16
+                (externalProps) => (
+                  <div>
+                    <BoldButton {...externalProps} />
+                    <ItalicButton {...externalProps} />
+                    <UnderlineButton {...externalProps} />
+                    <CodeButton {...externalProps} />
+                    <Separator {...externalProps} />
+                    <HeadlinesButton {...externalProps} />
+                    <UnorderedListButton {...externalProps} />
+                    <OrderedListButton {...externalProps} />
+                    <BlockquoteButton {...externalProps} />
+                    <CodeBlockButton {...externalProps} />
+                  </div>
+                )
+              }
+            </Toolbar>
           <EmojiSuggestions />
           <EmojiSelect />
           <MentionSuggestions
