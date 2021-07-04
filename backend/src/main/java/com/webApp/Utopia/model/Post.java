@@ -17,44 +17,19 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @Document(collection="post")
 public class Post {
-
-    @Id
     private String id;
-
 
     @NotNull(message = "Post title cannot be empty")
     private String title;
 
     @NotNull(message = "Post description cannot be empty")
     private String desc;
-    //外键
-    private User user;
-    private List<Comment> comments = new ArrayList<>();
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public String getDesc() {
-        return desc;
-    }
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-    public List<Comment> getComments() {
-        return comments; }
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-   //time list .etc可以添加
+    private String username;
+    @NotNull(message = "Topic Id cannot be empty")
+    private String topicId;
+    private String parentId;
+
+    private List<Post> children;
+
 }
