@@ -2,6 +2,8 @@ package com.webApp.Utopia.controller;
 
 import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.model.Community;
+import com.webApp.Utopia.model.CommunityNameObject;
+import com.webApp.Utopia.model.User;
 import com.webApp.Utopia.service.CommunityService;
 import com.webApp.Utopia.utils.JWTUtility;
 import io.swagger.annotations.Api;
@@ -11,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -45,18 +46,19 @@ public class CommunityController {
     }
 
     @PostMapping(value = "/createCommunity")
-    public ResponseEntity createCommunity(@RequestBody Community community) {
+    public ResponseEntity createCommunity(@RequestBody Community community, @RequestHeader(value = "Authorization") String authorization) {
+        String token = authorization.substring(7);
+        String username = jwtUtility.getUsernameFromToken(token);
         try {
-            communityService.createCommunity(community);
+            communityService.createCommunity(community, username);
             return new ResponseEntity(community.getName() + " has been successfully created", HttpStatus.OK);
         } catch (CommunityCollectionException exception) {
             return new ResponseEntity(exception.getMessage(), HttpStatus.CONFLICT);
         }
     }
 
-
     @PostMapping(value = "/updateCommunity")
-    public ResponseEntity updateCommunity(@RequestBody Community community) {
+    public ResponseEntity updateCommunity(@RequestBody Community community, @RequestHeader(value = "Authorization") String authorization) {
         try {
             communityService.updateCommunity(community);
             return new ResponseEntity(community.getName() + " has been successfully updated", HttpStatus.OK);
@@ -75,5 +77,14 @@ public class CommunityController {
         } catch (CommunityCollectionException exception) {
             return new ResponseEntity(communityName + " is not found", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PutMapping(value = "/subscribe")
+    @ApiOperation("A user subscribes a community")
+    public ResponseEntity subscribe(@RequestBody Community community, @RequestHeader(value = "Authorization") String authorization) {
+        String token = authorization.substring(7);
+        String username = jwtUtility.getUsernameFromToken(token);
+
+        return new ResponseEntity(username + " ", HttpStatus.OK);
     }
 }

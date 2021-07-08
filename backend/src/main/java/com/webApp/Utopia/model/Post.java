@@ -20,41 +20,16 @@ public class Post {
 
     @Id
     private String id;
-
-
     @NotNull(message = "Post title cannot be empty")
     private String title;
-
     @NotNull(message = "Post description cannot be empty")
-    private String desc;
+    private String description;
+    private String content;
     //外键
-    private User user;
-    private List<Comment> comments = new ArrayList<>();
+    private String creator;
+    private List<Comment> comments;
+    private String communityName;
+    private String date;
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public String getDesc() {
-        return desc;
-    }
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-    public List<Comment> getComments() {
-        return comments; }
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
    //time list .etc可以添加
 }

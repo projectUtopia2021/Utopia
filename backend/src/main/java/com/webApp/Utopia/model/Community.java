@@ -26,8 +26,8 @@ public class Community {
     @NotNull(message = "description cannot be empty")
     private String description;
     @NotNull(message = "creator username cannot be empty")
-    private String creatorUsername;
-    private List<String> members;
-    private List<String> posts;
+    private String creator;
+    private List<String> subscribers;
+    private List<Post> posts;
 
 }

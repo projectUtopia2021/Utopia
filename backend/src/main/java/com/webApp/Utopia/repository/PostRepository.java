@@ -9,7 +9,8 @@ import java.util.Optional;
 
 public interface PostRepository extends MongoRepository<Post, String>{
 
-    @Query("{'title':?0}")
     Optional<Post> findByTitle(String title);
 
+    @Query(value = "{'communityName': ?0, 'title': ?1}")
+    Optional<Post> findByCommunityNameAndTitle(String communityName, String title);
 }

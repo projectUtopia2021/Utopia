@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /*
  * @author Jeff
@@ -26,19 +27,28 @@ public class CommunityService {
         return communityRepo.findAll();
     }
 
-    public void createCommunity(Community newCommunity) throws CommunityCollectionException{
-        Optional<Community> communityByName = communityRepo.findByName(newCommunity.getName());
+    public void createCommunity(Community newCommunity, String username) throws CommunityCollectionException{
+        if (newCommunity.getName() == null || "".equals(newCommunity.getName())) {
+            throw new CommunityCollectionException(CommunityCollectionException.PropertyMissing("Community name"));
+        }
+        if (newCommunity.getDescription() == null || "".equals(newCommunity.getDescription())) {
+            throw new CommunityCollectionException(CommunityCollectionException.PropertyMissing("Community description"));
+        }
 
+        Optional<Community> communityByName = communityRepo.findByName(newCommunity.getName());
         if (communityByName.isPresent()) {
             throw new CommunityCollectionException(CommunityCollectionException.CommunityNameExists(newCommunity.getName()));
-        } else {
-            communityRepo.save(newCommunity);
         }
+        newCommunity.setPosts(new ArrayList<>());
+        newCommunity.setSubscribers(new ArrayList<>());
+        newCommunity.setId(UUID.randomUUID().toString());
+        newCommunity.setCreator(username);
+        communityRepo.save(newCommunity);
     }
 
     public void updateCommunity(Community updatedCommunity) throws CommunityCollectionException{
         Optional<Community> communityByName = communityRepo.findByName(updatedCommunity.getName());
-        if (!communityByName.isPresent()) {
+        if (communityByName.isEmpty()) {
             throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(updatedCommunity.getName()));
         } else {
             Community originalCommunity = communityByName.get();
@@ -52,10 +62,10 @@ public class CommunityService {
     public List<Community> getCommunityByName(String name) throws CommunityCollectionException {
         Optional<Community> targetCommunity= communityRepo.findByName(name);
 
-        if (!targetCommunity.isPresent()) {
+        if (targetCommunity.isEmpty()) {
             throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(name));
         } else {
-            List<Community> communityList = new ArrayList<Community>();
+            List<Community> communityList = new ArrayList<>();
             communityList.add(targetCommunity.get());
             return communityList;
         }
@@ -76,7 +86,7 @@ public class CommunityService {
         Optional<Community> targetCommunity = communityRepo.findByName(communityName);
         if (targetCommunity.isPresent()) {
             //check if the creator name is the same as username passed in
-            if( targetCommunity.get().getCreatorUsername().equals(username)) {
+            if( targetCommunity.get().getCreator().equals(username)) {
                 communityRepo.deleteByName(communityName);
             } else {
                 throw new CommunityCollectionException(CommunityCollectionException.CommunityCreatorNameDoesNotMatch(username));

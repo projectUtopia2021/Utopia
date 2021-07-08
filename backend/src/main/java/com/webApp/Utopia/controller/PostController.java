@@ -1,10 +1,14 @@
 package com.webApp.Utopia.controller;
 
+import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.exception.PostCollectionException;
 import com.webApp.Utopia.model.Post;
+import com.webApp.Utopia.service.CommunityService;
 import com.webApp.Utopia.service.PostService;
+import com.webApp.Utopia.utils.JWTUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,24 +25,44 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private JWTUtility jwtUtility;
 
     // GET Posts
-    @RequestMapping(method=RequestMethod.GET,value="/getPosts")
-    public ResponseEntity getAllPosts()
-    {
-        List<Post> posts = postService.getAllPosts();
-        return new ResponseEntity(
-                posts,
-                posts.size()>0?HttpStatus.OK:HttpStatus.NOT_FOUND
-        );
+    @ApiOperation(value = "communityName is required in path variable")
+    @RequestMapping(method=RequestMethod.GET,value="/getPostsByCommunity/{communityName}")
+    public ResponseEntity getAllPostsByCommunity(@PathVariable String communityName) {
+        try {
+            List<Post> posts = postService.getAllPostsByCommunityName(communityName);
+            return new ResponseEntity(
+                    posts,
+                    posts.size()>0?HttpStatus.OK:HttpStatus.NOT_FOUND
+            );
+        } catch (CommunityCollectionException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @ApiOperation(value = "communityName and postTitle are required in path variables")
+    @RequestMapping(method = RequestMethod.GET, value = "/getPostByTitle/{communityName}/{postTitle}")
+    public ResponseEntity findPostByTitle(@PathVariable String communityName, @PathVariable String postTitle) {
+        try {
+            Post post = postService.getPostByTitle(communityName, postTitle);
+            return new ResponseEntity(post, HttpStatus.OK);
+        } catch (PostCollectionException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     // SAVE Post
-    @RequestMapping(method= RequestMethod.POST,value="/savePosts")
-    public ResponseEntity<String> createPost(@RequestBody Post post)
+    @ApiOperation(value = "Only title, communityName, description, content are required in Post body")
+    @RequestMapping(method= RequestMethod.POST,value="/savePost")
+    public ResponseEntity<String> createPost(@RequestBody Post post, @RequestHeader(value = "Authorization") String authorization)
     {
+        String token = authorization.substring(7);
+        String username = jwtUtility.getUsernameFromToken(token);
         try{
-            postService.createPost(post);
+            postService.createPost(post, username);
             return new ResponseEntity("Successfully added post " +post.getTitle(), HttpStatus.OK);
         }
         catch(Exception  e){

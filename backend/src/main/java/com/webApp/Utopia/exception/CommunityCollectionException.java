@@ -17,5 +17,7 @@ public class CommunityCollectionException extends Exception{
         return name + " already exists";
     }
 
+    public static String PropertyMissing(String property) {return property + " cannot be empty"; }
+
     public static String CommunityCreatorNameDoesNotMatch(String name) {return name + " is not authorized"; }
 }
