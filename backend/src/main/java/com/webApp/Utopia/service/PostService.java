@@ -22,6 +22,8 @@ public class PostService {
     private PostRepository postRepo;
     @Autowired
     private CommunityRepository communityRepo;
+    @Autowired
+    private UserService userService;
 
     public List<Post> getAllPostsByCommunityName(String communityName) throws CommunityCollectionException{
         Optional<Community> communityOptional = communityRepo.findByName(communityName);
@@ -88,6 +90,7 @@ public class PostService {
             //save post into Post and Community documents
             postRepo.save(post);
             communityRepo.save(community);
+            userService.addToUserPostsHistory(post);
     }
 
     public void updatePost(String id, Post newPost)

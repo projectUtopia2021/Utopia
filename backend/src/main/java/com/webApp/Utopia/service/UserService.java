@@ -81,14 +81,15 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean addToUserPostsHistory(Post post){
-        Optional<User> userOptional = userRepo.findByName(post.getUsername());
+        Optional<User> userOptional = userRepo.findByName(post.getCreator());
         if(userOptional.isPresent()) {
             User user = userOptional.get();
             List<Post> posts = user.getPosts();
-            if(posts == null) posts = new ArrayList<Post>();
+            if(posts == null) {
+                posts = new ArrayList<Post>();
+            }
             posts.add(post);
             user.setPosts(posts);
-            posts = user.getPosts();
             userRepo.save(user);
             return true;
         }else{
