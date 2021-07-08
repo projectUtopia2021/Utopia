@@ -1,5 +1,6 @@
 package com.webApp.Utopia.service;
 
+import com.webApp.Utopia.model.Post;
 import com.webApp.Utopia.model.User;
 import com.webApp.Utopia.repository.UserRepository;
 import com.webApp.Utopia.utils.JWTUtility;
@@ -76,6 +77,22 @@ public class UserService implements UserDetailsService {
             User targetUser = userOptional.get();
             targetUser.setPassword(password);
             userRepo.save(targetUser);
+        }
+    }
+
+    public boolean addToUserPostsHistory(Post post){
+        Optional<User> userOptional = userRepo.findByName(post.getUsername());
+        if(userOptional.isPresent()) {
+            User user = userOptional.get();
+            List<Post> posts = user.getPosts();
+            if(posts == null) posts = new ArrayList<Post>();
+            posts.add(post);
+            user.setPosts(posts);
+            posts = user.getPosts();
+            userRepo.save(user);
+            return true;
+        }else{
+            return false;
         }
     }
 

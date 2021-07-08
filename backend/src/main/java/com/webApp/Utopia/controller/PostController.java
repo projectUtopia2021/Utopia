@@ -28,6 +28,7 @@ public class PostController {
     @Autowired
     private JWTUtility jwtUtility;
 
+
     // GET Posts
     @ApiOperation(value = "communityName is required in path variable")
     @RequestMapping(method=RequestMethod.GET,value="/getPostsByCommunity/{communityName}")
@@ -71,7 +72,7 @@ public class PostController {
     }
 
     // EDIT Post
-    @RequestMapping(method=RequestMethod.PUT,value="/updatePost/{id}")
+    @RequestMapping(method=RequestMethod.PUT,value="/{id}")
     public ResponseEntity updatePostById(@PathVariable("id") String id,@RequestBody Post editedPost)
     {
         try {
@@ -89,7 +90,7 @@ public class PostController {
 
 
     // DELETE Post
-    @RequestMapping(method=RequestMethod.DELETE,value="/deletePost/{id}")
+    @RequestMapping(method=RequestMethod.DELETE,value="/{id}")
     public ResponseEntity deletePostById(@PathVariable("id") String id)
     {
         try{

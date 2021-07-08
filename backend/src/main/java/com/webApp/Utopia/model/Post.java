@@ -17,8 +17,6 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @Document(collection="post")
 public class Post {
-
-    @Id
     private String id;
     @NotNull(message = "Post title cannot be empty")
     private String title;
