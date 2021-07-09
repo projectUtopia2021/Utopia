@@ -12,12 +12,21 @@ services:
   client:
     build: ./frontend/
     restart: always
-    ports: 
+    ports:
       - 80:80
     depends_on:
       - api_service
   db:
-    image: "mongo:4.4.3"
-    restart: always
-    ports:
-      - 27017:27017
+       hostname: db
+       image: mongo:latest
+       environment:
+         MONGO_INITDB_DATABASE: app_development
+         MONGO_REPLICA_SET_NAME: rs0
+       ports:
+         - 27017:27017
+       restart: always
+       healthcheck:
+         test: test $$(echo "rs.initiate().ok || rs.slaveOk().ok || rs.status().ok" | mongo --quiet) -eq 1
+         interval: 10s
+         start_period: 30s
+       entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
