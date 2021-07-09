@@ -16,7 +16,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import {useStyles} from './ProfileStyles';
 
 
-const drawerWidth = 300;
+const drawerWidth = 240;
 
 function Profile() {
     
@@ -53,7 +53,7 @@ function Profile() {
                         sx={{
                         width: drawerWidth,
                         flexShrink: 0,
-                        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+                        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box'},
                         }}
                     >
                         <Box sx={{ overflow: 'auto' }}>

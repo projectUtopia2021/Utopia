@@ -35,7 +35,7 @@ const TheTab = withStyles(theme => ({
  const MainContainer = withStyles(theme => ({
       position: 'relative',
       display: 'flex',
-      width: "80%"
+      width: "90%",
  }))(Container);
 
  const CommunityBar = styled('div')(theme => ({
@@ -44,7 +44,7 @@ const TheTab = withStyles(theme => ({
  }));
 
  const PostDisplay = styled('div')(theme => ({
-  flex: 10
+  flex: 11
 }));
 
 

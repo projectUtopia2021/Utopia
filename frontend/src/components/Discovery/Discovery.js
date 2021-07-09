@@ -5,61 +5,19 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import axios from "axios";
-
-const GET_COMMUNITIES_API = "/api/community/getCommunityByName"
-const communities = [
-    {
-        uuid: "6905d1ee-d919-11eb-b8bc-0242ac130003",
-        "name" : "Animal Crossing: New Horizons",
-        "description": "The largest Discord-Partnered community for Animal Crossing: New Horizons.",
-        numMembers: 506033
-    },
-    {
-        uuid: "6905d1ee-d919-11eb-b8bc-0242ac130sf03",
-        "name" : "Animal Crossing: New Horizons",
-        "description": "The largest Discord-Partnered community for Animal Crossing: New Horizons.",
-        numMembers: 506033
-    },
-    {
-        uuid: "6905d1ee-d919-11eb-b8bc-0242ac1dfs0003",
-        "name" : "Animal Crossing: New Horizons",
-        "description": "The largest Discord-Partnered community for Animal Crossing: New Horizons.",
-        numMembers: 506033
-    },
-    {
-        uuid: "6905d1ee-d919-11eb-b8bc-0242ac1dsf003",
-        "name" : "Animal Crossing: New Horizons",
-        "description": "The largest Discord-Partnered community for Animal Crossing: New Horizons.",
-        numMembers: 506033
-    },
-    {
-        uuid: "6905d1ee-d919-11eb-b8bc-0242ac130dge3",
-        "name" : "Animal Crossing: New Horizons",
-        "description": "The largest Discord-Partnered community for Animal Crossing: New Horizons.",
-        numMembers: 506033
-    }
-]
+import { useLocation } from "react-router-dom";
+import { useEffect } from 'react';
 
 export default function Discovery (props) {
-    const searchContent = props.SearchContent;
-    //const [communities,setCommunities] = React.useState('')
+    const location = useLocation()
+    const [communityList, setCommunityList] = React.useState(props.location.state.currentSearchResult);
 
-    // React.useEffect(() => {
-    //   axios.get(GET_COMMUNITIES_API + '/' + searchContent, {}
-    //   )
-    //   .then(
-    //     response => {
-    //       console.log(response)
-    //     }
-    //   )
-    //   .catch((error) => {
-    //     alert(error)
-    //   })
-    // }, [])
+    useEffect (() => {
+      setCommunityList(props.location.state.currentSearchResult)
+    }, [props.location]);
+
     return (
         <React.Fragment>
         <Container sx={{ py: 8 }} maxWidth="lg">
@@ -68,8 +26,9 @@ export default function Discovery (props) {
             </Typography>
           {/* End hero unit */}
           <Grid container spacing={3}>
-            {communities.map((community) => (
-              <Grid item key={community.uuid} xs={12} sm={6} md={4}>
+            {/* {console.log(communityList.length)} */}
+            {communityList.map((community) => (
+              <Grid item key={community.id} xs={12} sm={6} md={4}>
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                 >
