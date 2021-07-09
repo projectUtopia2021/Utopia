@@ -33,6 +33,15 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public User getUserByName(String name) {
+        Optional<User> user = userRepo.findByName(name);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
+        }
+    }
+
     public String createUser(User user)
             throws Exception {
 

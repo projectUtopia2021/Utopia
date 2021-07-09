@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.webApp.Utopia.exception.PostCollectionException;  //Exception可以后面再写
 import com.webApp.Utopia.model.Post;
 import com.webApp.Utopia.repository.PostRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PostService {
@@ -34,6 +35,7 @@ public class PostService {
         }
     }
 
+    @Transactional
     public void createPost(Post post)
             throws Exception{
 
