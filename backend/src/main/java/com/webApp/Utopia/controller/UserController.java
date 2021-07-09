@@ -14,12 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
     // GET Users
-    @RequestMapping(method=RequestMethod.GET,value="/api/getUsers")
+    @RequestMapping(method=RequestMethod.GET,value="/")
     public ResponseEntity getAllUsers()
     {
         List<User> comments = userService.getAllUsers();
@@ -29,21 +30,23 @@ public class UserController {
         );
     }
 
-    // SAVE User
-    @RequestMapping(method= RequestMethod.POST,value="/api/addUser")
-    public ResponseEntity<String> createComment(@RequestBody User user)
+    // GET Users by id
+    @RequestMapping(method=RequestMethod.GET,value="/{name}")
+    public ResponseEntity getUserByName(@PathVariable("name") String name)
     {
         try{
-            userService.createUser(user);
-            return new ResponseEntity("Successfully added user " +user.getName(), HttpStatus.OK);
+            User user = userService.getUserByName(name);
+            return new ResponseEntity(
+                user,
+                user != null ? HttpStatus.OK:HttpStatus.NOT_FOUND);
         }catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     // DELETE User
-    @RequestMapping(method=RequestMethod.DELETE,value="/api/deleteUser/{name}")
-    public ResponseEntity deleteCommentById(@PathVariable("name") String name)
+    @RequestMapping(method=RequestMethod.DELETE,value="/{name}")
+    public ResponseEntity deleteUserByName(@PathVariable("name") String name)
     {
         try{
             userService.deleteUserByName(name);
@@ -55,7 +58,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/api/updatePassword")
+    @RequestMapping(method=RequestMethod.PUT, value="/password/")
     public ResponseEntity updatePassword(@RequestBody Map<String, Object> inputData) {
         try{
             userService.updateUserPassword(inputData.get("emailAddress").toString(), inputData.get("password").toString());
