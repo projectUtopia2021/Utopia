@@ -27,6 +27,7 @@ import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
 import Draft from "../DraftJS/Draft";
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import CommunitySideBar from './CommunitySideBar';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -67,14 +68,14 @@ class PostPage extends React.Component {
             // anchorEl: event.currentTarget,
             open: !this.state.open,
         });
-        
+
     };
 
     closePopper = () => {
         this.setState({
             open: !this.state.open,
         });
-        
+
     };
 
     titleChange = (event) => {
@@ -98,34 +99,22 @@ class PostPage extends React.Component {
                                 </IconButton>
                             }
                         />
-                                    
+
                         <CardContent>
                             <Typography id="test1" sx={{ fontSize: 14,  }} color="text.secondary" align="center" gutterBottom>
                                 Something you wanna say...
                             </Typography>
-                            
+
                             <br />
                         </CardContent>
-                        
+
                     </Card> : null}
 
 
                     <Box mt={5} ml={10} mr={60}  sx={{ flexGrow: 1 }}>
                         <Grid container spacing={5}>
                             <Grid item xs={2}>
-                                <Stack spacing={2}>
-                                    <Button variant="contained" color="secondary" onClick={this.popperBtnHandler}>Start a Discussion</Button>
-                                </Stack>
-
-                                <Stack mt={5} spacing={1}>
-                                    <Item>Item 1</Item>
-                                    <Item>Item 2</Item>
-                                </Stack>
-
-                                <Stack mt={3} spacing={1}>
-                                    <Item>Item 3</Item>
-                                    <Item>Item 4</Item>
-                                </Stack>
+                                <CommunitySideBar/>
                             </Grid>
                             <Grid item xs={10}>
                                 <div style={{ width: '100%' }}>
@@ -162,7 +151,7 @@ class PostPage extends React.Component {
                                         </Box>
                                     </Box>
                                 </div>
-                                
+
                                 <List sx={{ width: '100%', bgcolor: 'background.paper', paddingLeft: '10px', paddingRight: '20px', marginTop: '20px'}} >
                                     {[0, 1, 2, 3].map((value) => (
                                         <ListItem
@@ -172,14 +161,14 @@ class PostPage extends React.Component {
                                             secondaryAction={
                                                 <Stack direction="row" spacing={1}>
                                                     <Chip label="General" />
-                                                    
+
                                                     <IconButton>
                                                         <StyledBadge badgeContent={value} color="secondary">
                                                             <ChatBubbleOutlineIcon fontSize="large"/>
                                                         </StyledBadge>
                                                     </IconButton>
                                                 </Stack>
-                                                
+
                                             }
                                         >
                                             <ListItemAvatar>
@@ -187,7 +176,7 @@ class PostPage extends React.Component {
                                                     W
                                                 </Avatar>
                                             </ListItemAvatar>
-                                            <ListItemText 
+                                            <ListItemText
                                                 primary={`Here is the ${value} Main title!`}
                                                 secondary={
                                                 <React.Fragment>
@@ -207,7 +196,7 @@ class PostPage extends React.Component {
                                     ))}
                                 </List>
 
-                                
+
                                 <Popper id="transitions-popper" open={this.state.open} placement="top" anchorEl={document.getElementById('popperPoint')} transition>
                                     {({ TransitionProps }) => (
                                     <Fade {...TransitionProps} timeout={350}>
@@ -220,8 +209,8 @@ class PostPage extends React.Component {
                                                     </Typography>
                                                     <input type="text" className={editorStyles.titleTB} name="name" onChange={this.titleChange}/>
                                                 </Stack>
-                                                    
-                                                    
+
+
                                                 </Box>
                                                 <Box>
                                                     <Stack
@@ -236,9 +225,9 @@ class PostPage extends React.Component {
                                                     </Stack>
                                                 </Box>
                                             </Box>
-                                            
-                                                                    
-                                            
+
+
+
                                             {/* <Draft otherInfo={{'title': 'this.textInput.current.value'}}></Draft> */}
                                             <Draft otherInfo={this.state.otherInfo}></Draft>
                                         </Box>

@@ -30,7 +30,7 @@ ReactDOM.render(
         <Route path="/register" component={Register} />
         <Route path="/profile" component={Profile} />
         <Route path="/draft" component={Draft} />
-        <Route path="/PostPage" component={PostPage} />
+        <Route path="/postpage" component={PostPage} />
         <Route path="/Posts" component={PostDetail} />
         <Route path="/discovery" component={Discovery} />
         <Route path="/communities" component={Communities} />
@@ -45,7 +45,6 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

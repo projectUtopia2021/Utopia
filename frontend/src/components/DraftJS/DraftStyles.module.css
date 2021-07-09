@@ -32,4 +32,15 @@
 .headlineButton:focus {
     background: #f3f3f3;
 }
+
+.wholeInput {
+    max-width: 600px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.titleTB {
+    width: 100%;
+    margin-bottom: 10px;
+}
   
