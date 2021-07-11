@@ -18,7 +18,7 @@ import java.util.List;
  * @author Jeff
  * @date 6/28/21 9:54 PM
  */
-@RequestMapping("/api/community")
+@RequestMapping("/api")
 @RestController
 @Api(value = "Community Controller")
 @ApiOperation(value = "APIs for community")
@@ -29,12 +29,12 @@ public class CommunityController {
     @Autowired
     JWTUtility jwtUtility;
 
-    @GetMapping(value = "/getAllCommunities")
+    @GetMapping(value = "/communities")
     public ResponseEntity getAllCommunities() {
         return new ResponseEntity(communityService.getAllCommunities(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getCommunityByName/{name}")
+    @GetMapping(value = "/community/{name}")
     public ResponseEntity getCommunityByName(@PathVariable("name") String name) {
         try {
             List<Community> communityList = communityService.findCommunityByNameApproximate(name);
@@ -44,36 +44,36 @@ public class CommunityController {
         }
     }
 
-    @PostMapping(value = "/createCommunity")
+    @PostMapping(value = "/community")
     public ResponseEntity createCommunity(@RequestBody Community community) {
         try {
             communityService.createCommunity(community);
-            return new ResponseEntity(community.getName() + " has been successfully created", HttpStatus.OK);
+            return new ResponseEntity(community.getName() + " has been successfully created", HttpStatus.CREATED);
         } catch (CommunityCollectionException exception) {
-            return new ResponseEntity(exception.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-
-    @PostMapping(value = "/updateCommunity")
-    public ResponseEntity updateCommunity(@RequestBody Community community) {
+    //Patch method for now, just pass in the fields that need to be updated
+    @PatchMapping(value = "/community/{id}")
+    public ResponseEntity updateCommunity(@RequestBody Community community, @PathVariable("id") String id) {
         try {
             communityService.updateCommunity(community);
-            return new ResponseEntity(community.getName() + " has been successfully updated", HttpStatus.OK);
+            return new ResponseEntity(community.getName() + " has been successfully updated", HttpStatus.CREATED);
         } catch (CommunityCollectionException exception) {
-            return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping(value = "/deleteCommunityByName/{communityName}")
-    public ResponseEntity deleteCommunity(@PathVariable String communityName, @RequestHeader(value = "Authorization") String authorization) {
+    @DeleteMapping(value = "/community/{id}")
+    public ResponseEntity deleteCommunity(@PathVariable("id") String id, @RequestHeader(value = "Authorization") String authorization) {
         String token = authorization.substring(7);
         String username = jwtUtility.getUsernameFromToken(token);
         try {
-            communityService.deleteCommunity(communityName, username);
-            return new ResponseEntity(communityName + " is deleted", HttpStatus.OK);
+            communityService.deleteCommunity(id, username);
+            return new ResponseEntity(id + " is deleted", HttpStatus.NO_CONTENT);
         } catch (CommunityCollectionException exception) {
-            return new ResponseEntity(communityName + " is not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity(id + " is not found", HttpStatus.NOT_FOUND);
         }
     }
 }

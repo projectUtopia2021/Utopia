@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @Api(value = "Post Controller")
 @ApiOperation(value = "APIs for Post Controller")
-@RequestMapping("/api/community/post")
+@RequestMapping("/api")
 public class PostController {
 
     @Autowired
@@ -27,7 +27,7 @@ public class PostController {
     private JWTUtility jwtUtility;
 
     // GET Posts
-    @RequestMapping(method=RequestMethod.GET,value="/{id}")
+    @RequestMapping(method=RequestMethod.GET,value="/posts/{id}")
     public ResponseEntity getAllPosts(@PathVariable("id")  String postId)
     {
         List<Post> posts = postService.getAllPosts(postId);
@@ -38,27 +38,27 @@ public class PostController {
     }
 
     // SAVE Post
-    @RequestMapping(method= RequestMethod.POST,value="/save")
+    @RequestMapping(method= RequestMethod.POST,value="/post")
     public ResponseEntity<String> createPost(@RequestHeader("Authorization") String token, @RequestBody Post post)
     {
         try{
             String username = jwtUtility.getUsernameFromToken(token.substring(7));
             post.setUsername(username);
             postService.createPost(post);
-            return new ResponseEntity("Successfully added post " +post.getTitle(), HttpStatus.OK);
+            return new ResponseEntity("Successfully added post " +post.getTitle(), HttpStatus.CREATED);
         }
         catch(Exception  e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
     // EDIT Post
-    @RequestMapping(method=RequestMethod.PUT,value="/{id}")
+    @RequestMapping(method=RequestMethod.PUT,value="/post/{id}")
     public ResponseEntity updatePostById(@PathVariable("id") String id,@RequestBody Post editedPost)
     {
         try {
             postService.updatePost(id,editedPost);
-            return new ResponseEntity("Updated posts with id "+id+"",HttpStatus.OK);
+            return new ResponseEntity("Updated posts with id "+id+"",HttpStatus.CREATED);
         }
         catch(ConstraintViolationException e)
         {
@@ -71,12 +71,12 @@ public class PostController {
 
 
     // DELETE Post
-    @RequestMapping(method=RequestMethod.DELETE,value="/{id}")
+    @RequestMapping(method=RequestMethod.DELETE,value="/post/{id}")
     public ResponseEntity deletePostById(@PathVariable("id") String id)
     {
         try{
             postService.deletePostById(id);
-            return new ResponseEntity("Successfully deleted post with id "+id,HttpStatus.OK);
+            return new ResponseEntity("Successfully deleted post with id "+id,HttpStatus.NO_CONTENT);
         }
         catch (PostCollectionException e)
         {
