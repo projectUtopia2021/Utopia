@@ -33,7 +33,6 @@ import createEmojiPlugin from '@draft-js-plugins/emoji';
 import "../../../node_modules/@draft-js-plugins/emoji/lib/plugin.css"
 
 import {Button} from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
 import Stack from '@material-ui/core/Stack';
 
 
@@ -224,13 +223,17 @@ class Draft extends React.Component {
     }
 
     var postData = {
-      title: document.getElementById("titleTB"),
       desc: draftToHtml(convertToRaw(contentState)),
       user: null,
       comment: [],
       images: this.state.currentFile,
       mentionName: mentionedUsers,
+      other: this.props.otherInfo,
     };
+
+    for (const [key, value] of Object.entries(this.props.otherInfo)) {
+      console.log(key, value);
+    }
     
     let axiosConfig = {
       headers: {
@@ -263,15 +266,11 @@ class Draft extends React.Component {
 
     return (
       <div className={editorStyles.wholeInput}>
-        <Typography variant="h4">
-          Title
-        </Typography>
-        <input type="text" className={editorStyles.titleTB} name="name" id="titleTB"/>
 
-        <div maxWidth="sm" className={editorStyles.textbox} onClick={this.focus}>
-          <Typography variant="h4">
+        <div className={editorStyles.textbox} onClick={this.focus}>
+          {/* <Typography variant="h4">
             Content
-          </Typography>
+          </Typography> */}
           <div className={editorStyles.editor}>
             <Editor
               editorState={this.state.editorState}
