@@ -76,7 +76,7 @@ public class CommunityService {
         Optional<Community> targetCommunity = communityRepo.findByName(communityName);
         if (targetCommunity.isPresent()) {
             //check if the creator name is the same as username passed in
-            if( targetCommunity.get().getCreatorUsername().equals(username)) {
+            if( targetCommunity.get().getUsername().equals(username)) {
                 communityRepo.deleteByName(communityName);
             } else {
                 throw new CommunityCollectionException(CommunityCollectionException.CommunityCreatorNameDoesNotMatch(username));

@@ -38,6 +38,16 @@ public class PostService {
     @Transactional
     public void createPost(Post post)
             throws Exception{
+        if (post.getTitle() == null || "".equals(post.getTitle())) {
+            throw new PostCollectionException(PostCollectionException.PropertyMissing("title"));
+        }
+        if (post.getCommunityName() == null || "".equals(post.getCommunityName())) {
+            throw new PostCollectionException(PostCollectionException.PropertyMissing("Community name"));
+        }
+        if (post.getDescription() == null || "".equals(post.getDescription())) {
+            throw new PostCollectionException(PostCollectionException.PropertyMissing("Post description"));
+        }
+
 
         // If the post is valid as per not null constraint we have to next
         // check if the post with the same name/id already exists
