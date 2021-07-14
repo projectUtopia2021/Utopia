@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { MainContainer, CommunityBar, PostDisplay } from './CommunitiesStyles.js';
-import { useState } from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
@@ -14,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
 import CommentIcon from '@material-ui/icons/Comment';
+import Button from '@material-ui/core/Button';
+import PostAddIcon from '@material-ui/icons/PostAdd';
 
 const drawerWidth = 246;
 const posts = [
@@ -54,6 +55,7 @@ export default function Communities(props) {
                 <Box id="drawer-container" sx={{position: 'relative',  height:`calc(100vh - 50px)`}}>
                 <Box sx={{ display: 'flex'}}>
                     <CommunityBar>
+                        
                     <Drawer 
                     PaperProps={{ style: { position: 'relative' } }}
                     BackdropProps={{ style: { position: 'relative' } }}
@@ -71,6 +73,12 @@ export default function Communities(props) {
                     variant='permanent'>
                     <Toolbar/>
                     <div style={{overflow:'auto'}}>
+                        <div id='buttonContainer' style={{width:'80%', align:'center'}}>
+                        <Button variant="outlined" color={'secondary'}  startIcon={<PostAddIcon />} fullWidth={true}>
+                            Make a Post
+                        </Button>
+                        </div>
+                    
                         <List>
                             {["unjoined community1", "unjoined Community2"].map((text) => (
                                 <ListItem 
