@@ -6,26 +6,7 @@ import Button from '@material-ui/core/Button';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import Toolbar from '@material-ui/core/Toolbar';
 
-const posts = [
-    {
-        title: "animal crossing wedding season mock data",
-        postContent: "Join the wedding seacon in June!",
-        author: "Liyuan",
-        date: "2021/06/15",
-    },
-    {
-        title: "animal crossing wedding season1 mock data",
-        postContent: "Join the wedding seacon in June!",
-        author: "Liyuan",
-        date: "2021/06/15",
-    },
-    {
-        title: "animal crossing wedding season2 mock data",
-        postContent: "Join the wedding seacon in June!",
-        author: "Liyuan",
-        date: "2021/06/15",
-    },
-];
+
 
 export default function CommunitySidebar(){
 
@@ -34,14 +15,11 @@ export default function CommunitySidebar(){
                     PaperProps={{ style: { position: 'relative' } }}
                     BackdropProps={{ style: { position: 'relative' } }}
                     ModalProps={{
-                        // container: document.getElementById('drawer-container'),
                         style: { position: 'absolute' }
                     }}
                     sx={{
-                    // width: `${drawerWidth}`, 
                     flexShrink: 0,
-                    [`& .MuiDrawer-paper`]: { 
-                                    // width: drawerWidth, 
+                    [`& .MuiDrawer-paper`]: {  
                                     boxSizing: 'border-box', 
                                     backgroundColor:'inherit'}}}
                     variant='permanent'>
