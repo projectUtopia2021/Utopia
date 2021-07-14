@@ -24,17 +24,21 @@ import java.util.List;
 @ApiOperation(value = "APIs for community")
 public class CommunityController {
 
+    private final CommunityService communityService;
+    private final JWTUtility jwtUtility;
+
     @Autowired
-    CommunityService communityService;
-    @Autowired
-    JWTUtility jwtUtility;
+    public CommunityController(CommunityService communityService, JWTUtility jwtUtility) {
+        this.communityService = communityService;
+        this.jwtUtility = jwtUtility;
+    }
 
     @GetMapping(value = "/communities")
     public ResponseEntity getAllCommunities() {
         return new ResponseEntity(communityService.getAllCommunities(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/community/{name}")
+    @GetMapping(value = "/communities/{name}")
     public ResponseEntity getCommunityByName(@PathVariable("name") String name) {
         try {
             List<Community> communityList = communityService.findCommunityByNameApproximate(name);
@@ -44,9 +48,23 @@ public class CommunityController {
         }
     }
 
-    @PostMapping(value = "/community")
-    public ResponseEntity createCommunity(@RequestBody Community community) {
+    @GetMapping(value = "/community/{id}")
+    public ResponseEntity getCommunityById(@PathVariable("id") String id) {
         try {
+            Community community = communityService.getCommunityById(id);
+            return new ResponseEntity(community, HttpStatus.OK);
+
+        } catch (CommunityCollectionException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping(value = "/community")
+    public ResponseEntity createCommunity(@RequestBody Community community, @RequestHeader("Authorization") String authorization) {
+        String token = authorization.substring(7);
+        String username = jwtUtility.getUsernameFromToken(token);
+        try {
+            community.setUsername(username);
             communityService.createCommunity(community);
             return new ResponseEntity(community.getName() + " has been successfully created", HttpStatus.CREATED);
         } catch (CommunityCollectionException exception) {

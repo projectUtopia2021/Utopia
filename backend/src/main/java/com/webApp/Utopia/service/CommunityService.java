@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /*
  * @author Jeff
@@ -17,23 +18,31 @@ import java.util.Optional;
  */
 @Service
 public class CommunityService {
+    private final CommunityRepository communityRepo;
+
     @Autowired
-    CommunityRepository communityRepo;
-    @Autowired
-    UserService userService;
+    public CommunityService(CommunityRepository communityRepo) {
+        this.communityRepo = communityRepo;
+    }
 
     public List<Community> getAllCommunities() {
         return communityRepo.findAll();
     }
 
     public void createCommunity(Community newCommunity) throws CommunityCollectionException{
+        if (newCommunity.getName() == null) {
+            throw new CommunityCollectionException(CommunityCollectionException.PropertyMissing("Community name"));
+        }
         Optional<Community> communityByName = communityRepo.findByName(newCommunity.getName());
 
         if (communityByName.isPresent()) {
             throw new CommunityCollectionException(CommunityCollectionException.CommunityNameExists(newCommunity.getName()));
-        } else {
-            communityRepo.save(newCommunity);
         }
+        newCommunity.setId(UUID.randomUUID().toString());
+        newCommunity.setSubscribers(new ArrayList<>());
+        newCommunity.setPosts(new ArrayList<>());
+        communityRepo.save(newCommunity);
+
     }
 
     public void updateCommunity(Community updatedCommunity) throws CommunityCollectionException{
@@ -49,17 +58,12 @@ public class CommunityService {
         }
     }
 
-    public List<Community> getCommunityByName(String name) throws CommunityCollectionException {
-        Optional<Community> targetCommunity= communityRepo.findByName(name);
-
-        if (!targetCommunity.isPresent()) {
-            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(name));
-        } else {
-            List<Community> communityList = new ArrayList<Community>();
-            communityList.add(targetCommunity.get());
-            return communityList;
+    public Community getCommunityById(String id) throws CommunityCollectionException {
+        Optional<Community> targetCommunity = communityRepo.findById(id);
+        if (targetCommunity.isEmpty()) {
+            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(id));
         }
-
+        return targetCommunity.get();
     }
 
 
