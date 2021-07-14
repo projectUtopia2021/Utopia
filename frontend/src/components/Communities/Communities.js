@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MainContainer, CommunityBar, PostDisplay } from './CommunitiesStyles.js';
-import Drawer from '@material-ui/core/Drawer';
+
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import { CssBaseline, Divider, ListItem, ListItemText } from '@material-ui/core';
@@ -15,6 +15,7 @@ import Avatar from '@material-ui/core/Avatar';
 import CommentIcon from '@material-ui/icons/Comment';
 import Button from '@material-ui/core/Button';
 import PostAddIcon from '@material-ui/icons/PostAdd';
+import CommunitySidebar from './CommunitySidebar.js';
 
 const drawerWidth = 246;
 const posts = [
@@ -31,7 +32,7 @@ const posts = [
         date: "2021/06/15",
     },
     {
-        title: "animal crossing wedding season2 mock data",
+        title: "animal crossing wedding season2 mock dataasf",
         postContent: "Join the wedding seacon in June!",
         author: "Liyuan",
         date: "2021/06/15",
@@ -39,14 +40,6 @@ const posts = [
 ];
 
 export default function Communities(props) {
-
-    const loadCommunityPost  = () => {
-        console.log("loading")
-    }
-
-    const loadUnjoinedCommunityPost = () => {
-
-    }
     
     return (
         <>
@@ -55,59 +48,7 @@ export default function Communities(props) {
                 <Box id="drawer-container" sx={{position: 'relative',  height:`calc(100vh - 50px)`}}>
                 <Box sx={{ display: 'flex'}}>
                     <CommunityBar>
-                        
-                    <Drawer 
-                    PaperProps={{ style: { position: 'relative' } }}
-                    BackdropProps={{ style: { position: 'relative' } }}
-                    ModalProps={{
-                        container: document.getElementById('drawer-container'),
-                        style: { position: 'absolute' }
-                    }}
-                    sx={{
-                    width: `${drawerWidth}`, 
-                    flexShrink: 0,
-                    [`& .MuiDrawer-paper`]: { 
-                                    width: drawerWidth, 
-                                    boxSizing: 'border-box', 
-                                    backgroundColor:'inherit'}}}
-                    variant='permanent'>
-                    <Toolbar/>
-                    <div style={{overflow:'auto'}}>
-                        <div id='buttonContainer' style={{width:'80%', align:'center'}}>
-                        <Button variant="outlined" color={'secondary'}  startIcon={<PostAddIcon />} fullWidth={true}>
-                            Make a Post
-                        </Button>
-                        </div>
-                    
-                        <List>
-                            {["unjoined community1", "unjoined Community2"].map((text) => (
-                                <ListItem 
-                                    button
-                                    key={text}
-                                    onSelect={loadUnjoinedCommunityPost}
-                                    sx={{
-                                    [`& .Mui-selected`]: {backgroundColor:'black'}
-                                }}>
-                                    <ListItemText primary={text}/>
-                                </ListItem>
-                            ))}
-                        </List>
-                        <Divider/>
-                        <List>
-                            {['Community1', "Community2"].map((text) => (
-                                <ListItem 
-                                    button
-                                    key={text}
-                                    onClick={loadCommunityPost}
-                                    sx={{
-                                    [`& .Mui-selected`]: {backgroundColor:'black'}
-                                }}>
-                                    <ListItemText primary={text}/>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </div>
-                </Drawer>
+                        <CommunitySidebar/>
                     </CommunityBar>
                 <PostDisplay >
                 <Box>
