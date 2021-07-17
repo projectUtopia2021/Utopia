@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User getUserByName(String name) {
-        Optional<User> user = userRepo.findByName(name);
+        Optional<User> user = userRepo.findByNamePartialData(name);
         if (user.isPresent()) {
             return user.get();
         } else {

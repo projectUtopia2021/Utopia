@@ -12,4 +12,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findByName(String name);
     Optional<User> findByEmail(String emailAddress);
     Long deleteByName(String Name);
+    @Query(value = "{'name':?0}", fields = "{'password': 0, 'locked':0, 'enabled': 0}")
+    Optional<User> findByNamePartialData(String name);
 }
