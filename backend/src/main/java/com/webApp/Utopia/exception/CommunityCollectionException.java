@@ -18,4 +18,6 @@ public class CommunityCollectionException extends Exception{
     }
 
     public static String CommunityCreatorNameDoesNotMatch(String name) {return name + " is not authorized"; }
+
+    public static String PropertyMissing(String property) { return property + " cannot be empty"; }
 }

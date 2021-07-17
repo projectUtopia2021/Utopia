@@ -1,12 +1,15 @@
 package com.webApp.Utopia.controller;
 
 import com.webApp.Utopia.exception.CommentCollectionException;
+import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.model.Comment;
 import com.webApp.Utopia.model.User;
 import com.webApp.Utopia.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
@@ -15,9 +18,14 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
+@Api(value = "User Controller")
 public class UserController {
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     // GET Users
     @RequestMapping(method=RequestMethod.GET,value="/")
@@ -30,7 +38,7 @@ public class UserController {
         );
     }
 
-    // GET Users by id
+    // GET Users by name
     @RequestMapping(method=RequestMethod.GET,value="/{name}")
     public ResponseEntity getUserByName(@PathVariable("name") String name)
     {
@@ -41,6 +49,17 @@ public class UserController {
                 user != null ? HttpStatus.OK:HttpStatus.NOT_FOUND);
         }catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, value = "/{name}")
+    public ResponseEntity updateUserByName(@PathVariable("name") String name, @RequestBody User user) {
+        try {
+            user.setName(name);
+            User modifiedUser = userService.updateUserByName(user);
+            return new ResponseEntity(modifiedUser, HttpStatus.CREATED);
+        } catch (Exception exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

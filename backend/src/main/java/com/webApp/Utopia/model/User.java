@@ -38,31 +38,11 @@ public class User implements UserDetails {
     private Boolean enabled =true;
     private List<String> friends;
     private List<Post> posts;
-
+    private List<CommunityIdName> communities;
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-    }
-
-    public User(@NotNull(message = "Username cannot be empty") String name, @NotNull(message = "emailAddress cannot be empty") String email, List<String> friends,List<Post> posts) {
-        this.name = name;
-        this.email = email;
-        this.friends = friends;
-        this.posts = posts;
-    }
-
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String emailAddress) {
-        this.email = emailAddress;
     }
 
     @Override
@@ -101,5 +81,4 @@ public class User implements UserDetails {
         return enabled;
     }
 }
-
 

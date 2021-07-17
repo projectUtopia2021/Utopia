@@ -16,4 +16,6 @@ public class PostCollectionException extends Exception {
     {
         return "Post with given title already exists";
     }
+
+    public static String PropertyMissing(String propertyName) {return propertyName + " cannot be empty"; }
 }
