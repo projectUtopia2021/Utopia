@@ -46,16 +46,20 @@ public class CommunityService {
     }
 
     public void updateCommunity(Community updatedCommunity) throws CommunityCollectionException{
-        Optional<Community> communityByName = communityRepo.findByName(updatedCommunity.getName());
-        if (!communityByName.isPresent()) {
-            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(updatedCommunity.getName()));
-        } else {
-            Community originalCommunity = communityByName.get();
-            String id = originalCommunity.getId();
-            BeanUtils.copyProperties(updatedCommunity, originalCommunity);
-            originalCommunity.setId(id);
-            communityRepo.save(originalCommunity);
+        if (updatedCommunity.getId() == null) {
+            throw new CommunityCollectionException(CommunityCollectionException.PropertyMissing("community id"));
         }
+        Optional<Community> communityOptional = communityRepo.findById(updatedCommunity.getId());
+        if (communityOptional.isEmpty()) {
+            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(updatedCommunity.getId()));
+        }
+
+        Community originalCommunity = communityOptional.get();
+        String id = originalCommunity.getId();
+        BeanUtils.copyProperties(updatedCommunity, originalCommunity);
+        originalCommunity.setId(id);
+        communityRepo.save(originalCommunity);
+
     }
 
     public Community getCommunityById(String id) throws CommunityCollectionException {
@@ -89,4 +93,21 @@ public class CommunityService {
             throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(communityName));
         }
     }
+
+
+    public void addUserToCommunity(String username, String communityId) throws CommunityCollectionException {
+        Optional<Community> communityOptional = communityRepo.findById(communityId);
+        if (communityOptional.isEmpty()) {
+            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(communityId));
+        }
+        Community community = communityOptional.get();
+        List<String> subscribers = community.getSubscribers();
+        //avoid duplicate
+        if (!subscribers.stream().anyMatch(subscriber -> subscriber.equals(username))) {
+            subscribers.add(username);
+        }
+        community.setSubscribers(subscribers);
+        communityRepo.save(community);
+    }
+
 }
