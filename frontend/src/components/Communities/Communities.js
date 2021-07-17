@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { MainContainer, CommunityBar, PostDisplay } from './CommunitiesStyles.js';
-
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import { CssBaseline, Divider, ListItem, ListItemText } from '@material-ui/core';
