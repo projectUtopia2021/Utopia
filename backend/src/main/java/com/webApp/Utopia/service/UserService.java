@@ -1,5 +1,7 @@
 package com.webApp.Utopia.service;
 
+import com.webApp.Utopia.exception.CommunityCollectionException;
+import com.webApp.Utopia.model.CommunityIdName;
 import com.webApp.Utopia.model.Post;
 import com.webApp.Utopia.model.User;
 import com.webApp.Utopia.repository.UserRepository;
@@ -18,11 +20,16 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
+    private final JWTUtility jwtUtility;
+    private final CommunityService communityService;
 
     @Autowired
-    private JWTUtility jwtUtility;
+    public UserService(UserRepository userRepo, JWTUtility jwtUtility, CommunityService communityService) {
+        this.userRepo = userRepo;
+        this.jwtUtility = jwtUtility;
+        this.communityService = communityService;
+    }
 
     public List<User> getAllUsers() {
         List<User> users = userRepo.findAll();
@@ -55,6 +62,9 @@ public class UserService implements UserDetailsService {
         }
         //String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(user.getPassword());
+        user.setCommunities(new ArrayList<>());
+        user.setFriends(new ArrayList<>());
+        user.setPosts(new ArrayList<>());
         try {
             userRepo.save(user);
         }catch(Exception e){
@@ -63,6 +73,32 @@ public class UserService implements UserDetailsService {
 
         return user.getName();
 
+    }
+
+    public User updateUserByName(User updatedUser) throws UsernameNotFoundException, CommunityCollectionException {
+        Optional<User> targetUserOptional = userRepo.findByName(updatedUser.getUsername());
+        if (targetUserOptional.isEmpty()) {
+            throw new UsernameNotFoundException(updatedUser.getUsername() + " is not found");
+        }
+        User targetUser = targetUserOptional.get();
+        if (updatedUser.getCommunities() != null) {
+            int listSize = updatedUser.getCommunities().size();
+            if (listSize > 0)
+            {
+                String communityId = updatedUser.getCommunities().get(listSize - 1).getCommunityId();
+                try {
+                    communityService.addUserToCommunity(updatedUser.getUsername(), communityId);
+                    //avoid duplicate
+                    if (!targetUser.getCommunities().stream().anyMatch(c -> communityId.equals(c.getCommunityId()))) {
+                        targetUser.setCommunities(updatedUser.getCommunities());
+                    }
+                } catch (CommunityCollectionException exception) {
+                    throw exception;
+                }
+            }
+        }
+        userRepo.save(targetUser);
+        return targetUser;
     }
 
     public void deleteUserByName(String name) throws Exception
