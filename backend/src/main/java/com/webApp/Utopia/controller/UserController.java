@@ -6,6 +6,7 @@ import com.webApp.Utopia.model.Comment;
 import com.webApp.Utopia.model.User;
 import com.webApp.Utopia.service.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/user")
 @Api(value = "User Controller")
+@ApiOperation(value = "APIs for User Controller")
 public class UserController {
     private final UserService userService;
 

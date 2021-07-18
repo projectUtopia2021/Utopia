@@ -38,40 +38,13 @@ public class User implements UserDetails {
     private Boolean enabled =true;
     private List<String> friends;
     private List<Post> posts;
-<<<<<<< HEAD
-
-=======
     private List<CommunityIdName> communities;
->>>>>>> 598a67f5963969d89ad4c2d48c0950829ae23543
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-<<<<<<< HEAD
-    public User(@NotNull(message = "Username cannot be empty") String name, @NotNull(message = "emailAddress cannot be empty") String email, List<String> friends,List<Post> posts) {
-        this.name = name;
-        this.email = email;
-        this.friends = friends;
-        this.posts = posts;
-    }
-
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String emailAddress) {
-        this.email = emailAddress;
-    }
-
-=======
->>>>>>> 598a67f5963969d89ad4c2d48c0950829ae23543
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("USER");
