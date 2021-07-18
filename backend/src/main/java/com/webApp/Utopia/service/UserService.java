@@ -81,11 +81,14 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException(updatedUser.getUsername() + " is not found");
         }
         User targetUser = targetUserOptional.get();
+        //check if subscribed communities have been updated
         if (updatedUser.getCommunities() != null) {
-            int listSize = updatedUser.getCommunities().size();
-            if (listSize > 0)
+            int updatedListSize = updatedUser.getCommunities().size();
+            int currentListSize = targetUser.getCommunities().size();
+            //subscribing community
+            if (updatedListSize > currentListSize)
             {
-                String communityId = updatedUser.getCommunities().get(listSize - 1).getCommunityId();
+                String communityId = updatedUser.getCommunities().get(updatedListSize - 1).getCommunityId();
                 try {
                     communityService.addUserToCommunity(updatedUser.getUsername(), communityId);
                     //avoid duplicate
@@ -95,6 +98,8 @@ public class UserService implements UserDetailsService {
                 } catch (CommunityCollectionException exception) {
                     throw exception;
                 }
+            } else {
+                
             }
         }
         userRepo.save(targetUser);

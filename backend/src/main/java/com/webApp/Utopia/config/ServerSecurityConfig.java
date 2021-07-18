@@ -28,6 +28,9 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
             // -- Swagger UI v2
             "/api/register",
             "/api/authenticate",
+            "/api/communities/**",
+            "/api/community/**",
+            "/api/communities",
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",
