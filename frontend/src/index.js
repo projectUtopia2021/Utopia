@@ -10,7 +10,6 @@ import Discovery from './components/Discovery/Discovery.js';
 import Communities from './components/Communities/Communities.js';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { UserContextProvider } from './components/Context/UserContext.js';
-import PostDetail from './components/Posts/PostDetail.js';
 
 
 ReactDOM.render(
@@ -26,7 +25,6 @@ ReactDOM.render(
         <Route path="/draft" component={Draft} />
         <Route path="/discovery" component={Discovery} />
         <Route path="/communities" component={Communities} />
-        <Route path='/post' component={PostDetail} />
       </Switch>
     </Router>
     </UserContextProvider>
