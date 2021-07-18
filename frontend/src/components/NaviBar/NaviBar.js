@@ -14,7 +14,7 @@ import axios from 'axios';
 import {useStateWithCallbackLazy} from 'use-state-with-callback';
 import { useUserContext } from '../Context/UserContext';
 
-const GET_COMMUNITIES_API = "/api/community/getCommunityByName/"
+const GET_COMMUNITIES_API = "/api/communities/"
 
 function HomeIcon(props) {
     return (
@@ -46,7 +46,9 @@ function NaviBar(props) {
                     history.push({pathname: "/discovery", state: {currentSearchResult}})
                 })
             }
-        ).catch(error => {alert(error)})
+        ).catch(error => {
+            history.push({pathname: "/discovery", state: {searchResult}})
+        })
     }
     
     React.useEffect(() => {
