@@ -10,7 +10,7 @@ public class CommunityCollectionException extends Exception{
     }
 
     public static String NotFoundException(String name) {
-        return "Community with id " + name + " is not found";
+        return "Community " + name + " is not found";
     }
 
     public static String CommunityNameExists(String name) {
