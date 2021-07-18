@@ -17,8 +17,6 @@ export function UserContextProvider({children}){
     }
     const setLogin = (loggedIn) => {
         setIsLoggedIn(loggedIn)
-        console.log(isLoggedIn)
-        console.log("setting")
     }
     return (
         <userInfo.Provider value={{username, setLoginUsername, isLoggedIn, setLogin}}>
