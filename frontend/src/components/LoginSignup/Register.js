@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import { useHistory } from "react-router";
 import API_PREFIX from '../../API_PREFIX';
+import { useUserContext } from "../Context/UserContext";
 
 const register_API = "/api/register"
 
@@ -12,6 +13,7 @@ export default function Register(props) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { setLoginUsername, setLogin } = useUserContext()
 
     const handleRgister = (event) => {
         event.preventDefault();
@@ -26,9 +28,12 @@ export default function Register(props) {
                     'password': password})
                     .then(
                         res => {
-                            localStorage.setItem('token', JSON.stringify(res.data))
+                            setLoginUsername(name, () => {
+                                localStorage.setItem('token', JSON.stringify(response.data))
+                                localStorage.setItem('username', `${name}`)
+                                setLogin(true)
+                            })
                             props.history.push('/')
-                            window.location.reload()
                         }
                     )
             }).catch(error => {

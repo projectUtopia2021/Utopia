@@ -7,8 +7,14 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
-import {Search, SearchIconWrapper, StyledInputBase, ButtonBox} from './NaviBarStyles';
+import {Search, StyledInputBase, ButtonBox} from './NaviBarStyles';
 import { useHistory } from 'react-router-dom';
+import IconButton from '@material-ui/core/IconButton';
+import axios from 'axios';
+import {useStateWithCallbackLazy} from 'use-state-with-callback';
+import { useUserContext } from '../Context/UserContext';
+
+const GET_COMMUNITIES_API = "/api/communities/"
 
 function HomeIcon(props) {
     return (
@@ -18,49 +24,79 @@ function HomeIcon(props) {
     );
 };
 
-function NaviBar() {
+function NaviBar(props) {
     const history = useHistory()
-    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+    const [searchContent, setSearchContent] = React.useState('');
+    const [searchResult, setSearchResult] = useStateWithCallbackLazy([]);
+    const { username, isLoggedIn, setLogin, setLoginUsername } = useUserContext()
 
     const handleLogOut = (event) => {
         event.preventDefault()
         localStorage.removeItem('token')
-        setIsLoggedIn(false)
+        localStorage.removeItem('username')
+        setLogin(false)
     }
 
+    const handleSearch = (event) => {
+        event.preventDefault()
+        axios.get(GET_COMMUNITIES_API + searchContent, {}).then(
+            response => {
+                const data = response.data;
+                setSearchResult(response.data, (currentSearchResult) => {
+                    history.push({pathname: "/discovery", state: {currentSearchResult}})
+                })
+            }
+        ).catch(error => {
+            history.push({pathname: "/discovery", state: {searchResult}})
+        })
+    }
+    
     React.useEffect(() => {
-        if(localStorage.getItem('token')){
-            setIsLoggedIn(true)
+        if(localStorage.getItem("token")){
+            setLogin(true)
+            const name =  localStorage.getItem('username')? localStorage.getItem('username'): 'user';
+            setLoginUsername(name)
         }
     }, [])
-    
-    
+
     return (
         <div>
             <CssBaseline />
             <AppBar position="relative">
                 <Toolbar>
                 <HomeIcon sx={{ mr: 2 }} />
-                <Typography variant="h6" color="inherit" noWrap>
+                <Typography variant="h6" color="inherit">
                     Utopia
                 </Typography>
+                
                 <Search>
-                    <SearchIconWrapper>
-                    <SearchIcon />
-                    </SearchIconWrapper>
+                    <form onSubmit={handleSearch}>
                     <StyledInputBase
                     placeholder="Search…"
                     inputProps={{ 'aria-label': 'search' }}
+                    onChange={(event) => {
+                        setSearchContent(event.target.value)
+                    }}
                     />
+                    <IconButton type="submit" aria-label="search">
+                    <SearchIcon />
+                    </IconButton>
+                    </form>
                 </Search>
                 <ButtonBox>
                 {isLoggedIn? (
-                    <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                    <Button style={{textTransform: 'none'}}
+                    <div style={{flexDirection: 'row', display:'flex'}}>
+                        <Typography color='inherit' align='center' sx={{mr: 3}} nowrap>
+                            Welcome, {username}
+                        </Typography>
+                        <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                        <Button style={{textTransform: 'none'}}
                         onClick={handleLogOut}>
-                    Log Out
-                    </Button>
+                        Log Out
+                        </Button>
                 </ButtonGroup>
+                    </div>
+                    
                 ): (
                     <ButtonGroup variant="contained" aria-label="outlined primary button group">
                     <Button style={{textTransform: 'none'}}  

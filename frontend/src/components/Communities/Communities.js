@@ -1,86 +1,94 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { MainContainer, CommunityBar, PostDisplay } from './CommunitiesStyles.js';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import { CssBaseline, Divider, ListItem, ListItemText } from '@material-ui/core';
+import { Box } from '@material-ui/system';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
-import Paper from "@material-ui/core/Paper";
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import { VerticalTabs, TheTab } from './CommunitiesStyles';
-import Box from '@material-ui/core/Box';
-import PropTypes from 'prop-types';
-import Community from './Community';
+import Container from '@material-ui/core/Container';
+import Avatar from '@material-ui/core/Avatar';
+import CommentIcon from '@material-ui/icons/Comment';
+import Button from '@material-ui/core/Button';
+import PostAddIcon from '@material-ui/icons/PostAdd';
+import CommunitySidebar from './CommunitySidebar.js';
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+const drawerWidth = 246;
+const posts = [
+    {
+        title: "animal crossing wedding season mock data",
+        postContent: "Join the wedding seacon in June!",
+        author: "Liyuan",
+        date: "2021/06/15",
+    },
+    {
+        title: "animal crossing wedding season1 mock data",
+        postContent: "Join the wedding seacon in June!",
+        author: "Liyuan",
+        date: "2021/06/15",
+    },
+    {
+        title: "animal crossing wedding season2 mock dataasf",
+        postContent: "Join the wedding seacon in June!",
+        author: "Liyuan",
+        date: "2021/06/15",
+    },
+];
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
-
-export default function Communites(props) {
-    const [communities, setCommunities] = useState([]);
-    const [value, setValue] = useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    }
-
+export default function Communities(props) {
+    
     return (
-        <div>
-            <CssBaseline />
-            <Grid container 
-            maxWidth="md" 
-            sx={{pt:8, pb: 6, px: 30}}
-            spacing={5}>
-                <Grid item xs={2} sx={{
-                  bgcolor: 'background.paper', 
-                  pr:4, 
-                  borderRadius:5,
-                  marginTop: 4,
-                  pb: 2}}>
-                    <Typography 
-                    //variant="h4" 
-                    fontWeight="fontWeightBold"
-                    sx={{textAlign:"center"}}
-                    Wrapper>
-                        Discover
-                    </Typography>
-                    <VerticalTabs 
-                        onChange={handleChange}
-                        value={value}
-                        sx={{pt:3}}
-                        textColor="#A69FFC">
-                            <TheTab  label="Home" Wrapper/>
-                            <TheTab  label="Gaming"  Wrapper/>
-                            <TheTab  label="Education"  Wrapper/>
-                            <TheTab  label="Science/Tech" Wrapper/>
-                            <TheTab  label="Entertainment" Wrapper/>
-                    </VerticalTabs>
-                </Grid>
-                <Grid item xs={10} spacing={4} sx={{flexDirection: "column"}}>
-                  <Community>
-
-                  </Community>
-                </Grid>
-            </Grid>
-        </div>
+        <>
+            <MainContainer>
+                <CssBaseline/>
+                <Box id="drawer-container" sx={{position: 'relative',  height:`calc(100vh - 50px)`}}>
+                <Box sx={{ display: 'flex'}}>
+                    <CommunityBar>
+                        <CommunitySidebar/>
+                    </CommunityBar>
+                <PostDisplay >
+                <Box>
+                        <Toolbar/>
+                        <Container maxWidth="md">
+                            <Grid container spacing={2} direction={'column'}>
+                                {posts.map((post) => (
+                                <Grid item key={post}>
+                                <Card
+                                sx={{ height: '100%', 
+                                        display: 'flex', 
+                                        flexDirection: 'row',
+                                        }}>
+                                <CardContent sx={{ flexGrow: 1 }}>
+                                    <Grid container >
+                                        <Avatar  src="/broken-image.jpg"/>
+                                        <Grid item sx={{pl:5}} sx={{pl:2}}>
+                                        <Typography gutterBottom variant="h6" component="h2">
+                                         {post.title}
+                                        </Typography>
+                                        <Typography>
+                                        {post.postContent}
+                                        </Typography>
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                                <CardActions>
+                                <CommentIcon fontSize={'medium'} sx={{mr:2}}>
+                                </CommentIcon>
+                                </CardActions>
+                                </Card>
+                            </Grid>
+                            ))}
+                        </Grid>
+                        </Container>
+                </Box>
+                </PostDisplay>
+                
+                </Box>
+                </Box>
+            </MainContainer>
+        </>
     );
 }
