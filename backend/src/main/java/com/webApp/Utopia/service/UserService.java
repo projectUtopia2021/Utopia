@@ -4,8 +4,10 @@ import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.model.CommunityIdName;
 import com.webApp.Utopia.model.Post;
 import com.webApp.Utopia.model.User;
+import com.webApp.Utopia.model.UserDTO;
 import com.webApp.Utopia.repository.UserRepository;
 import com.webApp.Utopia.utils.JWTUtility;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -23,27 +26,31 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepo;
     private final JWTUtility jwtUtility;
     private final CommunityService communityService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(UserRepository userRepo, JWTUtility jwtUtility, CommunityService communityService) {
+    public UserService(UserRepository userRepo, JWTUtility jwtUtility, CommunityService communityService, ModelMapper modelMapper) {
         this.userRepo = userRepo;
         this.jwtUtility = jwtUtility;
         this.communityService = communityService;
+        this.modelMapper = modelMapper;
     }
 
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         List<User> users = userRepo.findAll();
         if (users.size() > 0) {
-            return users;
+
+            return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
         } else {
-            return new ArrayList<User>();
+            return new ArrayList<>();
         }
     }
 
-    public User getUserByName(String name) {
+    public UserDTO getUserByName(String name) {
         Optional<User> user = userRepo.findByNamePartialData(name);
         if (user.isPresent()) {
-            return user.get();
+            UserDTO userDTO =  modelMapper.map(user.get(), UserDTO.class);
+            return userDTO;
         } else {
             return null;
         }
@@ -134,9 +141,9 @@ public class UserService implements UserDetailsService {
         Optional<User> userOptional = userRepo.findByName(post.getUsername());
         if(userOptional.isPresent()) {
             User user = userOptional.get();
-            List<Post> posts = user.getPosts();
-            if(posts == null) posts = new ArrayList<Post>();
-            posts.add(post);
+            List<String> posts = user.getPosts();
+            if(posts == null) posts = new ArrayList<>();
+            posts.add(post.getId());
             user.setPosts(posts);
             posts = user.getPosts();
             userRepo.save(user);
