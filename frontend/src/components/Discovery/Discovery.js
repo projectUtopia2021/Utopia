@@ -10,14 +10,24 @@ import Container from '@material-ui/core/Container';
 import { useLocation } from "react-router-dom";
 import { useEffect } from 'react';
 import { Link } from '@material-ui/core';
+import { useUserContext } from '../Context/UserContext';
 
 export default function Discovery (props) {
     const location = useLocation()
     const [communityList, setCommunityList] = React.useState(props.location.state.currentSearchResult);
+    const { isLoggedIn } = useUserContext()
 
     useEffect (() => {
       setCommunityList(props.location.state.currentSearchResult)
     }, [props.location]);
+
+    const handleJoinCommunity = (id) => {
+      return isLoggedIn? subscribeCommunity(id): null;
+    }
+
+    const subscribeCommunity = (id) => {
+      console.log("subscribe")
+    }
 
     return (
         <React.Fragment>
@@ -51,7 +61,12 @@ export default function Discovery (props) {
                   </CardContent>
                   <CardActions>
                     <Button size="small">View</Button>
-                    <Button size="small">Join</Button>
+                    <Button size="small" 
+                      onClick={() => {
+                        handleJoinCommunity(community.id)
+                      }}>
+                          Join
+                          </Button>
                   </CardActions>
                 </Card>
               </Grid>
