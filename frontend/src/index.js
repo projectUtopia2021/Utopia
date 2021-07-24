@@ -10,12 +10,14 @@ import Discovery from './components/Discovery/Discovery.js';
 import Communities from './components/Communities/Communities.js';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { UserContextProvider } from './components/Context/UserContext.js';
+import AutoLogin from './wrapper/AutoLogin.js';
 
 
 ReactDOM.render(
   <React.StrictMode>
     <UserContextProvider>
     <Router>
+      <AutoLogin/>
       <NaviBar/>
       <Switch>
         <Route exact path="/" component={HomePage} />
