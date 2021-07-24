@@ -11,22 +11,48 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from 'react';
 import { Link } from '@material-ui/core';
 import { useUserContext } from '../Context/UserContext';
+import axios from 'axios';
+
+const SUBSCRIBE_COMMUNITY = '/api/user/'
 
 export default function Discovery (props) {
     const location = useLocation()
-    const [communityList, setCommunityList] = React.useState(props.location.state.currentSearchResult);
-    const { isLoggedIn } = useUserContext()
+    const [searchCommunityList, setSearchCommunityList] = React.useState(props.location.state.currentSearchResult);
+    const { isLoggedIn, username, communityList, setUserCommunityList } = useUserContext()
 
     useEffect (() => {
-      setCommunityList(props.location.state.currentSearchResult)
+      setSearchCommunityList(props.location.state.currentSearchResult)
     }, [props.location]);
 
-    const handleJoinCommunity = (id) => {
-      return isLoggedIn? subscribeCommunity(id): null;
+    const handleJoinCommunity = (id, name) => {
+      return isLoggedIn? subscribeCommunity(id, name): null;
     }
 
-    const subscribeCommunity = (id) => {
-      console.log("subscribe")
+    const subscribeCommunity = (id, name) => {
+      const newCommunity = {
+        "communityId": id,
+        "communityName": name
+      }
+      var list = communityList;
+      list.push(newCommunity)
+      setUserCommunityList(list)
+      if(localStorage.getItem('token') && localStorage.getItem('username')){
+          const token = JSON.parse(localStorage.getItem('token')).jwtToken
+          axios.patch(SUBSCRIBE_COMMUNITY + username, {
+            communities: list
+          }, {
+            headers:{
+              'Authorization': `Bearer ${token}`
+            }
+          }).then(
+            response => {
+              alert("you joined successfully")
+            }
+          ).catch(error => {
+            alert(error)
+          })
+      }
+      
     }
 
     return (
@@ -36,9 +62,9 @@ export default function Discovery (props) {
               All Results:
             </Typography>
           {/* End hero unit */}
-          {communityList? (
+          {searchCommunityList? (
             <Grid container spacing={3}>
-            {communityList.map((community) => (
+            {searchCommunityList.map((community) => (
               <Grid item key={community.id} xs={12} sm={6} md={4}>
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
@@ -61,12 +87,20 @@ export default function Discovery (props) {
                   </CardContent>
                   <CardActions>
                     <Button size="small">View</Button>
-                    <Button size="small" 
+                    {/* {console.log(communityList.includes({
+                      aCommunity: {
+                        "communityId":community.id,
+                        "communityName":community.name
+                        }}))} */}
+                    {communityList.includes({"communityId":community.id,"communityName":community.name})? 
+                    null:
+                    (<Button size="small" 
                       onClick={() => {
-                        handleJoinCommunity(community.id)
+                        handleJoinCommunity(community.id, community.name)
                       }}>
                           Join
-                          </Button>
+                          </Button>)}
+                    
                   </CardActions>
                 </Card>
               </Grid>
