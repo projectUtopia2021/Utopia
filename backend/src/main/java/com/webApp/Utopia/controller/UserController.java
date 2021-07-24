@@ -59,7 +59,7 @@ public class UserController {
     public ResponseEntity updateUserByName(@PathVariable("name") String name, @RequestBody User user) {
         try {
             user.setName(name);
-            User modifiedUser = userService.updateUserByName(user);
+            UserDTO modifiedUser = userService.updateUserByName(user);
             return new ResponseEntity(modifiedUser, HttpStatus.CREATED);
         } catch (Exception exception) {
             return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
