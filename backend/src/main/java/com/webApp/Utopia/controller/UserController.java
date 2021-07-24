@@ -4,6 +4,7 @@ import com.webApp.Utopia.exception.CommentCollectionException;
 import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.model.Comment;
 import com.webApp.Utopia.model.User;
+import com.webApp.Utopia.model.UserDTO;
 import com.webApp.Utopia.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,10 +34,10 @@ public class UserController {
     @RequestMapping(method=RequestMethod.GET,value="/")
     public ResponseEntity getAllUsers()
     {
-        List<User> comments = userService.getAllUsers();
+        List<UserDTO> users = userService.getAllUsers();
         return new ResponseEntity(
-                comments,
-                comments.size()>0?HttpStatus.OK:HttpStatus.NOT_FOUND
+                users,
+                users.size()>0?HttpStatus.OK:HttpStatus.NOT_FOUND
         );
     }
 
@@ -45,7 +46,7 @@ public class UserController {
     public ResponseEntity getUserByName(@PathVariable("name") String name)
     {
         try{
-            User user = userService.getUserByName(name);
+            UserDTO user = userService.getUserByName(name);
             return new ResponseEntity(
                 user,
                 user != null ? HttpStatus.OK:HttpStatus.NOT_FOUND);
