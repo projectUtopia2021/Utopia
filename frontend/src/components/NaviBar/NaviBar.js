@@ -134,7 +134,7 @@ function NaviBar(props) {
                             Welcome, {username}
                         </Typography>
                         <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                        <Button style={{textTransform: 'none'}}
+                        <Button style={{textTransform: 'none', }}
                         onClick={handleLogOut}>
                         Log Out
                         </Button>
@@ -143,13 +143,13 @@ function NaviBar(props) {
                     
                 ): (
                     <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                    <Button style={{textTransform: 'none'}}  
+                    <Button style={{textTransform: 'none',}}  
                                 onClick = {() => {
                                     history.push("/login")
                             }}>
                                 Log In
                         </Button>
-                         <Button style={{textTransform: 'none'}} 
+                         <Button style={{textTransform: 'none', }} 
                                 onClick = {() => {
                                 history.push("/register")
                             }}>
