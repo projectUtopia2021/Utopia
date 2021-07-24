@@ -53,6 +53,9 @@ function NaviBar(props) {
     
     React.useEffect(() => {
         if(localStorage.getItem("token")){
+            setLogin(true)
+            const name =  localStorage.getItem('username')? localStorage.getItem('username'): 'user';
+            setLoginUsername(name)
             // const headers = {
             //     'Content-Type': 'application/json',
             //     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("token")).jwtToken,
@@ -67,10 +70,9 @@ function NaviBar(props) {
             // ).catch(error => {
             //     console.log(error)
             // })
-            setLogin(true)
-            const name =  localStorage.getItem('username')? localStorage.getItem('username'): 'user';
-            setLoginUsername(name)
+            
         }
+        console.log(isLoggedIn, username)
         // axios.interceptors.request.use(function (config) {
         //     if (localStorage.getItem("token")) {
         //       config.headers.common['Authorization'] = `Bearer ` + JSON.parse(localStorage.getItem("token")).jwtToken;

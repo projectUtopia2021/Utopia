@@ -8,34 +8,32 @@ import { useHistory } from 'react-router-dom';
 const GET_USER_API = "/api/user/"
 
 export default function AutoLogin ({props}) {
-    // const [ isLoggedIn, 
-    //         setIsLoggedIn,
-    //         username,
-    //         setUsername ] = useUserContext();
-    const history = useHistory()
+    const { setLogin, setLoginUsername, setUserCommunityList } = useUserContext();
 
     React.useEffect(() => {
         if(localStorage.getItem('token') && localStorage.getItem('username')){
             const name = localStorage.getItem('username')
-            const token = localStorage.getItem('token')
+            const token = JSON.parse(localStorage.getItem('token')).jwtToken
             authenticateToken(name, token);
-            console.log("token ", token)
         }
     },[])
 
     const authenticateToken = (name, token) => {
-        // axios.defaults.headers.common['Authorization'] = `Bearer ` + token;
-        console.log("getting information", token)
         axios.get(GET_USER_API +  name, {headers: {
             'Authorization': `Bearer ${token}`
         }
              })
             .then(
                 response => {
-                    console.log("got")
+                    console.log(response.data.communities)
+                    setLogin(true)
+                    setLoginUsername(response.data.name)
+                    setUserCommunityList(response.data.communities)
                 }
             ).catch(error => {
-                console.log(error)
+                alert("Session Expried!")
+                localStorage.removeItem('token')
+                localStorage.removeItem('username')
             })
     }
 
