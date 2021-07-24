@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,7 +83,7 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public User updateUserByName(User updatedUser) throws UsernameNotFoundException, CommunityCollectionException {
+    public UserDTO updateUserByName(User updatedUser) throws UsernameNotFoundException, CommunityCollectionException {
         Optional<User> targetUserOptional = userRepo.findByName(updatedUser.getUsername());
         if (targetUserOptional.isEmpty()) {
             throw new UsernameNotFoundException(updatedUser.getUsername() + " is not found");
@@ -106,11 +107,23 @@ public class UserService implements UserDetailsService {
                     throw exception;
                 }
             } else {
-                
+                Set<String> updatedCommunityIdSet = Set.copyOf(updatedUser.getCommunities().stream().map(communityIdName -> communityIdName.getCommunityId()).collect(Collectors.toList()));
+
+                for(CommunityIdName community: targetUser.getCommunities()) {
+                    //find the community to be removed
+                    if (!updatedCommunityIdSet.contains(community.getCommunityId())) {
+                        try {
+                            communityService.deleteUserFromCommunity(updatedUser.getUsername(), community.getCommunityId());
+                            targetUser.setCommunities(updatedUser.getCommunities());
+                        } catch (CommunityCollectionException exception) {
+                            throw exception;
+                        }
+                    }
+                }
             }
         }
         userRepo.save(targetUser);
-        return targetUser;
+        return modelMapper.map(targetUser, UserDTO.class);
     }
 
     public void deleteUserByName(String name) throws Exception
