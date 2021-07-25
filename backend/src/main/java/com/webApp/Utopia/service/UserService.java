@@ -156,10 +156,11 @@ public class UserService implements UserDetailsService {
             User user = userOptional.get();
             List<String> posts = user.getPosts();
             if(posts == null) posts = new ArrayList<>();
-            posts.add(post.getId());
-            user.setPosts(posts);
-            posts = user.getPosts();
-            userRepo.save(user);
+            if(!posts.contains(post.getId())) {
+                posts.add(post.getId());
+                user.setPosts(posts);
+                userRepo.save(user);
+            }
             return true;
         }else{
             return false;

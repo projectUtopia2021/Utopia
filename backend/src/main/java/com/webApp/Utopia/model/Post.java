@@ -25,8 +25,6 @@ public class Post {
     private String description;
     @NotNull(message = "Username cannot be empty")
     private String username;
-    @NotNull(message = "Topic Id cannot be empty")
-    private String topicId;
     private String parentId;
     @NotNull(message = "communityId cannot be empty")
     private String communityId;
