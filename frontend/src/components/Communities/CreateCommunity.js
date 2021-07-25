@@ -19,7 +19,7 @@ export default function CreateCommunity(props){
     //     axios.post(CREATE_COMMUNITY_API, {headers: {
     //         'Authorization': `Bearer ${token}`
     //     }})
-    // }
+    }
 
     return(
         <React.Fragment>
