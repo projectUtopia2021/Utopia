@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {
-    PostDetailContainer, 
-    PostComment, 
-    PostSidebarContainer, 
+    PostDetailContainer,
+    PostComment,
+    PostSidebarContainer,
     PostContainer,
     DiscussionSection,
     HeadSection
@@ -15,7 +15,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Divider, TextField
+    Divider, Fab, Icon, TextField
 } from '@material-ui/core';
 import Box from "@material-ui/core/Box";
 import Avatar from '@material-ui/core/Avatar';
@@ -28,19 +28,33 @@ import Fade from "@material-ui/core/Fade";
 import Stack from "@material-ui/core/Stack";
 import editorStyles from "../PostPage/PostPageStyles.module.css";
 import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
-
+import Draft from "../DraftJS/Draft";
+import {makeStyles} from "@material-ui/styles";
+import {useEffect} from "react";
 const mockdata = {
-    username:'liyuan',
+    username:'user1',
     title: "hi there",
     content:"say hello to post detail",
     tag:'general'
 }
 
+
+
 export default function PostDetail (){
     const [open, setOpen] = React.useState(false);
-
+    const [buttonText,setButtonText] = React.useState("like");
+    const [theme,setTheme] = React.useState('blue')
+    const changeText = (text) => {
+        setButtonText(text);
+    }
+    const callText = () => {
+        if (buttonText =="like" ){
+            setButtonText("liked")
+        }else{
+            setButtonText("like")
+        }
+    }
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -79,7 +93,7 @@ export default function PostDetail (){
             <PostDetailContainer >
             <CssBaseline/>
             <Box sx={{
-                display:'flex',  
+                display:'flex',
                 bgcolor:'white',
                 mt:3,
                 borderRadius:1
@@ -89,9 +103,9 @@ export default function PostDetail (){
                         <Grid container direction='column'>
                         <Grid item >
                                 <Box
-                                sx={{   
-                                        //height: '50px', 
-                                        display: 'flex', 
+                                sx={{
+                                        //height: '50px',
+                                        display: 'flex',
                                         flexDirection: 'row',
                                         width:'100%',
                                         //alignItems:'center',
@@ -102,14 +116,14 @@ export default function PostDetail (){
                                             alignItems:'center',
                                             }}
                                             >
-                                                <Avatar 
-                                                    src="/broken-image.jpg" 
-                                                    style={{ 
-                                                        height: '55px', 
+                                                <Avatar
+                                                    src="/broken-image.jpg"
+                                                    style={{
+                                                        height: '55px',
                                                         width: '55px'
                                                         }}/>
                                         </div>
-                                        
+
                                         <Container sx={{height:'80%'}}>
                                         <div>
                                         <Typography variant="h6" component="h2" fontWeight='bold'>
@@ -124,22 +138,29 @@ export default function PostDetail (){
                                         </div>
 
                                         </Container>
-                                        
+
                                 </Box>
                                 <Box id='like-button-box'
                                     sx={{
                                         float:'left'
                                      }}>
-                                    <IconButton aria-label="ThumbUpAlt" >
-                                        <ThumbUpAltIcon fontSize="large" />
-                                    </IconButton>
+
+                                    <Button
+                                      variant = "contained"
+                                      color = "primary"
+                                      size = "small"
+                                      startIcon ={<ThumbUpAltIcon />}
+                                      onClick={() => callText()}
+                                    >{buttonText}
+
+                                    </Button>
                                 </Box>
-                                <Box id='reply-button-box' 
+                                <Box id='reply-button-box'
                                             sx={{
                                                 float:'right'
                                                 }}>
                                     <Button style={{
-                                        textTransform: 'none', 
+                                        textTransform: 'none',
                                         }}  onClick={handleClickOpen}>
                                         Reply
                                     </Button>
@@ -191,3 +212,8 @@ export default function PostDetail (){
         </PostContainer>
     );
 }
+
+
+
+
+

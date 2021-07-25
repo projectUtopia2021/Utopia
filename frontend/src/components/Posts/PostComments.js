@@ -6,7 +6,15 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import CommentIcon from '@material-ui/icons/Comment';
-import { Button, Container, CssBaseline, Divider } from '@material-ui/core';
+import {
+    Button,
+    Container,
+    CssBaseline, Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Divider, TextField
+} from '@material-ui/core';
 import {Route} from "react-router-dom";
 import {Component} from "react";
 import $ from "jquery";
@@ -84,7 +92,7 @@ export default function PostComments(){
                             </>
                             ))}
                         </Grid>
-                        </Container>
+            </Container>
             <div className="content" id="content">
                 <Route exact path="/PostComments" component={ListAllComments} />
             </div>
@@ -124,3 +132,4 @@ class ListAllComments extends Component {
         );
     }
 }
+
