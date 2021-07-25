@@ -15,10 +15,24 @@ export default function CreateCommunity(props){
     const [creator, setCreator] = useState(props.creator);
 
     const handleCreate = () => {
-        console.log(communityName, cmnyDescription)
-    //     axios.post(CREATE_COMMUNITY_API, {headers: {
-    //         'Authorization': `Bearer ${token}`
-    //     }})
+        const communityData = {
+            "description": cmnyDescription, 
+            "name": communityName
+        }
+        console.log(communityData)
+        const token = JSON.parse(localStorage.getItem('token')).jwtToken
+        axios.post(CREATE_COMMUNITY_API, 
+            communityData,{
+            headers: {
+            'Authorization': `Bearer ${token}`
+        }})
+        .then(
+            response => {
+                props.history.push('/')
+            }
+        ).catch(error => {
+            alert(error)
+        })
     }
 
     return(
@@ -66,7 +80,6 @@ export default function CreateCommunity(props){
                                     variant="outlined"
                                     fullWidth={true}
                                     onChange={(event) => {
-                                        console.log(event.target.value)
                                         setCommunityName(event.target.value)
                                     }}
                                     />
@@ -81,7 +94,6 @@ export default function CreateCommunity(props){
                                     multiline={true}
                                     rows={4}
                                     onChange={(event) => {
-                                        console.log(event.target.value)
                                         setCmnyDescription(event.target.value)
                                     }}
                                     />
