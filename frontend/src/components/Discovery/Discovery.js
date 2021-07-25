@@ -88,18 +88,15 @@ export default function Discovery (props) {
                   <CardActions>
                     <Button size="small">View</Button>
                     {communityList.some(c => {
-                      console.log("community: ", c.communityId)
-                      console.log("current community id: ", community.id)
-                      console.log(c.communityId === community.id)
-                      return c.commnuityId === community.id})? 
-                    console.log("yes, joined"):
-                    console.log("not joined")}
+                      return c.communityId === community.id})? 
+                    null:
                     <Button size="small" 
                       onClick={() => {
                         handleJoinCommunity(community.id, community.name)
                       }}>
                           Join
-                          </Button>
+                    </Button>}
+                    
                   </CardActions>
                 </Card>
               </Grid>
