@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /*
  * @author Jeff
@@ -107,6 +108,18 @@ public class CommunityService {
             subscribers.add(username);
         }
         community.setSubscribers(subscribers);
+        communityRepo.save(community);
+    }
+
+    public void deleteUserFromCommunity(String username, String communityId) throws CommunityCollectionException {
+        Optional<Community> communityOptional = communityRepo.findById(communityId);
+        if (communityOptional.isEmpty()) {
+            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(communityId));
+        }
+        Community community = communityOptional.get();
+        List<String> subscribers = community.getSubscribers();
+        List<String> updatedSubscribers = subscribers.stream().filter(subscriber -> !subscriber.equals(username)).collect(Collectors.toList());
+        community.setSubscribers(updatedSubscribers);
         communityRepo.save(community);
     }
 

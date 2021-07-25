@@ -4,8 +4,10 @@ import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.model.CommunityIdName;
 import com.webApp.Utopia.model.Post;
 import com.webApp.Utopia.model.User;
+import com.webApp.Utopia.model.UserDTO;
 import com.webApp.Utopia.repository.UserRepository;
 import com.webApp.Utopia.utils.JWTUtility;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -23,27 +27,31 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepo;
     private final JWTUtility jwtUtility;
     private final CommunityService communityService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(UserRepository userRepo, JWTUtility jwtUtility, CommunityService communityService) {
+    public UserService(UserRepository userRepo, JWTUtility jwtUtility, CommunityService communityService, ModelMapper modelMapper) {
         this.userRepo = userRepo;
         this.jwtUtility = jwtUtility;
         this.communityService = communityService;
+        this.modelMapper = modelMapper;
     }
 
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         List<User> users = userRepo.findAll();
         if (users.size() > 0) {
-            return users;
+
+            return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
         } else {
-            return new ArrayList<User>();
+            return new ArrayList<>();
         }
     }
 
-    public User getUserByName(String name) {
+    public UserDTO getUserByName(String name) {
         Optional<User> user = userRepo.findByNamePartialData(name);
         if (user.isPresent()) {
-            return user.get();
+            UserDTO userDTO =  modelMapper.map(user.get(), UserDTO.class);
+            return userDTO;
         } else {
             return null;
         }
@@ -75,7 +83,7 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public User updateUserByName(User updatedUser) throws UsernameNotFoundException, CommunityCollectionException {
+    public UserDTO updateUserByName(User updatedUser) throws UsernameNotFoundException, CommunityCollectionException {
         Optional<User> targetUserOptional = userRepo.findByName(updatedUser.getUsername());
         if (targetUserOptional.isEmpty()) {
             throw new UsernameNotFoundException(updatedUser.getUsername() + " is not found");
@@ -99,11 +107,23 @@ public class UserService implements UserDetailsService {
                     throw exception;
                 }
             } else {
-                
+                Set<String> updatedCommunityIdSet = Set.copyOf(updatedUser.getCommunities().stream().map(communityIdName -> communityIdName.getCommunityId()).collect(Collectors.toList()));
+
+                for(CommunityIdName community: targetUser.getCommunities()) {
+                    //find the community to be removed
+                    if (!updatedCommunityIdSet.contains(community.getCommunityId())) {
+                        try {
+                            communityService.deleteUserFromCommunity(updatedUser.getUsername(), community.getCommunityId());
+                            targetUser.setCommunities(updatedUser.getCommunities());
+                        } catch (CommunityCollectionException exception) {
+                            throw exception;
+                        }
+                    }
+                }
             }
         }
         userRepo.save(targetUser);
-        return targetUser;
+        return modelMapper.map(targetUser, UserDTO.class);
     }
 
     public void deleteUserByName(String name) throws Exception
@@ -134,9 +154,9 @@ public class UserService implements UserDetailsService {
         Optional<User> userOptional = userRepo.findByName(post.getUsername());
         if(userOptional.isPresent()) {
             User user = userOptional.get();
-            List<Post> posts = user.getPosts();
-            if(posts == null) posts = new ArrayList<Post>();
-            posts.add(post);
+            List<String> posts = user.getPosts();
+            if(posts == null) posts = new ArrayList<>();
+            posts.add(post.getId());
             user.setPosts(posts);
             posts = user.getPosts();
             userRepo.save(user);
