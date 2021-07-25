@@ -56,51 +56,7 @@ function NaviBar(props) {
             setLogin(true)
             const name =  localStorage.getItem('username')? localStorage.getItem('username'): 'user';
             setLoginUsername(name)
-            // const headers = {
-            //     'Content-Type': 'application/json',
-            //     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("token")).jwtToken,
-            // }
-            // axios.defaults.headers.common['Authorization'] = `Bearer ` + JSON.parse(localStorage.getItem("token")).jwtToken;
-            // console.log(axios.defaults.headers.common['Authorization'])
-            // axios.get(GET_USER_API +  localStorage.getItem('username'))
-            // .then(
-            //     response => {
-            //         console.log("got")
-            //     }
-            // ).catch(error => {
-            //     console.log(error)
-            // })
-            
         }
-        console.log(isLoggedIn, username)
-        // axios.interceptors.request.use(function (config) {
-        //     if (localStorage.getItem("token")) {
-        //       config.headers.common['Authorization'] = `Bearer ` + JSON.parse(localStorage.getItem("token")).jwtToken;
-        //       console.log("here")
-        //     }
-        //     return config
-        //   }, function (error) {
-        //     history.push('/login')
-        //     return Promise.reject(error)
-        //   })
-
-        //   axios.interceptors.response.use(function (response) {
-        //     return response
-        //   }, function (error) {
-        //     // 对响应错误做点什么
-        //     if (error.response) {
-        //       switch (error.response.status) {
-        //         case 401:
-        //         //   store.commit('del_token')
-        //           history.push('/login')
-        //         case 403:
-        //         //   store.commit('del_token')
-        //            console.log("error")
-        //     }
-        //     }
-        //     return Promise.reject(error)
-        //   })
-          
     }, [])
 
     return (
