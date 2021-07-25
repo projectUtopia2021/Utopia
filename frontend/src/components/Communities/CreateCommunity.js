@@ -19,7 +19,6 @@ export default function CreateCommunity(props){
             "description": cmnyDescription, 
             "name": communityName
         }
-        console.log(communityData)
         const token = JSON.parse(localStorage.getItem('token')).jwtToken
         axios.post(CREATE_COMMUNITY_API, 
             communityData,{
