@@ -37,10 +37,23 @@ public class PostController {
         );
     }
 
+    @RequestMapping(method=RequestMethod.GET,value="/posts")
+    public ResponseEntity getPostsByName(@RequestParam("name")  String name)
+    {
+        List<Post> posts = postService.getPostByName(name);
+        return new ResponseEntity(
+                posts,
+                posts.size()>0?HttpStatus.OK:HttpStatus.NOT_FOUND
+        );
+    }
+
+
+
     // SAVE Post
     @RequestMapping(method= RequestMethod.POST,value="/post")
     public ResponseEntity<String> createPost(@RequestHeader("Authorization") String token, @RequestBody Post post)
     {
+        if(post.getId() == null) return new ResponseEntity<>("Id could not be empty", HttpStatus.BAD_REQUEST);
         try{
             String username = jwtUtility.getUsernameFromToken(token.substring(7));
             post.setUsername(username);

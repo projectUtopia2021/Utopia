@@ -45,6 +45,13 @@ public class CommunityService {
         communityRepo.save(newCommunity);
 
     }
+    public void addPostToCommunity(String postId, String communityName) throws Exception{
+        Community community = getCommunityByName(communityName);
+        List<String> posts = community.getPosts();
+        posts.add(postId);
+        community.setPosts(posts);
+        communityRepo.save(community);
+    }
 
     public void updateCommunity(Community updatedCommunity) throws CommunityCollectionException{
         if (updatedCommunity.getId() == null) {
@@ -71,6 +78,13 @@ public class CommunityService {
         return targetCommunity.get();
     }
 
+    public Community getCommunityByName(String name) throws CommunityCollectionException {
+        Optional<Community> targetCommunity = communityRepo.findByName(name);
+        if (targetCommunity.isEmpty()) {
+            throw new CommunityCollectionException(CommunityCollectionException.NotFoundException(name));
+        }
+        return targetCommunity.get();
+    }
 
     public List<Community> findCommunityByNameApproximate(String name) throws CommunityCollectionException{
         List<Community> communities = communityRepo.findByNameLike(name);

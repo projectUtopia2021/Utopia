@@ -17,5 +17,6 @@ public interface PostRepository extends MongoRepository<Post, String>{
 
     Optional<List<Post>> getSubTree(String postId);
 
-
+    @Query("{'title': /?0/}")
+    Optional<List<Post>> findByPrefix(String name);
 }
