@@ -23,8 +23,8 @@ const theme = createTheme({
 ReactDOM.render(
   <React.StrictMode>
     <UserContextProvider>
+    <AutoLogin/>
     <Router>
-      <AutoLogin/>
       <NaviBar/>
       <Switch>
         <Route exact path="/" component={HomePage} />

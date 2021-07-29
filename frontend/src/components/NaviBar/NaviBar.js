@@ -35,6 +35,7 @@ function NaviBar(props) {
         localStorage.removeItem('token')
         localStorage.removeItem('username')
         setLogin(false)
+        console.log('log out')
     }
 
     const handleSearch = (event) => {
@@ -52,7 +53,9 @@ function NaviBar(props) {
     }
     
     React.useEffect(() => {
+        console.log("calling use effect")
         if(localStorage.getItem("token")){
+            console.log("got token")
             setLogin(true)
             const name =  localStorage.getItem('username')? localStorage.getItem('username'): 'user';
             setLoginUsername(name)
