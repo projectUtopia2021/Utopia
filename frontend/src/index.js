@@ -10,12 +10,21 @@ import Discovery from './components/Discovery/Discovery.js';
 import Communities from './components/Communities/Communities.js';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { UserContextProvider } from './components/Context/UserContext.js';
+import AutoLogin from './wrapper/AutoLogin.js';
+import CreateCommunity from './components/Communities/CreateCommunity.js';
+import { createTheme, ThemeProvider } from '@material-ui/core';
 
+const theme = createTheme({
+  palette:{
+    type:'light'
+  }
+});
 
 ReactDOM.render(
   <React.StrictMode>
     <UserContextProvider>
     <Router>
+      <AutoLogin/>
       <NaviBar/>
       <Switch>
         <Route exact path="/" component={HomePage} />
@@ -25,15 +34,14 @@ ReactDOM.render(
         <Route path="/draft" component={Draft} />
         <Route path="/discovery" component={Discovery} />
         <Route path="/communities" component={Communities} />
+        <Route path="/community/create" component={CreateCommunity}/>
       </Switch>
     </Router>
     </UserContextProvider>
-    
-
-
-  </React.StrictMode>,
+    </React.StrictMode>,
   document.getElementById('root')
 );
+  
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
