@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { MainContainer, CommunityBar, PostDisplay } from './CommunitiesStyles.js';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import { CssBaseline, Divider, ListItem, ListItemText } from '@material-ui/core';
-import  Box  from '@material-ui/core/Box';
+import { CssBaseline } from '@material-ui/core';
+import { Box } from '@material-ui/system';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,8 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
 import CommentIcon from '@material-ui/icons/Comment';
-import Button from '@material-ui/core/Button';
-import PostAddIcon from '@material-ui/icons/PostAdd';
 import CommunitySidebar from './CommunitySidebar.js';
 
 const drawerWidth = 246;

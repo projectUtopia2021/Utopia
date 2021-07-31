@@ -12,7 +12,15 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import PostPage from './components/PostPage/PostPage.js';
 import PostDetail from './components/Posts/PostDetail.js';
 import { UserContextProvider } from './components/Context/UserContext.js';
+import AutoLogin from './wrapper/AutoLogin.js';
+import CreateCommunity from './components/Communities/CreateCommunity.js';
+import { createTheme, ThemeProvider } from '@material-ui/core';
 
+const theme = createTheme({
+  palette:{
+    type:'light'
+  }
+});
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,12 +34,11 @@ ReactDOM.render(
         <Route path="/register" component={Register} />
         <Route path="/profile" component={Profile} />
         <Route path="/draft" component={Draft} />
-        <Route path="/Communities" component={Communities} />
-        <Route path="/Community" component={Community} />
         <Route path="/PostPage" component={PostPage} />
         <Route path="/Posts" component={PostDetail} />
         <Route path="/discovery" component={Discovery} />
         <Route path="/communities" component={Communities} />
+        <Route path="/community/create" component={CreateCommunity}/>
       </Switch>
     </Router>
     </UserContextProvider>
@@ -41,7 +48,7 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-  
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
