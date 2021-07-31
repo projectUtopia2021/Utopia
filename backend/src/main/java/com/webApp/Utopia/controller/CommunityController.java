@@ -2,7 +2,9 @@ package com.webApp.Utopia.controller;
 
 import com.webApp.Utopia.exception.CommunityCollectionException;
 import com.webApp.Utopia.model.Community;
+import com.webApp.Utopia.model.Post;
 import com.webApp.Utopia.service.CommunityService;
+import com.webApp.Utopia.service.PostService;
 import com.webApp.Utopia.utils.JWTUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -25,11 +26,13 @@ import java.util.List;
 public class CommunityController {
 
     private final CommunityService communityService;
+    private final PostService postService;
     private final JWTUtility jwtUtility;
 
     @Autowired
-    public CommunityController(CommunityService communityService, JWTUtility jwtUtility) {
+    public CommunityController(CommunityService communityService, PostService postService, JWTUtility jwtUtility) {
         this.communityService = communityService;
+        this.postService = postService;
         this.jwtUtility = jwtUtility;
     }
 
@@ -56,6 +59,17 @@ public class CommunityController {
 
         } catch (CommunityCollectionException exception) {
             return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(value = "/community/{name}/posts")
+    public ResponseEntity getPostsOfTheCommunity(@PathVariable("name") String name) {
+        try {
+            List<Post> posts = postService.queryPostsOfTheCommunity(name);
+            return new ResponseEntity(posts, HttpStatus.OK);
+
+        } catch (Exception exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
