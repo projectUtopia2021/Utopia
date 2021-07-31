@@ -12,14 +12,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { UserContextProvider } from './components/Context/UserContext.js';
 import AutoLogin from './wrapper/AutoLogin.js';
 import CreateCommunity from './components/Communities/createCommunity/CreateCommunity.js';
-import { createTheme, ThemeProvider } from '@material-ui/core';
+import { createTheme } from '@material-ui/core';
 import { SearchContextProvider } from './components/Context/SearchBarContext.js';
-
-const theme = createTheme({
-  palette:{
-    type:'light'
-  }
-});
 
 ReactDOM.render(
   <React.StrictMode>

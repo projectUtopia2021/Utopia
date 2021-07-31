@@ -2,7 +2,7 @@ import * as React from 'react';
 import { MainContainer, CommunityBar, PostDisplay } from './CommunitiesStyles.js';
 import Toolbar from '@material-ui/core/Toolbar';
 import { CssBaseline } from '@material-ui/core';
-import { Box } from '@material-ui/system';
+import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';

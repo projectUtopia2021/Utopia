@@ -1,22 +1,18 @@
 import * as React from 'react'
 import { MainContainer } from '../CommunitiesStyles'
-import { Box } from '@material-ui/system';
+import Box from '@material-ui/core/Box';
 import { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from "axios";
-import 'react-image-crop/dist/ReactCrop.css'
-import ReactCrop from 'react-image-crop';
 import Cropper from 'react-easy-crop';
 import { useCallback } from 'react';
-import Modal from '@material-ui/core/Modal';
 import getCroppedImg from './CropImage.js'
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import TouchRipple from '@material-ui/core/ButtonBase/TouchRipple';
 
 
 
