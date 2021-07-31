@@ -10,11 +10,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import {Search, StyledInputBase, ButtonBox} from './NaviBarStyles';
 import { useHistory } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
-import axios from 'axios';
-import {useStateWithCallbackLazy} from 'use-state-with-callback';
 import { useUserContext } from '../Context/UserContext';
-
-const GET_COMMUNITIES_API = "/api/communities/"
+import { useSearchContext } from '../Context/SearchBarContext';
 
 function HomeIcon(props) {
     return (
@@ -26,36 +23,23 @@ function HomeIcon(props) {
 
 function NaviBar(props) {
     const history = useHistory()
-    const [searchContent, setSearchContent] = React.useState('');
-    const [searchResult, setSearchResult] = useStateWithCallbackLazy([]);
     const { username, isLoggedIn, setLogin, setLoginUsername } = useUserContext()
+    const { setSearch } = useSearchContext();
 
     const handleLogOut = (event) => {
         event.preventDefault()
         localStorage.removeItem('token')
         localStorage.removeItem('username')
         setLogin(false)
-        console.log('log out')
     }
 
     const handleSearch = (event) => {
         event.preventDefault()
-        axios.get(GET_COMMUNITIES_API + searchContent, {}).then(
-            response => {
-                const data = response.data;
-                setSearchResult(response.data, (currentSearchResult) => {
-                    history.push({pathname: "/discovery", state: {currentSearchResult}})
-                })
-            }
-        ).catch(error => {
-            history.push({pathname: "/discovery", state: {searchResult}})
-        })
+        history.push("/discovery")
     }
     
     React.useEffect(() => {
-        console.log("calling use effect")
         if(localStorage.getItem("token")){
-            console.log("got token")
             setLogin(true)
             const name =  localStorage.getItem('username')? localStorage.getItem('username'): 'user';
             setLoginUsername(name)
@@ -78,7 +62,7 @@ function NaviBar(props) {
                     placeholder="Search…"
                     inputProps={{ 'aria-label': 'search' }}
                     onChange={(event) => {
-                        setSearchContent(event.target.value)
+                        setSearch(event.target.value)
                     }}
                     />
                     <IconButton type="submit" aria-label="search">

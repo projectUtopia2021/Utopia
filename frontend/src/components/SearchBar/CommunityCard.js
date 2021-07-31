@@ -82,10 +82,6 @@ export default function SingleCommunity(props){
       }
       }
       React.useEffect(() => {
-        if(communityList){
-          console.log("got list")
-          console.log(communityList)
-        }
           communityList.some(c => {
             return c.communityId === community.id})? setMessage("Leave"): setMessage("Join")
       }, [])
