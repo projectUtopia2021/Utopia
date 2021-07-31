@@ -58,7 +58,7 @@ public class CommunityController {
             communityService.updateCommunity(community);
             return new ResponseEntity(community.getName() + " has been successfully updated", HttpStatus.OK);
         } catch (CommunityCollectionException exception) {
-            return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

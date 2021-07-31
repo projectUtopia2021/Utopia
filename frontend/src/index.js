@@ -15,6 +15,7 @@ import PostDetail from './components/Posts/PostDetail.js';
 ReactDOM.render(
   <React.StrictMode>
     <Router>
+      <AutoLogin/>
       <NaviBar/>
       <Switch>
         <Route exact path="/" component={HomePage} />
@@ -28,11 +29,11 @@ ReactDOM.render(
         <Route path="/Posts" component={PostDetail} />
       </Switch>
     </Router>
-
-
-  </React.StrictMode>,
+    </UserContextProvider>
+    </React.StrictMode>,
   document.getElementById('root')
 );
+  
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
