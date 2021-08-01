@@ -1,0 +1,17 @@
+package com.webApp.Utopia.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
+
+/*
+ * @author Jeff
+ * @date 8/1/21 1:11 AM
+ */
+@Configuration
+public class WebConfig {
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        return new ServerEndpointExporter();
+    }
+}
