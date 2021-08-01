@@ -14,9 +14,16 @@ export default function SingleCommunity(props){
     const community = props.community
     const { isLoggedIn, username, communityList, setUserCommunityList } = useUserContext()
     const [ subsribed, setSubsribed ] = React.useState()
+    const [ message, setMessage ] = React.useState();
 
-    const handleJoinCommunity = (id, name) => {
-        return isLoggedIn? subscribeCommunity(id, name): null;
+    const ToggleJoinOrLeave = (id, name) => {
+        return isLoggedIn? (
+          message === 'Join'?
+          subscribeCommunity(id, name):
+          unsubcribeCommunity(id,name)
+          ): (
+            alert("Login to Join Community")
+            );
       }
   
       const subscribeCommunity = (id, name) => {
@@ -38,13 +45,47 @@ export default function SingleCommunity(props){
             }).then(
               response => {
                 alert("you joined successfully")
+                setMessage('Leave')
               }
             ).catch(error => {
               alert(error)
             })
         }
-        
       }
+
+      const unsubcribeCommunity = (idToRemove, name) => {
+        console.log('id to remove ', idToRemove)
+        const filteredCommunity = communityList.filter((c) => c.communityId !== idToRemove);
+        if(updateRequest(filteredCommunity)===true){
+          setMessage('Join')
+          alert("Leave " + name + " successfully")
+        }
+      }
+
+      const updateRequest = (newList) => {
+        if(localStorage.getItem('token') && localStorage.getItem('username')){
+          const token = JSON.parse(localStorage.getItem('token')).jwtToken
+          axios.patch(SUBSCRIBE_COMMUNITY + username, {
+            communities: newList
+          }, {
+            headers:{
+              'Authorization': `Bearer ${token}`
+            }
+          }).then(
+            response => {
+              setMessage('Join')
+              alert("Leave successfully")
+            }
+          ).catch(error => {
+            return error
+          })
+      }
+      }
+      React.useEffect(() => {
+          communityList.some(c => {
+            return c.communityId === community.id})? setMessage("Leave"): setMessage("Join")
+      }, [])
+    
     return(
         <React.Fragment>
             <Card
@@ -68,17 +109,13 @@ export default function SingleCommunity(props){
                   </CardContent>
                   <CardActions>
                     <Button size="small">View</Button>
-                    {communityList.some(c => {
-                      return c.communityId === community.id})? 
-                      null:
-                      <Button size="small"
+                    <Button size="small"
                         disabled={subsribed} 
                       onClick={() => {
-                        handleJoinCommunity(community.id, community.name)
+                        ToggleJoinOrLeave(community.id, community.name)
                       }}>
-                          Join
+                          {message}
                     </Button>
-                    }
                     
                     
                   </CardActions>

@@ -18,11 +18,10 @@ export default function Login(props) {
             'password': password})
             .then(
                 response => {
-                    setLoginUsername(name, () => {
+                    setLoginUsername(name)
                     localStorage.setItem('token', JSON.stringify(response.data))
                     localStorage.setItem('username', `${name}`)
                     setLogin(true)
-                    })
                     props.history.push('/')
                 }
             ).catch(error => {
