@@ -27,7 +27,7 @@ import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
 import Draft from "../DraftJS/Draft";
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import CommunitySideBar from './CommunitySideBar';
+import CommunitySidebar from "../Communities/CommunitySidebar";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -90,128 +90,162 @@ class PostPage extends React.Component {
 
         return (
             <div>
-                {closeBtn ? <Card className={editorStyles.card}>
-                    <CardHeader
-                        action={
-                            <IconButton aria-label="closes">
-                                <CloseIcon fontSize="large" onClick={this.closeClick}/>
-                            </IconButton>
-                        }
-                    />
-                                  
-                    <CardContent>
-                        <Typography sx={{ fontSize: 14,  }} color="text.secondary" align="center" gutterBottom>
-                            Something you wanna say...
-                        </Typography>
-                        
-                        <br />
-                    </CardContent>
-                    
-                </Card> : null}
+                <div>
+                    {closeBtn ? <Card className={editorStyles.card}>
+                        <CardHeader
+                            action={
+                                <IconButton aria-label="closes" onClick={this.closeClick}>
+                                    <CloseIcon fontSize="large"/>
+                                </IconButton>
+                            }
+                        />
+
+                        <CardContent>
+                            <Typography id="test1" sx={{ fontSize: 14,  }} color="text.secondary" align="center" gutterBottom>
+                                Something you wanna say...
+                            </Typography>
+
+                            <br />
+                        </CardContent>
+
+                    </Card> : null}
 
 
-                <Box mt={5} ml={10} mr={90}  sx={{ flexGrow: 1 }}>
-                    <Grid container spacing={5}>
-                        <Grid item xs={2.5}>
-                            <Stack spacing={2}>
-                                <Button variant="contained" color="secondary">Start a Discussion</Button>
-                            </Stack>
+                    <Box mt={5} ml={10} mr={60}  sx={{ flexGrow: 1 }}>
+                        <Grid container spacing={5}>
+                            <Grid item xs={4}>
+                                <CommunitySidebar/>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <div style={{ width: '100%' }}>
+                                    <Box sx={{ display: 'flex'}}>
+                                        <Box sx={{flexGrow: 1}}>
+                                            <PopupState variant="popover" popupId="demo-popup-popover">
+                                                {(popupState) => (
+                                                    <div>
+                                                    <Button variant="contained" color="info" {...bindTrigger(popupState)}>
+                                                        Latest
+                                                    </Button>
+                                                    <Popover
+                                                        {...bindPopover(popupState)}
+                                                        anchorOrigin={{
+                                                        vertical: 'bottom',
+                                                        horizontal: 'left',
+                                                        }}
+                                                        transformOrigin={{
+                                                        vertical: 'top',
+                                                        horizontal: 'left',
+                                                        }}
+                                                    >
+                                                        <Typography sx={{ p: 1, ml:1, mr:1.8 }}>Latest</Typography>
+                                                        <Typography sx={{ p: 1, ml:1}}>Top</Typography>
+                                                        <Typography sx={{ p: 1, ml:1}}>Newest</Typography>
+                                                        <Typography sx={{ p: 1, ml:1}}>Oldest</Typography>
+                                                    </Popover>
+                                                    </div>
+                                                )}
+                                            </PopupState>
+                                        </Box>
+                                        <Box>
+                                            <CheckBoxIcon sx={{ fontSize: 30 }} onClick={null}/>
+                                        </Box>
+                                    </Box>
+                                </div>
 
-                            <Stack mt={5} spacing={1}>
-                                <Item>Item 1</Item>
-                                <Item>Item 2</Item>
-                            </Stack>
+                                <List sx={{ width: '100%', bgcolor: 'background.paper', paddingLeft: '10px', paddingRight: '20px', marginTop: '20px'}} >
+                                    {[0, 1, 2, 3].map((value) => (
+                                        <ListItem
+                                            key={value}
+                                            disableGutters
+                                            style={{marginBottom: 8}}
+                                            secondaryAction={
+                                                <Stack direction="row" spacing={1}>
+                                                    <Chip label="General" />
 
-                            <Stack mt={3} spacing={1}>
-                                <Item>Item 3</Item>
-                                <Item>Item 4</Item>
-                            </Stack>
-                        </Grid>
-                        <Grid item xs={9.5}>
-                            <div style={{ width: '100%' }}>
-                                <Box sx={{ display: 'flex'}}>
-                                    <Box sx={{flexGrow: 1}}>
-                                        <PopupState variant="popover" popupId="demo-popup-popover">
-                                            {(popupState) => (
-                                                <div>
-                                                <Button variant="contained" color="info" {...bindTrigger(popupState)}>
-                                                    Open Popover
-                                                </Button>
-                                                <Popover
-                                                    {...bindPopover(popupState)}
-                                                    anchorOrigin={{
-                                                    vertical: 'bottom',
-                                                    horizontal: 'left',
-                                                    }}
-                                                    transformOrigin={{
-                                                    vertical: 'top',
-                                                    horizontal: 'left',
-                                                    }}
+                                                    <IconButton>
+                                                        <StyledBadge badgeContent={value} color="secondary">
+                                                            <ChatBubbleOutlineIcon fontSize="large"/>
+                                                        </StyledBadge>
+                                                    </IconButton>
+                                                </Stack>
+
+                                            }
+                                        >
+                                            <ListItemAvatar>
+                                                <Avatar aria-label="recipe" >
+                                                    W
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={`Here is the ${value} Main title!`}
+                                                secondary={
+                                                <React.Fragment>
+                                                <Typography
+                                                    sx={{ display: 'inline' }}
+                                                    component="span"
+                                                    variant="body2"
+                                                    color="text.primary"
                                                 >
-                                                    <Typography sx={{ p: 1, ml:1, mr:6.5 }}>Latest</Typography>
-                                                    <Typography sx={{ p: 1, ml:1}}>Top</Typography>
-                                                    <Typography sx={{ p: 1, ml:1}}>Newest</Typography>
-                                                    <Typography sx={{ p: 1, ml:1}}>Oldest</Typography>
-                                                </Popover>
-                                                </div>
-                                            )}
-                                        </PopupState>
-                                    </Box>
-                                    <Box>
-                                        <CheckBoxIcon sx={{ fontSize: 30 }} onClick={null}/>
-                                    </Box>
-                                </Box>
-                            </div>
-                            
-                            <List sx={{ width: '100%', bgcolor: 'background.paper', paddingLeft: '10px', paddingRight: '20px', marginTop: '20px'}} >
-                                {[1, 2, 3].map((value) => (
-                                    <ListItem
-                                        key={value}
-                                        disableGutters
-                                        style={{marginBottom: 8}}
-                                        secondaryAction={
-                                            <Stack direction="row" spacing={1}>
-                                                <Chip label="General" />
-                                                <IconButton>
-                                                    <ChatBubbleOutlineIcon fontSize="large"/> <span>&nbsp;5</span>
-                                                </IconButton>
-                                                
-                                                <IconButton>
-                                                    <StyledBadge badgeContent={4} color="secondary">
-                                                        <ChatBubbleOutlineIcon fontSize="large"/>
-                                                    </StyledBadge>
-                                                </IconButton>
-                                            </Stack>
-                                            
-                                        }
-                                    >
-                                        <ListItemAvatar>
-                                            <Avatar aria-label="recipe" >
-                                                W
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText 
-                                            primary={`Here is the ${value} Main title!`}
-                                            secondary={
-                                            <React.Fragment>
-                                              <Typography
-                                                sx={{ display: 'inline' }}
-                                                component="span"
-                                                variant="body2"
-                                                color="text.primary"
-                                              >
-                                                Javen W.
-                                              </Typography>
-                                              {" — That sounds good!!!"}
-                                            </React.Fragment>
-                                        }
-                                        />
-                                    </ListItem>
-                                ))}
-                            </List>
+                                                    Javen W.
+                                                </Typography>
+                                                {" — That sounds good!!!"}
+                                                </React.Fragment>
+                                            }
+                                            />
+                                        </ListItem>
+                                    ))}
+                                </List>
+
+
+                                <Popper id="transitions-popper" open={this.state.open} placement="top" anchorEl={document.getElementById('popperPoint')} transition>
+                                    {({ TransitionProps }) => (
+                                    <Fade {...TransitionProps} timeout={350}>
+                                        <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+                                            <Box sx={{ display: 'flex'}}>
+                                                <Box sx={{flexGrow: 1}}>
+                                                <Stack direction="row" spacing={2} pl={1}>
+                                                    <Typography variant="h4">
+                                                        Title
+                                                    </Typography>
+                                                    <input type="text" className={editorStyles.titleTB} name="name" onChange={this.titleChange}/>
+                                                </Stack>
+
+
+                                                </Box>
+                                                <Box>
+                                                    <Stack
+                                                        direction="row-reverse"
+                                                        justifyContent="flex-start"
+                                                        alignItems="center"
+                                                        spacing={2}
+                                                    >
+                                                        <IconButton aria-label="closes" size="small" onClick={this.closePopper}>
+                                                            <CloseIcon fontSize="small"/>
+                                                        </IconButton>
+                                                    </Stack>
+                                                </Box>
+                                            </Box>
+
+
+
+                                            {/* <Draft otherInfo={{'title': 'this.textInput.current.value'}}></Draft> */}
+                                            <Draft otherInfo={this.state.otherInfo}></Draft>
+                                        </Box>
+                                    </Fade>
+                                    )}
+                                </Popper>
+
+
+
+
+
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Box>
+                    </Box>
+                </div>
+                <div>
+                    <div id="popperPoint" className={editorStyles.editor}></div>
+                </div>
             </div>
         );
     }
