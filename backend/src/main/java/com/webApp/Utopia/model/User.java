@@ -39,6 +39,7 @@ public class User implements UserDetails {
     private List<String> friends;
     private List<String> posts;
     private List<CommunityIdName> communities;
+    private List<Notification> notifications;
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;

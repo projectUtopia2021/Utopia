@@ -17,4 +17,5 @@ public class UserDTO {
     private List<String> friends;
     private List<CommunityIdName> communities;
     private List<String> posts;
+    private List<Notification> notifications;
 }
