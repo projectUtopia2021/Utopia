@@ -6,14 +6,33 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from 'react';
 import { Link } from '@material-ui/core';
 import CommunityCard from './CommunityCard';
-import CreateCommunity from '../Communities/CreateCommunity';
+import axios from 'axios';
+import { useSearchContext } from '../Context/SearchBarContext';
+import { useUserContext } from '../Context/UserContext';
+
+const GET_COMMUNITIES_API = "/api/communities/"
 
 export default function Discovery (props) {
-    const [searchCommunityList, setSearchCommunityList] = React.useState(
-        props.location.state.currentSearchResult);
+    const { searchContent, searchResultList, setResultList } = useSearchContext();
+    const { isLoggedIn } = useUserContext();
 
+    const handleCreateCommunity = () => {
+      if(isLoggedIn){
+        props.history.push('/community/create')
+      }
+      else{
+        alert("Login to create community")
+      }
+    }
     useEffect (() => {
-      setSearchCommunityList(props.location.state.currentSearchResult)
+      axios.get(GET_COMMUNITIES_API + searchContent, {}).then(
+            response => {
+                const data = response.data;
+                setResultList(response.data)
+                }
+        ).catch(error => {
+          setResultList(undefined)
+        })
     }, [props.location]);
 
     const handleJoinCommunity = (id, name) => {
@@ -54,9 +73,9 @@ export default function Discovery (props) {
               All Results:
             </Typography>
           {/* End hero unit */}
-          {searchCommunityList? (
+          {searchResultList? (
             <Grid container spacing={3}>
-            {searchCommunityList.map((community) => (
+            {searchResultList.map((community) => (
               <Grid item key={community.id} xs={12} sm={6} md={4}>
                 <CommunityCard community={community}/>
               </Grid>
@@ -65,7 +84,7 @@ export default function Discovery (props) {
             :
             (<Typography variant="h6"> 
               Sorry, no relevant community.&nbsp;
-              <Link color='inherit' onClick={() => props.history.push('/community/create')}>
+              <Link color='inherit' onClick={() => handleCreateCommunity()}>
               Create a community?
               </Link>
               

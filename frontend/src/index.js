@@ -6,25 +6,23 @@ import Login from './components/LoginSignup/Login';
 import Register from './components/LoginSignup/Register'
 import Profile from './components/Profile/Profile.js';
 import Draft from './components/DraftJS/Draft.js';
-import Discovery from './components/Discovery/Discovery.js';
+import Discovery from './components/SearchBar/Discovery.js';
 import Communities from './components/Communities/Communities.js';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import PostPage from './components/PostPage/PostPage.js';
 import PostDetail from './components/Posts/PostDetail.js';
 import { UserContextProvider } from './components/Context/UserContext.js';
 import AutoLogin from './wrapper/AutoLogin.js';
-
-const theme = createTheme({
-  palette:{
-    type:'light'
-  }
-});
+import CreateCommunity from './components/Communities/createCommunity/CreateCommunity.js';
+import { createTheme } from '@material-ui/core';
+import { SearchContextProvider } from './components/Context/SearchBarContext.js';
 
 ReactDOM.render(
   <React.StrictMode>
     <UserContextProvider>
+      <SearchContextProvider>
+    <AutoLogin/>
     <Router>
-      <AutoLogin/>
       <NaviBar/>
       <Switch>
         <Route exact path="/" component={HomePage} />
@@ -39,6 +37,7 @@ ReactDOM.render(
         <Route path="/community/create" component={CreateCommunity}/>
       </Switch>
     </Router>
+    </SearchContextProvider>
     </UserContextProvider>
 
 

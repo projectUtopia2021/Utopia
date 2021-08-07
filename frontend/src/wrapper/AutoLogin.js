@@ -25,8 +25,10 @@ export default function AutoLogin ({props}) {
              })
             .then(
                 response => {
+                    console.log("setting data")
                     setLogin(true)
                     setLoginUsername(response.data.name)
+                    console.log(response.data.communities)
                     setUserCommunityList(response.data.communities)
                 }
             ).catch(error => {
