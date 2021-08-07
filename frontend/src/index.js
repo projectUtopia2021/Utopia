@@ -15,12 +15,12 @@ import { UserContextProvider } from './components/Context/UserContext.js';
 import AutoLogin from './wrapper/AutoLogin.js';
 import CreateCommunity from './components/Communities/createCommunity/CreateCommunity.js';
 import { createTheme } from '@material-ui/core';
-import { SearchContextProvider } from './components/Context/SearchBarContext.js';
+import { CommunitiesContextProvider } from '../src/components/Context/CommunityContext';
 
 ReactDOM.render(
   <React.StrictMode>
     <UserContextProvider>
-      <SearchContextProvider>
+      <CommunitiesContextProvider>
     <AutoLogin/>
     <Router>
       <NaviBar/>
@@ -29,15 +29,16 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/profile" component={Profile} />
-        <Route path="/draft" component={Draft} />
         <Route path="/PostPage" component={PostPage} />
         <Route path="/Posts" component={PostDetail} />
-        <Route path="/discovery" component={Discovery} />
-        <Route path="/communities" component={Communities} />
+        <Route path="/profile/:username" component={Profile} />
+        <Route path="/draft/" component={Draft} />
+        <Route path="/discovery/:toSearch" component={Discovery} />
+        <Route path="/community/:communityName" component={Communities} />
         <Route path="/community/create" component={CreateCommunity}/>
       </Switch>
     </Router>
-    </SearchContextProvider>
+    </CommunitiesContextProvider>
     </UserContextProvider>
 
 

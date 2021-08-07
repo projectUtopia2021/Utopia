@@ -11,7 +11,6 @@ import {Search, StyledInputBase, ButtonBox} from './NaviBarStyles';
 import { useHistory } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import { useUserContext } from '../Context/UserContext';
-import { useSearchContext } from '../Context/SearchBarContext';
 
 function HomeIcon(props) {
     return (
@@ -24,7 +23,7 @@ function HomeIcon(props) {
 function NaviBar(props) {
     const history = useHistory()
     const { username, isLoggedIn, setLogin, setLoginUsername } = useUserContext()
-    const { setSearch } = useSearchContext();
+    const [searchContent, setSearchContent] = React.useState();
 
     const handleLogOut = (event) => {
         event.preventDefault()
@@ -32,10 +31,10 @@ function NaviBar(props) {
         localStorage.removeItem('username')
         setLogin(false)
     }
-
+ 
     const handleSearch = (event) => {
         event.preventDefault()
-        history.push("/discovery")
+        history.push(`/discovery/${searchContent}`)
     }
     
     React.useEffect(() => {
@@ -106,7 +105,7 @@ function NaviBar(props) {
                     placeholder="Search…"
                     inputProps={{ 'aria-label': 'search' }}
                     onChange={(event) => {
-                        setSearch(event.target.value)
+                        setSearchContent(event.target.value)
                     }}
                     />
                     <IconButton type="submit" aria-label="search">
@@ -142,6 +141,7 @@ function NaviBar(props) {
                             }}>
                                     Sign Up
                     </Button>
+
                     </ButtonGroup>
                     
                 )}

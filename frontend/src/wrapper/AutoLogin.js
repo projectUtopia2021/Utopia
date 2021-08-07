@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { useUserContext } from '../components/Context/UserContext';
-import {  useEffect } from 'react';
 import axios from 'axios';
-import Login from '../components/LoginSignup/Login';
-import { useHistory } from 'react-router-dom';
+import { useCommunitiesContext } from '../components/Context/CommunityContext';
 
 const GET_USER_API = "/api/user/"
 
 export default function AutoLogin ({props}) {
-    const { setLogin, setLoginUsername, setUserCommunityList } = useUserContext();
+    const { setLogin, setLoginUsername } = useUserContext();
+    const { setJoinedList } = useCommunitiesContext();
 
     React.useEffect(() => {
         if(localStorage.getItem('token') && localStorage.getItem('username')){
@@ -25,16 +24,16 @@ export default function AutoLogin ({props}) {
              })
             .then(
                 response => {
-                    console.log("setting data")
                     setLogin(true)
                     setLoginUsername(response.data.name)
-                    console.log(response.data.communities)
-                    setUserCommunityList(response.data.communities)
+                    setJoinedList(response.data.communities)
                 }
             ).catch(error => {
                 alert("Session Expried!")
                 localStorage.removeItem('token')
                 localStorage.removeItem('username')
+                setLogin(false)
+                window.location.reload()
             })
     }
 
