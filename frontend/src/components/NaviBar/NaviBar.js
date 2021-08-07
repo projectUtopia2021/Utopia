@@ -11,7 +11,6 @@ import {Search, StyledInputBase, ButtonBox} from './NaviBarStyles';
 import { useHistory } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import { useUserContext } from '../Context/UserContext';
-import { useSearchContext } from '../Context/SearchBarContext';
 
 function HomeIcon(props) {
     return (
@@ -24,7 +23,7 @@ function HomeIcon(props) {
 function NaviBar(props) {
     const history = useHistory()
     const { username, isLoggedIn, setLogin, setLoginUsername } = useUserContext()
-    const { setSearch } = useSearchContext();
+    const [searchContent, setSearchContent] = React.useState();
 
     const handleLogOut = (event) => {
         event.preventDefault()
@@ -32,10 +31,10 @@ function NaviBar(props) {
         localStorage.removeItem('username')
         setLogin(false)
     }
-
+ 
     const handleSearch = (event) => {
         event.preventDefault()
-        history.push("/discovery")
+        history.push(`/discovery/${searchContent}`)
     }
     
     React.useEffect(() => {
@@ -43,7 +42,51 @@ function NaviBar(props) {
             setLogin(true)
             const name =  localStorage.getItem('username')? localStorage.getItem('username'): 'user';
             setLoginUsername(name)
+            // const headers = {
+            //     'Content-Type': 'application/json',
+            //     'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("token")).jwtToken,
+            // }
+            // axios.defaults.headers.common['Authorization'] = `Bearer ` + JSON.parse(localStorage.getItem("token")).jwtToken;
+            // console.log(axios.defaults.headers.common['Authorization'])
+            // axios.get(GET_USER_API +  localStorage.getItem('username'))
+            // .then(
+            //     response => {
+            //         console.log("got")
+            //     }
+            // ).catch(error => {
+            //     console.log(error)
+            // })
+            
         }
+        console.log(isLoggedIn, username)
+        // axios.interceptors.request.use(function (config) {
+        //     if (localStorage.getItem("token")) {
+        //       config.headers.common['Authorization'] = `Bearer ` + JSON.parse(localStorage.getItem("token")).jwtToken;
+        //       console.log("here")
+        //     }
+        //     return config
+        //   }, function (error) {
+        //     history.push('/login')
+        //     return Promise.reject(error)
+        //   })
+
+        //   axios.interceptors.response.use(function (response) {
+        //     return response
+        //   }, function (error) {
+        //     // 对响应错误做点什么
+        //     if (error.response) {
+        //       switch (error.response.status) {
+        //         case 401:
+        //         //   store.commit('del_token')
+        //           history.push('/login')
+        //         case 403:
+        //         //   store.commit('del_token')
+        //            console.log("error")
+        //     }
+        //     }
+        //     return Promise.reject(error)
+        //   })
+          
     }, [])
 
     return (
@@ -62,7 +105,7 @@ function NaviBar(props) {
                     placeholder="Search…"
                     inputProps={{ 'aria-label': 'search' }}
                     onChange={(event) => {
-                        setSearch(event.target.value)
+                        setSearchContent(event.target.value)
                     }}
                     />
                     <IconButton type="submit" aria-label="search">
@@ -98,6 +141,7 @@ function NaviBar(props) {
                             }}>
                                     Sign Up
                     </Button>
+
                     </ButtonGroup>
                     
                 )}

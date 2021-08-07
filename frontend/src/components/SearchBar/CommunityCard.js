@@ -7,14 +7,17 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { useUserContext } from '../Context/UserContext';
 import axios from 'axios';
+import { useCommunitiesContext } from '../Context/CommunityContext';
 
 const SUBSCRIBE_COMMUNITY = '/api/user/'
 
 export default function SingleCommunity(props){
     const community = props.community
-    const { isLoggedIn, username, communityList, setUserCommunityList } = useUserContext()
+    const history = props.history
+    const { isLoggedIn, username } = useUserContext()
+    const { joinedCommunities, setJoinedList } = useCommunitiesContext()
     const [ subsribed, setSubsribed ] = React.useState()
-    const [ message, setMessage ] = React.useState();
+    const [ message, setMessage ] = React.useState()
 
     const ToggleJoinOrLeave = (id, name) => {
         return isLoggedIn? (
@@ -31,9 +34,9 @@ export default function SingleCommunity(props){
           "communityId": id,
           "communityName": name
         }
-        var list = communityList;
+        var list = joinedCommunities;
         list.push(newCommunity)
-        setUserCommunityList(list)
+        setJoinedList(list)
         if(localStorage.getItem('token') && localStorage.getItem('username')){
             const token = JSON.parse(localStorage.getItem('token')).jwtToken
             axios.patch(SUBSCRIBE_COMMUNITY + username, {
@@ -54,8 +57,7 @@ export default function SingleCommunity(props){
       }
 
       const unsubcribeCommunity = (idToRemove, name) => {
-        console.log('id to remove ', idToRemove)
-        const filteredCommunity = communityList.filter((c) => c.communityId !== idToRemove);
+        const filteredCommunity = joinedCommunities.filter((c) => c.communityId !== idToRemove);
         if(updateRequest(filteredCommunity)===true){
           setMessage('Join')
           alert("Leave " + name + " successfully")
@@ -79,10 +81,15 @@ export default function SingleCommunity(props){
           ).catch(error => {
             return error
           })
+        }
       }
+
+      const ToggleViewCommunity = () => {
+        history.push(`/community/${community.name}`)
       }
+
       React.useEffect(() => {
-          communityList.some(c => {
+        joinedCommunities.some(c => {
             return c.communityId === community.id})? setMessage("Leave"): setMessage("Join")
       }, [])
     
@@ -108,7 +115,7 @@ export default function SingleCommunity(props){
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">View</Button>
+                    <Button size="small" onClick={ToggleViewCommunity}>View</Button>
                     <Button size="small"
                         disabled={subsribed} 
                       onClick={() => {

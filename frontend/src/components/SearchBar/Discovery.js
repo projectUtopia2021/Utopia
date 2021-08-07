@@ -2,19 +2,19 @@ import * as React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { useLocation } from "react-router-dom";
 import { useEffect } from 'react';
 import { Link } from '@material-ui/core';
 import CommunityCard from './CommunityCard';
 import axios from 'axios';
-import { useSearchContext } from '../Context/SearchBarContext';
 import { useUserContext } from '../Context/UserContext';
+import { useParams } from 'react-router-dom';
 
 const GET_COMMUNITIES_API = "/api/communities/"
 
 export default function Discovery (props) {
-    const { searchContent, searchResultList, setResultList } = useSearchContext();
+    const [searchResultList, setSearchResultList] = React.useState([]);
     const { isLoggedIn } = useUserContext();
+    const { toSearch } = useParams();
 
     const handleCreateCommunity = () => {
       if(isLoggedIn){
@@ -25,15 +25,46 @@ export default function Discovery (props) {
       }
     }
     useEffect (() => {
-      axios.get(GET_COMMUNITIES_API + searchContent, {}).then(
+      axios.get(GET_COMMUNITIES_API + toSearch, {}).then(
             response => {
                 const data = response.data;
-                setResultList(response.data)
+                setSearchResultList(response.data)
                 }
         ).catch(error => {
-          setResultList(undefined)
+          setSearchResultList(undefined)
         })
     }, [props.location]);
+
+    const handleJoinCommunity = (id, name) => {
+      return isLoggedIn? subscribeCommunity(id, name): null;
+    }
+
+    const subscribeCommunity = (id, name) => {
+      const newCommunity = {
+        "communityId": id,
+        "communityName": name
+      }
+      var list = communityList;
+      list.push(newCommunity)
+      setUserCommunityList(list)
+      if(localStorage.getItem('token') && localStorage.getItem('username')){
+          const token = JSON.parse(localStorage.getItem('token')).jwtToken
+          axios.patch(SUBSCRIBE_COMMUNITY + username, {
+            communities: list
+          }, {
+            headers:{
+              'Authorization': `Bearer ${token}`
+            }
+          }).then(
+            response => {
+              alert("you joined successfully")
+            }
+          ).catch(error => {
+            alert(error)
+          })
+      }
+      
+    }
 
     return (
         <React.Fragment>
@@ -46,7 +77,7 @@ export default function Discovery (props) {
             <Grid container spacing={3}>
             {searchResultList.map((community) => (
               <Grid item key={community.id} xs={12} sm={6} md={4}>
-                <CommunityCard community={community}/>
+                <CommunityCard community={community} history={props.history}/>
               </Grid>
             ))}
           </Grid>)

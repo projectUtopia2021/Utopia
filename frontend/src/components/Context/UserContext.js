@@ -11,16 +11,12 @@ export function useUserContext(){
 export function UserContextProvider({children}){
     const [username, setUsername] = useStateWithCallbackLazy("")
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [communityList, setCommunityList] = useState([])
 
     const setLoginUsername = (name, todo) => {
         setUsername(name, todo)
     }
     const setLogin = (loggedIn) => {
         setIsLoggedIn(loggedIn)
-    }
-    const setUserCommunityList = (list) => {
-        setCommunityList(list)
     }
     return (
         <userInfo.Provider 
@@ -29,8 +25,7 @@ export function UserContextProvider({children}){
             setLoginUsername, 
             isLoggedIn, 
             setLogin, 
-            communityList, 
-            setUserCommunityList}}>
+            }}>
             {children}
         </userInfo.Provider>
     )

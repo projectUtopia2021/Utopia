@@ -1,15 +1,22 @@
 import * as React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import { CssBaseline, Divider, ListItem, ListItemText } from '@material-ui/core';
+import { ListItem, ListItemText } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import Toolbar from '@material-ui/core/Toolbar';
+import { useCommunitiesContext } from '../Context/CommunityContext';
+import { useParams } from 'react-router';
 
 
 
-export default function CommunitySidebar(){
+export default function CommunitySidebar(props){
+    const { joinedCommunities } = useCommunitiesContext()
+    const { communityName } = useParams();
 
+    const handleChangeIndex = (event, name) => {
+        props.history.push(`/community/${name}`)
+    }
     return (
         <Drawer 
                     PaperProps={{ style: { position: 'relative' } }}
@@ -30,29 +37,15 @@ export default function CommunitySidebar(){
                             Make a Post
                         </Button>
                         </div>
-                    
                         <List>
-                            {["unjoined community1", "unjoined Community2"].map((text) => (
+                            {joinedCommunities.map((community, index) => (
                                 <ListItem 
                                     button
-                                    key={text}
-                                    sx={{
-                                    [`& .Mui-selected`]: {backgroundColor:'black'}
-                                }}>
-                                    <ListItemText primary={text}/>
-                                </ListItem>
-                            ))}
-                        </List>
-                        <Divider/>
-                        <List>
-                            {['Community1', "Community2"].map((text) => (
-                                <ListItem 
-                                    button
-                                    key={text}
-                                    sx={{
-                                    [`& .Mui-selected`]: {backgroundColor:'black'}
-                                }}>
-                                    <ListItemText primary={text}/>
+                                    key={community.communityId}
+                                    onClick={event => handleChangeIndex(event, community.communityName)}
+                                    selected={communityName === community.communityName}
+                                >
+                                    <ListItemText primary={community.communityName}/>
                                 </ListItem>
                             ))}
                         </List>

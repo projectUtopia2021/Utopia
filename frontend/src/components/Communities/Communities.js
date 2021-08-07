@@ -12,8 +12,8 @@ import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
 import CommentIcon from '@material-ui/icons/Comment';
 import CommunitySidebar from './CommunitySidebar.js';
+import { useParams } from 'react-router';
 
-const drawerWidth = 246;
 const posts = [
     {
         title: "animal crossing wedding season mock data",
@@ -36,6 +36,7 @@ const posts = [
 ];
 
 export default function Communities(props) {
+    const { communityName } = useParams()
     
     return (
         <>
@@ -44,7 +45,7 @@ export default function Communities(props) {
                 <Box id="drawer-container" sx={{position: 'relative',  height:`calc(100vh - 50px)`}}>
                 <Box sx={{ display: 'flex'}}>
                     <CommunityBar>
-                        <CommunitySidebar/>
+                        <CommunitySidebar location={communityName} history={props.history}/>
                     </CommunityBar>
                 <PostDisplay >
                 <Box>

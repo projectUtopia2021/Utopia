@@ -9,7 +9,7 @@ const pre_fixed_API = "/api/authenticate"
 export default function Login(props) {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
-    const { setLoginUsername, setLogin } = useUserContext()
+    const { setLoginUsername, setLogin, isLoggedIn } = useUserContext()
 
     const handleLogin = (event) => {
         event.preventDefault()
