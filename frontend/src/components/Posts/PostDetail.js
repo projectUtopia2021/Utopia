@@ -31,7 +31,8 @@ import IconButton from "@material-ui/core/IconButton";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import Draft from "../DraftJS/Draft";
 import {makeStyles} from "@material-ui/styles";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import axios from "axios";
 const mockdata = {
     username:'user1',
     title: "hi there",
@@ -40,11 +41,14 @@ const mockdata = {
 }
 
 
+const CREATE_COMMENT_API = 'localhost:8080/api/saveComments'
 
-export default function PostDetail (){
+
+export default function PostDetail (props){
     const [open, setOpen] = React.useState(false);
+    const [commentTitle, setCommentTitle] = useState('');
+    const [commentDescription, setCommentDescription] = useState("");
     const [buttonText,setButtonText] = React.useState("like");
-    const [theme,setTheme] = React.useState('blue')
     const changeText = (text) => {
         setButtonText(text);
     }
@@ -62,6 +66,28 @@ export default function PostDetail (){
     const handleClose = () => {
         setOpen(false);
     };
+    const handleCreate = () => {
+        const commentData = {
+            "title": commentTitle,
+            "description": commentDescription,
+        }
+        const token = JSON.parse(localStorage.getItem('token')).jwtToken
+        axios.post(CREATE_COMMENT_API,
+            commentData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(
+                response => {
+                    props.history.push('/')
+                }
+            ).catch(error => {
+            alert(error)
+        })
+    }
+
+
     return(
         <PostContainer>
         <HeadSection>
@@ -168,27 +194,44 @@ export default function PostDetail (){
                                         <DialogTitle id="form-dialog-title">Reply</DialogTitle>
                                         <DialogContent>
                                             <DialogContentText>
-                                                To reply the post, please enter your content here. We will send updates
-                                                immediately.
+                                                Write some comments!
                                             </DialogContentText>
+                                            <TextField
+                                                required
+                                                margin="dense"
+                                                id="name"
+                                                label="commentTitle"
+                                                type="des"
+                                                size="normal"
+                                                multiline
+                                                rows={1}
+                                                defaultValue=""
+                                                fullWidth
+                                                onChange={(event) => {
+                                                    setCommentTitle(event.target.value)
+                                                }}
+                                            />
                                             <TextField
                                                 autoFocus
                                                 margin="dense"
                                                 id="name"
-                                                label="Content"
+                                                label="CommentDescription"
                                                 type="des"
                                                 size="normal"
                                                 multiline
                                                 rows={4}
-                                                defaultValue="write some comments here"
+                                                defaultValue=""
                                                 fullWidth
+                                                onChange={(event) => {
+                                                    setCommentDescription(event.target.value)
+                                                }}
                                             />
                                         </DialogContent>
                                         <DialogActions>
                                             <Button onClick={handleClose} color="primary">
-                                                Cancel
+                                                Close
                                             </Button>
-                                            <Button onClick={handleClose} color="primary">
+                                            <Button onClick={handleCreate} color="primary">
                                                 Save
                                             </Button>
                                         </DialogActions>

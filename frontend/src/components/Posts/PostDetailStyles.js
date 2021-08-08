@@ -32,7 +32,14 @@ const DiscussionSection = styled('div')(theme => ({
 const HeadSection = styled('div')(theme => ({
 }));
 
+const MainContainer = withStyles(theme => ({
+    position: 'relative',
+    display: 'flex',
+    width: "90%",
+}))(Container);
+
 export {
+    MainContainer,
     PostDetailContainer, 
     PostComment, 
     PostSidebarContainer, 
