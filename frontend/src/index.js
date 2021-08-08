@@ -9,7 +9,6 @@ import Draft from './components/DraftJS/Draft.js';
 import Discovery from './components/SearchBar/Discovery.js';
 import Communities from './components/Communities/Communities.js';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import PostPage from './components/PostPage/PostPage.js';
 import PostDetail from './components/Posts/PostDetail.js';
 import { UserContextProvider } from './components/Context/UserContext.js';
 import AutoLogin from './wrapper/AutoLogin.js';
@@ -29,7 +28,6 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/profile" component={Profile} />
-        <Route path="/PostPage" component={PostPage} />
         <Route path="/Posts" component={PostDetail} />
         <Route path="/profile/:username" component={Profile} />
         <Route path="/draft/" component={Draft} />

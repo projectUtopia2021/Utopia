@@ -26,7 +26,7 @@ import PostSidebar from './PostSidebar';
 import Popper from "@material-ui/core/Popper";
 import Fade from "@material-ui/core/Fade";
 import Stack from "@material-ui/core/Stack";
-import editorStyles from "../PostPage/PostPageStyles.module.css";
+import editorStyles from "../Communities/CommunitiesStyles.module.css";
 import IconButton from "@material-ui/core/IconButton";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import Draft from "../DraftJS/Draft";

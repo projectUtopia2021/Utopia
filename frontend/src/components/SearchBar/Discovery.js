@@ -12,87 +12,87 @@ import { useParams } from 'react-router-dom';
 const GET_COMMUNITIES_API = "/api/communities/"
 
 export default function Discovery (props) {
-    const [searchResultList, setSearchResultList] = React.useState([]);
-    const { isLoggedIn } = useUserContext();
-    const { toSearch } = useParams();
+    // const [searchResultList, setSearchResultList] = React.useState([]);
+    // const { isLoggedIn } = useUserContext();
+    // const { toSearch } = useParams();
 
-    const handleCreateCommunity = () => {
-      if(isLoggedIn){
-        props.history.push('/community/create')
-      }
-      else{
-        alert("Login to create community")
-      }
-    }
-    useEffect (() => {
-      axios.get(GET_COMMUNITIES_API + toSearch, {}).then(
-            response => {
-                const data = response.data;
-                setSearchResultList(response.data)
-                }
-        ).catch(error => {
-          setSearchResultList(undefined)
-        })
-    }, [props.location]);
+    // const handleCreateCommunity = () => {
+    //   if(isLoggedIn){
+    //     props.history.push('/community/create')
+    //   }
+    //   else{
+    //     alert("Login to create community")
+    //   }
+    // }
+    // useEffect (() => {
+    //   axios.get(GET_COMMUNITIES_API + toSearch, {}).then(
+    //         response => {
+    //             const data = response.data;
+    //             setSearchResultList(response.data)
+    //             }
+    //     ).catch(error => {
+    //       setSearchResultList(undefined)
+    //     })
+    // }, [props.location]);
 
-    const handleJoinCommunity = (id, name) => {
-      return isLoggedIn? subscribeCommunity(id, name): null;
-    }
+    // const handleJoinCommunity = (id, name) => {
+    //   return isLoggedIn? subscribeCommunity(id, name): null;
+    // }
 
-    const subscribeCommunity = (id, name) => {
-      const newCommunity = {
-        "communityId": id,
-        "communityName": name
-      }
-      var list = communityList;
-      list.push(newCommunity)
-      setUserCommunityList(list)
-      if(localStorage.getItem('token') && localStorage.getItem('username')){
-          const token = JSON.parse(localStorage.getItem('token')).jwtToken
-          axios.patch(SUBSCRIBE_COMMUNITY + username, {
-            communities: list
-          }, {
-            headers:{
-              'Authorization': `Bearer ${token}`
-            }
-          }).then(
-            response => {
-              alert("you joined successfully")
-            }
-          ).catch(error => {
-            alert(error)
-          })
-      }
+    // const subscribeCommunity = (id, name) => {
+    //   const newCommunity = {
+    //     "communityId": id,
+    //     "communityName": name
+    //   }
+    //   var list = communityList;
+    //   list.push(newCommunity)
+    //   setUserCommunityList(list)
+    //   if(localStorage.getItem('token') && localStorage.getItem('username')){
+    //       const token = JSON.parse(localStorage.getItem('token')).jwtToken
+    //       axios.patch(SUBSCRIBE_COMMUNITY + username, {
+    //         communities: list
+    //       }, {
+    //         headers:{
+    //           'Authorization': `Bearer ${token}`
+    //         }
+    //       }).then(
+    //         response => {
+    //           alert("you joined successfully")
+    //         }
+    //       ).catch(error => {
+    //         alert(error)
+    //       })
+    //   }
       
-    }
+    // }
 
-    return (
-        <React.Fragment>
-        <Container sx={{ py: 8 }} maxWidth="lg">
-        <Typography variant="h5" color="text.secondary" fontWeight="fontWeightBold" paragraph>
-              All Results:
-            </Typography>
-          {/* End hero unit */}
-          {searchResultList? (
-            <Grid container spacing={3}>
-            {searchResultList.map((community) => (
-              <Grid item key={community.id} xs={12} sm={6} md={4}>
-                <CommunityCard community={community} history={props.history}/>
-              </Grid>
-            ))}
-          </Grid>)
-            :
-            (<Typography variant="h6"> 
-              Sorry, no relevant community.&nbsp;
-              <Link color='inherit' onClick={() => handleCreateCommunity()}>
-              Create a community?
-              </Link>
+    // return (
+    //     <React.Fragment>
+    //     <Container sx={{ py: 8 }} maxWidth="lg">
+    //     <Typography variant="h5" color="text.secondary" fontWeight="fontWeightBold" paragraph>
+    //           All Results:
+    //         </Typography>
+    //       {/* End hero unit */}
+    //       {searchResultList? (
+    //         <Grid container spacing={3}>
+    //         {searchResultList.map((community) => (
+    //           <Grid item key={community.id} xs={12} sm={6} md={4}>
+    //             <CommunityCard community={community} history={props.history}/>
+    //           </Grid>
+    //         ))}
+    //       </Grid>)
+    //         :
+    //         (<Typography variant="h6"> 
+    //           Sorry, no relevant community.&nbsp;
+    //           <Link color='inherit' onClick={() => handleCreateCommunity()}>
+    //           Create a community?
+    //           </Link>
               
-            </Typography>)
+    //         </Typography>)
               
-            }
+    //         }
           
-        </Container>
-        </React.Fragment>
-    );
+    //     </Container>
+    //     </React.Fragment>
+    // );
 }

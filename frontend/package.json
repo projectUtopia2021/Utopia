@@ -6,6 +6,8 @@
   "dependencies": {
     "@draft-js-plugins/editor": "^4.1.0",
     "@draft-js-plugins/emoji": "^4.5.5",
+    "@draft-js-plugins/mention": "^4.6.1",
+    "@draft-js-plugins/static-toolbar": "^4.1.1",
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
@@ -19,6 +21,9 @@
     "axios": "^0.21.1",
     "bootstrap": "^3.4.1",
     "draft-js": "^0.11.7",
+    "draft-js-mention-plugin": "^3.1.5",
+    "draft-js-plugins-editor": "^3.0.0",
+    "draftjs-to-html": "^0.9.1",
     "material-ui-popup-state": "^1.8.4",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
