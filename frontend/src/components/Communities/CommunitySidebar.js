@@ -33,7 +33,7 @@ export default function CommunitySidebar(props){
                     <Toolbar/>
                     <div style={{overflow:'auto'}}>
                         <div id='buttonContainer' style={{width:'80%', align:'center'}}>
-                        <Button variant="outlined" color={'secondary'}  startIcon={<PostAddIcon />} fullWidth={true}>
+                        <Button variant="outlined" color={'secondary'}  startIcon={<PostAddIcon /> } fullWidth={true} onClick={props.anchorAction}>
                             Make a Post
                         </Button>
                         </div>
