@@ -33,19 +33,19 @@ export default function CommunitySidebar(props){
                     <Toolbar/>
                     <div style={{overflow:'auto'}}>
                         <div id='buttonContainer' style={{width:'80%', align:'center'}}>
-                        <Button variant="outlined" color={'secondary'}  startIcon={<PostAddIcon />} fullWidth={true}>
+                        <Button variant="outlined" color={'secondary'}  startIcon={<PostAddIcon /> } fullWidth={true} onClick={props.anchorAction}>
                             Make a Post
                         </Button>
                         </div>
                         <List>
-                            {joinedCommunities.map((community, index) => (
+                            {joinedCommunities.map((community) => (
                                 <ListItem 
                                     button
-                                    key={community.communityId}
-                                    onClick={event => handleChangeIndex(event, community.communityName)}
-                                    selected={communityName === community.communityName}
+                                    key={community}
+                                    onClick={event => handleChangeIndex(event, community)}
+                                    selected={communityName === community}
                                 >
-                                    <ListItemText primary={community.communityName}/>
+                                    <ListItemText primary={community}/>
                                 </ListItem>
                             ))}
                         </List>

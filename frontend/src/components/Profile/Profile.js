@@ -14,16 +14,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import {useStyles} from './ProfileStyles';
-import { useState } from 'react';
-import { useParams } from 'react-router';
 
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 function Profile() {
     
     const classes = useStyles();
-    const { username } = useParams();
 
     return (
         <div>
@@ -34,7 +31,7 @@ function Profile() {
                         R
                     </Avatar>
                     }
-                    title={username}
+                    title="Test User1"
                     subheader="Online"
                 />
             </Card>
@@ -56,7 +53,7 @@ function Profile() {
                         sx={{
                         width: drawerWidth,
                         flexShrink: 0,
-                        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box'},
+                        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
                         }}
                     >
                         <Box sx={{ overflow: 'auto' }}>

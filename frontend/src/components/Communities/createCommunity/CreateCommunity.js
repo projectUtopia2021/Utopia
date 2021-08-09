@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { MainContainer } from '../CommunitiesStyles'
+import { MainContainer } from './CommunitiesStyles'
 import Box from '@material-ui/core/Box';
 import { useState } from 'react';
 import Typography from '@material-ui/core/Typography';

@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Api(value = "Post Controller")
 @ApiOperation(value = "APIs for Post Controller")
-@RequestMapping("/api")
+@RequestMapping("/api/posts")
 public class PostController {
 
     @Autowired
@@ -27,7 +28,7 @@ public class PostController {
     private JWTUtility jwtUtility;
 
     // GET Posts
-    @RequestMapping(method=RequestMethod.GET,value="/posts/{id}")
+    @RequestMapping(method=RequestMethod.GET,value="/{id}")
     public ResponseEntity getAllPosts(@PathVariable("id")  String postId)
     {
         List<Post> posts = postService.getAllPosts(postId);
@@ -37,7 +38,7 @@ public class PostController {
         );
     }
 
-    @RequestMapping(method=RequestMethod.GET,value="/posts")
+    @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity getPostsByName(@RequestParam("name")  String name)
     {
         List<Post> posts = postService.getPostByName(name);
@@ -50,10 +51,11 @@ public class PostController {
 
 
     // SAVE Post
-    @RequestMapping(method= RequestMethod.POST,value="/post")
+    @RequestMapping(method= RequestMethod.POST)
     public ResponseEntity<String> createPost(@RequestHeader("Authorization") String token, @RequestBody Post post)
     {
-        if(post.getId() == null) return new ResponseEntity<>("Id could not be empty", HttpStatus.BAD_REQUEST);
+        String uuid = UUID.randomUUID().toString();
+        post.setId(uuid);
         try{
             String username = jwtUtility.getUsernameFromToken(token.substring(7));
             post.setUsername(username);
@@ -66,7 +68,7 @@ public class PostController {
     }
 
     // EDIT Post
-    @RequestMapping(method=RequestMethod.PUT,value="/post/{id}")
+    @RequestMapping(method=RequestMethod.PUT,value="/{id}")
     public ResponseEntity updatePostById(@PathVariable("id") String id,@RequestBody Post editedPost)
     {
         try {
@@ -84,7 +86,7 @@ public class PostController {
 
 
     // DELETE Post
-    @RequestMapping(method=RequestMethod.DELETE,value="/post/{id}")
+    @RequestMapping(method=RequestMethod.DELETE,value="/{id}")
     public ResponseEntity deletePostById(@PathVariable("id") String id)
     {
         try{
