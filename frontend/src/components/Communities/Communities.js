@@ -55,13 +55,13 @@ class Communities extends React.Component {
     }
 
     componentDidMount() {
-        fetch("https://api.example.com/items")
+        fetch("/api" + window.location.pathname + "/posts")
           .then(res => res.json())
           .then(
             (result) => {
               this.setState({
                 isLoaded: true,
-                postData: result.postData
+                postData: result ? result : []
               });
             },
             
@@ -203,13 +203,14 @@ class Communities extends React.Component {
 
 
                                 <Grid container spacing={2} direction={'column'} sx={{mt: 1}}>
-                                    {posts.map((post) => (
-                                        <Grid item key={post}>
+                                    {postData.map((post) => (
+                                        <Grid item key={post} onClick = {() => this.props.history.push(window.location.pathname + "/posts/" + post.id)}>
                                             <Card
                                                 sx={{ height: '100%', 
                                                     display: 'flex', 
                                                     flexDirection: 'row',
-                                                    }}>
+                                                    }}
+                                                >
                                                 <CardContent sx={{ flexGrow: 1 }}>
                                                     <Grid container >
                                                         <Avatar  src="/broken-image.jpg"/>
@@ -218,7 +219,7 @@ class Communities extends React.Component {
                                                          {post.title}
                                                         </Typography>
                                                         <Typography>
-                                                        {post.postContent}
+                                                         {"Created by " + post.username}
                                                         </Typography>
                                                         </Grid>
                                                     </Grid>

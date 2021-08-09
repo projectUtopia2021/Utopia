@@ -31,6 +31,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/communities/**",
             "/api/community/**",
             "/api/communities",
+            "/api/discovery/*",
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",

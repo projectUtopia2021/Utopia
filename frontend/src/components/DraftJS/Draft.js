@@ -206,7 +206,6 @@ class Draft extends React.Component {
      console.log("make Posts");
 
     //  localStorage.getItem('token', JSON.stringify(res.data))
-    console.log(localStorage.getItem('token'))
 
 
     const contentState = this.state.editorState.getCurrentContent();
@@ -229,17 +228,17 @@ class Draft extends React.Component {
       images: this.state.currentFile,
       mentionName: mentionedUsers,
     };
-    
+
     let axiosConfig = {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin' : '*',
         'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS', 
-        'Authorization': localStorage.getItem('token'),
+        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('token')).jwtToken}`,
       }
     };
     
-    axios.post('/api/post', postData, axiosConfig)
+    axios.post('/api/posts', postData, axiosConfig)
     .then((res) => {
       console.log("RESPONSE RECEIVED: ", res);
     })

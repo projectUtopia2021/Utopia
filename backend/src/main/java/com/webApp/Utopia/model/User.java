@@ -38,7 +38,7 @@ public class User implements UserDetails {
     private Boolean enabled =true;
     private List<String> friends;
     private List<String> posts;
-    private List<CommunityIdName> communities;
+    private List<String> communities;
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;

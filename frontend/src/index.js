@@ -28,7 +28,7 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/profile" component={Profile} />
-        <Route path="/Posts" component={PostDetail} />
+        <Route path="/community/:communityName/posts/:postId" component={PostDetail} />
         <Route path="/profile/:username" component={Profile} />
         <Route path="/draft/" component={Draft} />
         <Route path="/discovery/:toSearch" component={Discovery} />

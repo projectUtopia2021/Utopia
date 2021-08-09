@@ -9,15 +9,18 @@ import { useUserContext } from '../Context/UserContext';
 import axios from 'axios';
 import { useCommunitiesContext } from '../Context/CommunityContext';
 
-const SUBSCRIBE_COMMUNITY = '/api/user/'
+const SUBSCRIBE_COMMUNITY_API = "/api/user/community/";
 
 export default function SingleCommunity(props){
     const community = props.community
     const history = props.history
+    const communityList = props.communityList
     const { isLoggedIn, username } = useUserContext()
     const { joinedCommunities, setJoinedList } = useCommunitiesContext()
     const [ subsribed, setSubsribed ] = React.useState()
     const [ message, setMessage ] = React.useState()
+
+    setJoinedList(communityList);
 
     const ToggleJoinOrLeave = (id, name) => {
         return isLoggedIn? (
@@ -25,29 +28,24 @@ export default function SingleCommunity(props){
           subscribeCommunity(id, name):
           unsubcribeCommunity(id,name)
           ): (
-            alert("Login to Join Community")
+            history.push("/login")
             );
       }
   
       const subscribeCommunity = (id, name) => {
-        const newCommunity = {
-          "communityId": id,
-          "communityName": name
-        }
-        var list = joinedCommunities;
-        list.push(newCommunity)
-        setJoinedList(list)
         if(localStorage.getItem('token') && localStorage.getItem('username')){
             const token = JSON.parse(localStorage.getItem('token')).jwtToken
-            axios.patch(SUBSCRIBE_COMMUNITY + username, {
-              communities: list
-            }, {
+            console.log(token)
+            axios.post(SUBSCRIBE_COMMUNITY_API + name, {}, {
               headers:{
-                'Authorization': `Bearer ${token}`
+                Authorization: `Bearer ${token}`
               }
             }).then(
               response => {
                 alert("you joined successfully")
+                var list = joinedCommunities;
+                list.push(name)
+                setJoinedList(list)
                 setMessage('Leave')
               }
             ).catch(error => {
@@ -56,20 +54,17 @@ export default function SingleCommunity(props){
         }
       }
 
-      const unsubcribeCommunity = (idToRemove, name) => {
-        const filteredCommunity = joinedCommunities.filter((c) => c.communityId !== idToRemove);
-        if(updateRequest(filteredCommunity)===true){
+      const unsubcribeCommunity = (idToRemove, name) =>{
+        if(updateRequest(name)===true){
           setMessage('Join')
           alert("Leave " + name + " successfully")
         }
       }
 
-      const updateRequest = (newList) => {
+      const updateRequest = (communityName) => {
         if(localStorage.getItem('token') && localStorage.getItem('username')){
           const token = JSON.parse(localStorage.getItem('token')).jwtToken
-          axios.patch(SUBSCRIBE_COMMUNITY + username, {
-            communities: newList
-          }, {
+          axios.delete(SUBSCRIBE_COMMUNITY_API + communityName, {
             headers:{
               'Authorization': `Bearer ${token}`
             }
@@ -89,9 +84,10 @@ export default function SingleCommunity(props){
       }
 
       React.useEffect(() => {
+        console.log("dddddddddddddddddddddee")
         joinedCommunities.some(c => {
-            return c.communityId === community.id})? setMessage("Leave"): setMessage("Join")
-      }, [])
+            return c === community.name})? setMessage("Leave"): setMessage("Join")
+      }, [joinedCommunities])
     
     return(
         <React.Fragment>
