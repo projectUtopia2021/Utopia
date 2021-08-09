@@ -20,7 +20,7 @@ export default function Discovery (props) {
 
      const handleCreateCommunity = () => {
        if(isLoggedIn){
-         props.history.push('/community/create')
+         props.history.push('/createCommunity')
        }
        else{
          alert("Login to create community")

@@ -33,7 +33,7 @@ ReactDOM.render(
         <Route path="/draft/" component={Draft} />
         <Route path="/discovery/:toSearch" component={Discovery} />
         <Route path="/community/:communityName" component={Communities} />
-        <Route path="/community/create" component={CreateCommunity}/>
+        <Route path="/createCommunity" component={CreateCommunity}/>
       </Switch>
     </Router>
     </CommunitiesContextProvider>

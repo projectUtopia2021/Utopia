@@ -38,14 +38,14 @@ export default function CommunitySidebar(props){
                         </Button>
                         </div>
                         <List>
-                            {joinedCommunities.map((community, index) => (
+                            {joinedCommunities.map((community) => (
                                 <ListItem 
                                     button
-                                    key={community.communityId}
-                                    onClick={event => handleChangeIndex(event, community.communityName)}
-                                    selected={communityName === community.communityName}
+                                    key={community}
+                                    onClick={event => handleChangeIndex(event, community)}
+                                    selected={communityName === community}
                                 >
-                                    <ListItemText primary={community.communityName}/>
+                                    <ListItemText primary={community}/>
                                 </ListItem>
                             ))}
                         </List>

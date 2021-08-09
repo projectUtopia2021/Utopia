@@ -22,17 +22,17 @@ export default function SingleCommunity(props){
 
     setJoinedList(communityList);
 
-    const ToggleJoinOrLeave = (id, name) => {
+    const ToggleJoinOrLeave = (name) => {
         return isLoggedIn? (
           message === 'Join'?
-          subscribeCommunity(id, name):
-          unsubcribeCommunity(id,name)
+          subscribeCommunity(name):
+          unsubcribeCommunity(name)
           ): (
             history.push("/login")
             );
       }
   
-      const subscribeCommunity = (id, name) => {
+      const subscribeCommunity = (name) => {
         if(localStorage.getItem('token') && localStorage.getItem('username')){
             const token = JSON.parse(localStorage.getItem('token')).jwtToken
             console.log(token)
@@ -54,7 +54,7 @@ export default function SingleCommunity(props){
         }
       }
 
-      const unsubcribeCommunity = (idToRemove, name) =>{
+      const unsubcribeCommunity = (name) =>{
         if(updateRequest(name)===true){
           setMessage('Join')
           alert("Leave " + name + " successfully")
@@ -115,7 +115,7 @@ export default function SingleCommunity(props){
                     <Button size="small"
                         disabled={subsribed} 
                       onClick={() => {
-                        ToggleJoinOrLeave(community.id, community.name)
+                        ToggleJoinOrLeave(community.name)
                       }}>
                           {message}
                     </Button>

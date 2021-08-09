@@ -162,7 +162,7 @@ class Communities extends React.Component {
                             <Grid item xs={3} >
                                 {/* <Button variant="contained" color="secondary" onClick={this.popperBtnHandler}>Start a Discussion</Button> */}
                                 <Box>
-                                    <CommunitySidebar anchorAction={this.popperBtnHandler}/>
+                                    <CommunitySidebar anchorAction={this.popperBtnHandler} history = {this.props.history}/>
                                 </Box>
                             </Grid>
                             <Grid item xs={9}>
