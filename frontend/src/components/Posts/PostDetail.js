@@ -32,6 +32,7 @@ import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import Draft from "../DraftJS/Draft";
 import {makeStyles} from "@material-ui/styles";
 import {useEffect} from "react";
+import axios from "axios";
 const mockdata = [{
       username:'Ray',
       title: "hi there",
@@ -50,6 +51,27 @@ export default function PostDetail (){
     const [open, setOpen] = React.useState(false);
     const [buttonText,setButtonText] = React.useState("like");
     const [theme,setTheme] = React.useState('blue')
+    const [postData, setPostData] = React.useState([])
+
+     useEffect (() => {
+       var strarr = window.location.pathname.split("/");
+       const token = JSON.parse(localStorage.getItem('token')).jwtToken
+       console.log(token)
+       axios.get('/api/posts/' + strarr[strarr.length - 1], {
+                                                                              headers:{
+                                                                                Authorization: `Bearer ${token}`
+                                                                              }
+                                                                            })
+         .then(
+             response => {
+                 const data = response.data;
+                 setPostData(response.data)
+                 }
+         ).catch(error => {
+           setPostData(undefined)
+         })
+     }, []);
+
     const changeText = (text) => {
         setButtonText(text);
     }
@@ -85,7 +107,7 @@ export default function PostDetail (){
                   color="text.primary"
                   gutterBottom
                 >
-                  {mockdata[0].title}
+                  {postData[0].title}
                 </Typography>
                 <Typography variant="h6" align="center" color="text.secondary" paragraph>
                   {"Welcome"}
@@ -106,7 +128,7 @@ export default function PostDetail (){
                 <PostComment>
                     <Container id="post-detail-area" maxWidth="md">
                         <Grid container direction='column'>
-                        {mockdata.map((post) => (
+                        {postData.map((post) => (
                             <Grid item >
                                     <Box
                                     sx={{
@@ -139,9 +161,7 @@ export default function PostDetail (){
                                             </div>
 
                                             <div style={{marginTop:5}}>
-                                            <Typography paragraph={true}>
-                                            {post.content}
-                                            </Typography>
+                                            <div dangerouslySetInnerHTML={{ __html: post.description }}></div>
                                             </div>
 
                                             </Container>
