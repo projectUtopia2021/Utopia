@@ -3,16 +3,17 @@ import InputBase from '@material-ui/core/InputBase';
 import Box from '@material-ui/core/Box';
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
-    left: '60%',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
       backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
-    marginLeft: 0,
+    float:'right',
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
+      marginLeft: theme.spacing(3),
       width: 'auto',
     },
   }));
@@ -44,11 +45,25 @@ const Search = styled('div')(({ theme }) => ({
     },
   }));
 
+  const SectionDesktop = styled('div') (({theme}) => ({
+    display: 'none',
+    float:'right',
+    [theme.breakpoints.up('sm')]: {
+      display: 'flex',
+    },
+  }))
+
   const ButtonBox = styled(Box)(({theme}) => ({
     position: 'relative',
-    left: '65%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center','& > *': { m: 1,},
   }))
-  export {Search, SearchIconWrapper, StyledInputBase, ButtonBox};
+
+  const SectionMobile = styled('div')(({theme}) => ({
+    display: 'flex',
+      [theme.breakpoints.up('sm')]: {
+        display: 'none',
+      },
+  }))
+  export {Search, SearchIconWrapper, StyledInputBase, ButtonBox, SectionDesktop, SectionMobile};
