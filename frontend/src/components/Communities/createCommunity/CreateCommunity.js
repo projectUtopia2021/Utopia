@@ -23,17 +23,13 @@ const imageMaxSize = 1000000000 // bytes
 export default function CreateCommunity(props){
     const [communityName, setCommunityName] = useState('');
     const [cmnyDescription, setCmnyDescription] = useState("");
-    // const [croppedImageUrl, setCroppedImageUrl] = useState();
-    // const [crop, setCrop] = useState({ aspect: 16 / 9 });
     const [imageSrc, setImageSrc ] = useState();
-    // const imageCanvasRef = React.createRef()
     const [crop, setCrop] = useState({ x: 0, y: 0 })
-    const [rotation, setRotation] = useState(0)
-    const [zoom, setZoom] = useState(1)
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
     const [croppedImage, setCroppedImage] = useState(null)
-    const [open, setOpen] = useState(false)
     const [show, setShow] = useState(false)
+    const [zoom, setZoom] = useState(1)
+    
 
     const handleCreate = () => {
         const communityData = {
@@ -80,12 +76,16 @@ export default function CreateCommunity(props){
       }, [croppedAreaPixels])
 
       const handleCloseDialog = () => {
-        setOpen(false)
         setImageSrc(null)
     }
 
     const  showCroppedImage = () => {
         setShow(true)
+    }
+
+    const handleDeleteImg = () => {
+        setShow(false)
+        setImageSrc(null)
     }
 
     return(
@@ -117,12 +117,6 @@ export default function CreateCommunity(props){
                         }}>
                         <Box
                             id="create_community_form" 
-                            // maxWidth="md" 
-                            // width="60%"
-                            xs={24}
-                            sm={24}
-                            md={3}
-                            lg={3}
                             direction='column'
                             alignContent='center'
                             sx={{
@@ -156,7 +150,11 @@ export default function CreateCommunity(props){
                                     />
                                 </Box>
                                 <div>
-                                    {show && <img src={croppedImage} style={{paddingRight:'10px'}}/>}
+                                    {show && 
+                                    <img src={croppedImage} 
+                                        style={{paddingRight:'10px'}} 
+                                        width="400"
+                                    />}
                                     <input
                                         accept="image/*"
                                         style={{display:'none'}}
@@ -172,6 +170,13 @@ export default function CreateCommunity(props){
                                         Upload
                                         </Button>
                                     </label>   
+                                    {show && <Button 
+                                            onClick={handleDeleteImg} 
+                                            color="primary"
+                                            variant='outlined'
+                                            sx={{m:'3px'}}>
+                                                Delete
+                                            </Button>}
                                     <Dialog 
                                         open={imageSrc} 
                                         fullWidth={true}
@@ -181,17 +186,18 @@ export default function CreateCommunity(props){
                                         aria-labelledby="crop-image-dialog">
                                             <DialogTitle id="crop-image-dialog">Community Image</DialogTitle>
                                             <DialogContent>
-                                                <div style={{position:'relative', width:'100%', height:'500px'}}> 
+                                                <div style={{
+                                                    position:'relative', 
+                                                    width:'100%', 
+                                                    height:'500px'}}> 
                                                 <Cropper
                                                     image={imageSrc}
                                                     crop={crop}
-                                                    // rotation={rotation}
-                                                    // zoom={zoom}
                                                     aspect={16 / 9}
                                                     onCropChange={setCrop}
-                                                    // onRotationChange={setRotation}
                                                     onCropComplete={onCropComplete}
-                                                    // onZoomChange={setZoom}
+                                                    zoom={zoom}
+                                                    onZoomChange={setZoom}
                                                     />
                                                     </div>
                                             </DialogContent>
